@@ -1,0 +1,2324 @@
+Anda adalah SENIOR FULL-STACK ENGINEER, SOFTWARE ARCHITECT, UI/UX DESIGNER,
+DATABASE ENGINEER, SECURITY ENGINEER, QA ENGINEER, dan DEVOPS ENGINEER.
+
+Tugas Anda adalah MEMBANGUN APLIKASI RESTAURANT MANAGEMENT SYSTEM (RMS)
+yang lengkap, modern, aman, scalable, responsive, production-ready, dan
+siap digunakan oleh:
+
+- Restoran
+- Cafe
+- Rumah makan
+- Coffee shop
+- Warung makan
+- Bakery
+- Catering
+- Food court
+- Bar non-alkohol
+- Usaha kuliner kecil sampai enterprise
+- Single outlet maupun multi outlet
+
+==================================================
+1. TEKNOLOGI WAJIB
+==================================================
+
+Frontend:
+- Next.js versi terbaru yang stabil
+- App Router
+- TypeScript
+- React
+- Tailwind CSS
+- shadcn/ui
+- Lucide Icons
+- React Hook Form
+- Zod
+- TanStack Query jika diperlukan
+- Recharts untuk grafik
+
+Backend:
+- Next.js Server Actions
+- Next.js Route Handlers
+- Supabase
+
+Database:
+- Supabase PostgreSQL
+
+Authentication:
+- Supabase Auth
+- Login menggunakan USERNAME + PASSWORD
+- JANGAN meminta user memasukkan email pada form login utama
+
+Hosting:
+- Vercel
+
+Storage:
+- Supabase Storage
+
+Realtime:
+- Supabase Realtime
+
+Deployment:
+- Vercel
+- Environment Variables
+
+==================================================
+2. ATURAN LOGIN USERNAME + PASSWORD
+==================================================
+
+Aplikasi harus menggunakan login:
+
+Username
+Password
+
+Bukan:
+
+Email
+Password
+
+Tetapi karena Supabase Auth menggunakan email/password,
+implementasikan sistem username abstraction.
+
+Struktur:
+
+profiles
+- id
+- user_id
+- username
+- full_name
+- phone
+- avatar_url
+- role
+- branch_id
+- is_active
+- created_at
+- updated_at
+
+Username harus UNIQUE.
+
+Ketika user memasukkan username:
+
+1. Validasi username
+2. Cari username melalui server-side logic yang aman
+3. Ambil identifier auth yang diperlukan
+4. Login menggunakan Supabase Auth password authentication
+5. Jangan pernah mengekspos password
+6. Jangan mengirim password ke client selain proses authentication
+7. Jangan membuat endpoint publik yang bisa digunakan untuk enumerasi username
+8. Tambahkan rate limiting
+9. Tambahkan brute-force protection
+10. Tambahkan session management
+
+Login:
+
+/login
+
+Field:
+
+Username
+Password
+
+Fitur:
+
+- Show/hide password
+- Remember session
+- Loading state
+- Error state
+- Invalid credentials
+- Account inactive
+- Session expired
+- Logout
+- Auto redirect
+- Protected routes
+
+==================================================
+3. ROLE / USER MANAGEMENT
+==================================================
+
+Role minimal:
+
+SUPER ADMIN
+OWNER
+MANAGER
+CASHIER
+KITCHEN
+WAITER
+INVENTORY
+ACCOUNTING
+
+Buat permission system granular.
+
+Contoh:
+
+dashboard.view
+sales.view
+sales.create
+sales.edit
+sales.delete
+orders.view
+orders.create
+orders.edit
+orders.cancel
+products.view
+products.create
+products.edit
+products.delete
+inventory.view
+inventory.create
+inventory.adjust
+purchases.view
+purchases.create
+reports.view
+reports.export
+users.view
+users.create
+users.edit
+settings.manage
+branches.manage
+
+Jangan hanya mengandalkan role.
+
+Gunakan:
+
+Role
++
+Permissions
+
+Owner dapat mengatur permission setiap role.
+
+==================================================
+4. MULTI OUTLET / MULTI CABANG
+==================================================
+
+Aplikasi harus mendukung:
+
+- Single outlet
+- Multiple outlet
+- Multiple branches
+- Multiple cashier
+- Multiple kitchen
+- Multiple warehouse
+
+Table:
+
+organizations
+branches
+users
+roles
+permissions
+role_permissions
+
+Contoh:
+
+Organization:
+Restoran ABC
+
+Branches:
+- Cabang Kota
+- Cabang Selatan
+- Cabang Utara
+
+User hanya dapat melihat data sesuai permission dan branch
+yang diberikan.
+
+SUPER ADMIN dapat melihat semua cabang.
+
+OWNER dapat memilih:
+
+- Semua cabang
+- Cabang tertentu
+
+==================================================
+5. DASHBOARD
+==================================================
+
+Dashboard harus sangat modern dan informatif.
+
+Tampilkan:
+
+Today's Sales
+Today's Orders
+Today's Profit
+Average Order Value
+Total Customers
+Low Stock Items
+Pending Orders
+Cancelled Orders
+
+Grafik:
+
+- Penjualan harian
+- Penjualan mingguan
+- Penjualan bulanan
+- Profit
+- Produk terlaris
+- Kategori terlaris
+- Jam paling ramai
+- Metode pembayaran
+- Performa cabang
+
+Filter:
+
+- Hari ini
+- Kemarin
+- 7 hari
+- 30 hari
+- Bulan ini
+- Tahun ini
+- Custom date range
+
+Dashboard harus realtime jika memungkinkan.
+
+==================================================
+6. POINT OF SALE / KASIR
+==================================================
+
+Ini adalah fitur inti.
+
+Buat POS modern seperti sistem kasir profesional.
+
+Layout:
+
+LEFT:
+Kategori
+
+CENTER:
+Daftar produk
+
+RIGHT:
+Current Order / Cart
+
+Fitur:
+
+- Search produk
+- Barcode scanner
+- Kategori
+- Favorite product
+- Produk dengan gambar
+- Modifier
+- Variant
+- Add-ons
+- Catatan
+- Quantity
+- Discount
+- Tax
+- Service charge
+- Rounding
+- Customer
+- Table
+- Order type
+
+Order type:
+
+DINE IN
+TAKE AWAY
+DELIVERY
+PICK UP
+
+Keranjang:
+
+Produk
+Qty
+Harga
+Discount
+Subtotal
+
+Summary:
+
+Subtotal
+Discount
+Tax
+Service Charge
+Grand Total
+
+Pembayaran:
+
+CASH
+BANK TRANSFER
+QRIS
+DEBIT
+CREDIT
+E-WALLET
+OTHER
+
+Fitur:
+
+- Split payment
+- Multiple payment method
+- Partial payment
+- Change calculation
+- Receipt
+- Print receipt
+- Download receipt PDF
+- Reprint receipt
+- Void transaction
+- Refund
+- Return
+- Hold order
+- Resume order
+
+==================================================
+7. TABLE MANAGEMENT
+==================================================
+
+Buat modul meja restoran.
+
+Tampilan:
+
+Visual floor plan.
+
+Status meja:
+
+AVAILABLE
+OCCUPIED
+RESERVED
+WAITING_PAYMENT
+CLEANING
+OUT_OF_SERVICE
+
+Setiap meja:
+
+- Nomor meja
+- Kapasitas
+- Area
+- Status
+- Current order
+- Customer
+- Waiter
+
+Fitur:
+
+- Merge table
+- Split table
+- Transfer table
+- Move order
+- Reserve table
+
+==================================================
+8. ORDER MANAGEMENT
+==================================================
+
+Order status:
+
+NEW
+CONFIRMED
+PREPARING
+READY
+SERVED
+COMPLETED
+CANCELLED
+REFUNDED
+
+Order mempunyai:
+
+- Order number
+- Table
+- Customer
+- Cashier
+- Waiter
+- Branch
+- Items
+- Modifier
+- Notes
+- Payment
+- Status
+- Timestamp
+
+Order number otomatis.
+
+Contoh:
+
+ORD-20260902-0001
+
+==================================================
+9. KITCHEN DISPLAY SYSTEM (KDS)
+==================================================
+
+Buat Kitchen Display System.
+
+URL:
+
+/kitchen
+
+Tampilan besar dan mudah dibaca.
+
+Kolom:
+
+NEW
+PREPARING
+READY
+
+Kitchen dapat melihat:
+
+- Nomor order
+- Meja
+- Item
+- Quantity
+- Modifier
+- Notes
+- Waktu order
+
+Timer otomatis.
+
+Contoh:
+
+12:32
+18:45
+25:12
+
+Gunakan warna/status visual untuk order yang terlalu lama.
+
+Realtime menggunakan Supabase Realtime.
+
+Ketika kasir membuat order:
+
+POS
+↓
+DATABASE
+↓
+KITCHEN DISPLAY
+
+Kitchen mengubah:
+
+NEW → PREPARING → READY
+
+Kasir/waiter menerima update realtime.
+
+==================================================
+10. WAITER SYSTEM
+==================================================
+
+Waiter dapat:
+
+- Melihat meja
+- Membuat order
+- Menambahkan item
+- Mengubah order
+- Mengirim order ke kitchen
+- Melihat status kitchen
+- Memindahkan meja
+- Meminta bill
+- Menandai order served
+
+==================================================
+11. MENU / PRODUCT MANAGEMENT
+==================================================
+
+Product:
+
+- Name
+- SKU
+- Barcode
+- Category
+- Description
+- Image
+- Purchase price
+- Selling price
+- Cost price
+- Tax
+- Unit
+- Stock tracking
+- Minimum stock
+- Active/inactive
+
+Category:
+
+- Food
+- Beverage
+- Coffee
+- Dessert
+- Snack
+- etc.
+
+Variant:
+
+Small
+Medium
+Large
+
+Contoh:
+
+Es Kopi
+
+Small 15.000
+Medium 20.000
+Large 25.000
+
+Modifier:
+
+Extra shot
+Extra cheese
+Less sugar
+Ice
+Topping
+
+==================================================
+12. RECIPE / BILL OF MATERIAL
+==================================================
+
+Fitur penting untuk restoran.
+
+Setiap menu dapat mempunyai recipe.
+
+Contoh:
+
+Nasi Goreng
+
+Recipe:
+
+Rice 200g
+Egg 1 pcs
+Chicken 50g
+Oil 10ml
+Seasoning 5g
+
+Ketika terjual:
+
+Stock bahan otomatis berkurang.
+
+Formula:
+
+Stock Used =
+Recipe Quantity × Sold Quantity
+
+Hitung:
+
+Food Cost
+COGS
+Gross Profit
+Margin
+
+==================================================
+13. INVENTORY MANAGEMENT
+==================================================
+
+Inventory bahan baku.
+
+Contoh:
+
+Beras
+Gula
+Kopi
+Susu
+Ayam
+Telur
+Minyak
+Tepung
+
+Fitur:
+
+- Stock
+- Minimum stock
+- Maximum stock
+- Unit
+- Warehouse
+- Batch
+- Expiry date
+- Cost
+- Stock adjustment
+- Stock opname
+
+Transaction:
+
+STOCK_IN
+STOCK_OUT
+ADJUSTMENT
+TRANSFER
+WASTE
+PURCHASE
+SALE_CONSUMPTION
+
+==================================================
+14. STOCK OPNAME
+==================================================
+
+Buat modul stock opname profesional.
+
+Flow:
+
+Create Stock Opname
+↓
+Select Warehouse
+↓
+System Stock
+↓
+Physical Stock
+↓
+Difference
+↓
+Reason
+↓
+Approval
+↓
+Stock Adjustment
+
+Tampilkan:
+
+Item
+System Qty
+Physical Qty
+Difference
+Unit Cost
+Difference Value
+
+==================================================
+15. PURCHASE MANAGEMENT
+==================================================
+
+Purchase Order:
+
+PO number
+Supplier
+Branch
+Warehouse
+Date
+Items
+Qty
+Price
+Discount
+Tax
+Total
+
+Status:
+
+DRAFT
+PENDING
+APPROVED
+RECEIVED
+PARTIAL
+CANCELLED
+
+Goods receipt.
+
+Ketika barang diterima:
+
+Inventory otomatis bertambah.
+
+==================================================
+16. SUPPLIER MANAGEMENT
+==================================================
+
+Supplier:
+
+- Name
+- Company
+- Phone
+- Email
+- Address
+- NPWP jika diperlukan
+- Payment terms
+- Notes
+
+Riwayat:
+
+- Purchase
+- Total purchase
+- Outstanding payable
+
+==================================================
+17. CUSTOMER MANAGEMENT
+==================================================
+
+Customer:
+
+- Name
+- Phone
+- Email
+- Address
+- Birthday
+- Notes
+
+Customer history:
+
+- Total orders
+- Total spending
+- Last purchase
+- Favorite products
+
+Tambahkan loyalty system.
+
+==================================================
+18. LOYALTY / MEMBER
+==================================================
+
+Customer dapat menjadi member.
+
+Level:
+
+BRONZE
+SILVER
+GOLD
+PLATINUM
+
+Point system:
+
+Setiap transaksi mendapatkan point.
+
+Owner dapat mengatur:
+
+Rp 10.000 = 1 point
+
+Reward:
+
+100 points = discount Rp 10.000
+
+==================================================
+19. PROMOTION
+==================================================
+
+Support:
+
+- Percentage discount
+- Fixed discount
+- Buy 1 Get 1
+- Buy X Get Y
+- Happy Hour
+- Product discount
+- Category discount
+- Member discount
+- Voucher
+
+Contoh:
+
+16:00 - 18:00
+Coffee discount 20%
+
+==================================================
+20. EXPENSE MANAGEMENT
+==================================================
+
+Catat pengeluaran:
+
+- Electricity
+- Water
+- Rent
+- Salary
+- Gas
+- Transportation
+- Maintenance
+- Marketing
+- Other
+
+Kategori expense dapat dibuat custom.
+
+==================================================
+21. EMPLOYEE MANAGEMENT
+==================================================
+
+Employee:
+
+- Name
+- Employee ID
+- Phone
+- Position
+- Branch
+- Status
+
+Attendance sederhana:
+
+Clock in
+Clock out
+
+Tambahkan:
+
+- Shift
+- Schedule
+- Overtime
+
+==================================================
+22. SHIFT MANAGEMENT
+==================================================
+
+Cashier shift.
+
+Open shift:
+
+Opening cash
+
+Close shift:
+
+Cash sales
+Cash refunds
+Expected cash
+Actual cash
+Difference
+
+Laporan:
+
+Expected
+Actual
+Variance
+
+Jika ada selisih:
+
+SHORT
+OVER
+
+Simpan audit log.
+
+==================================================
+23. REPORTING
+==================================================
+
+Buat laporan profesional.
+
+Sales Report
+Purchase Report
+Profit Report
+COGS Report
+Inventory Report
+Stock Movement
+Stock Opname
+Product Sales
+Category Sales
+Cashier Sales
+Waiter Sales
+Branch Sales
+Customer Sales
+Payment Report
+Tax Report
+Discount Report
+Refund Report
+Void Report
+Expense Report
+Shift Report
+Kitchen Performance
+
+Semua laporan:
+
+- Filter tanggal
+- Filter branch
+- Filter cashier
+- Filter category
+- Filter payment
+- Export Excel/CSV
+- Export PDF
+- Print
+
+==================================================
+24. PROFIT & LOSS
+==================================================
+
+Hitung:
+
+Revenue
+- Discount
+- Refund
+- COGS
+= Gross Profit
+
+Gross Profit
+- Expenses
+= Net Profit
+
+Tampilkan:
+
+Revenue
+COGS
+Gross Profit
+Gross Margin
+Operating Expense
+Net Profit
+Net Margin
+
+==================================================
+25. TAX
+==================================================
+
+Buat konfigurasi pajak fleksibel.
+
+Jangan hardcode satu jenis pajak.
+
+Owner dapat mengatur:
+
+Tax name
+Tax percentage
+Inclusive / Exclusive
+
+Contoh:
+
+PBJT
+PPN
+Service Charge
+
+Tetapi sistem harus configurable sesuai kebutuhan bisnis/lokasi.
+
+==================================================
+26. QR MENU
+==================================================
+
+Setiap meja dapat memiliki QR Code.
+
+Customer scan QR:
+
+QR
+↓
+Digital Menu
+↓
+Select Food
+↓
+Select Table
+↓
+Order
+
+Jika konfigurasi memungkinkan:
+
+Customer order
+↓
+Kitchen
+
+Buat URL:
+
+/menu/[branch]/[table]
+
+==================================================
+27. ONLINE ORDER
+==================================================
+
+Siapkan architecture agar dapat dikembangkan menjadi:
+
+- Website order
+- Online menu
+- Pickup
+- Delivery
+- Reservation
+
+Jangan membuat architecture yang sulit dikembangkan.
+
+==================================================
+28. RESERVATION
+==================================================
+
+Customer reservation:
+
+Name
+Phone
+Date
+Time
+Number of guests
+Table
+Notes
+
+Status:
+
+PENDING
+CONFIRMED
+SEATED
+COMPLETED
+CANCELLED
+NO_SHOW
+
+==================================================
+29. NOTIFICATION SYSTEM
+==================================================
+
+Notification realtime.
+
+Jenis:
+
+New order
+Order ready
+Low stock
+Reservation
+Payment
+Refund
+Void
+Stock opname
+Approval
+System notification
+
+Notification center:
+
+Unread count
+Read/unread
+Mark all read
+
+Realtime menggunakan Supabase Realtime.
+
+==================================================
+30. OWNER NOTIFICATION
+==================================================
+
+Owner harus dapat menerima notifikasi ketika:
+
+- Transaksi baru
+- Transaksi besar
+- Refund
+- Void
+- Diskon besar
+- Stock rendah
+- Stock opname
+- Purchase dibuat
+- Expense dibuat
+- Cashier closing shift
+- Selisih kas
+
+Contoh:
+
+"Transaksi baru #ORD-20260902-0001
+Cashier: John
+Total: Rp125.000"
+
+Architecture harus memungkinkan pengembangan push notification.
+
+==================================================
+31. AUDIT LOG
+==================================================
+
+Semua tindakan penting harus dicatat.
+
+Contoh:
+
+User
+Action
+Entity
+Entity ID
+Old Data
+New Data
+IP jika tersedia
+User Agent
+Timestamp
+
+Action:
+
+CREATE
+UPDATE
+DELETE
+LOGIN
+LOGOUT
+VOID
+REFUND
+DISCOUNT
+APPROVAL
+STOCK_ADJUSTMENT
+
+Audit log tidak boleh mudah dihapus oleh user biasa.
+
+==================================================
+32. DATABASE DESIGN
+==================================================
+
+Buat database PostgreSQL yang normalized.
+
+Minimal tables:
+
+organizations
+branches
+profiles
+roles
+permissions
+role_permissions
+
+categories
+products
+product_variants
+modifiers
+modifier_options
+
+tables
+table_areas
+reservations
+
+orders
+order_items
+order_item_modifiers
+
+payments
+payment_items
+refunds
+
+customers
+customer_points
+customer_rewards
+
+recipes
+recipe_items
+
+inventory_items
+warehouses
+stock_movements
+stock_opnames
+stock_opname_items
+
+suppliers
+purchase_orders
+purchase_order_items
+goods_receipts
+goods_receipt_items
+
+expenses
+expense_categories
+
+employees
+employee_shifts
+attendance
+
+promotions
+vouchers
+
+notifications
+audit_logs
+
+settings
+
+Tambahkan:
+
+created_at
+updated_at
+
+pada tabel yang relevan.
+
+Gunakan UUID.
+
+Gunakan foreign key.
+
+Gunakan index.
+
+Gunakan unique constraints.
+
+Gunakan check constraints jika diperlukan.
+
+==================================================
+33. SUPABASE ROW LEVEL SECURITY
+==================================================
+
+WAJIB menggunakan RLS.
+
+Jangan membuat:
+
+USING (true)
+
+untuk data sensitif.
+
+User hanya boleh mengakses data sesuai:
+
+organization
+branch
+role
+permission
+
+Pastikan:
+
+- User A tidak dapat melihat data organization B
+- Cashier cabang A tidak dapat melihat transaksi cabang B
+- Kitchen hanya melihat order yang diperlukan
+- Owner dapat melihat sesuai branch permission
+
+Test semua policy.
+
+==================================================
+34. SECURITY
+==================================================
+
+Prioritaskan security.
+
+Implement:
+
+- Supabase Auth
+- RLS
+- Server-side authorization
+- Input validation
+- Zod
+- SQL injection protection
+- XSS protection
+- CSRF consideration
+- Rate limiting
+- Secure cookies
+- Secure session
+- Permission checking
+- Audit log
+- Error handling
+
+JANGAN:
+
+- expose service role key
+- expose secret environment variables
+- trust role dari client
+- trust branch_id dari client
+- bypass RLS tanpa alasan
+- menyimpan password sendiri
+- menyimpan password plaintext
+
+Environment:
+
+NEXT_PUBLIC_SUPABASE_URL
+NEXT_PUBLIC_SUPABASE_ANON_KEY
+SUPABASE_SERVICE_ROLE_KEY
+
+Service role hanya server-side.
+
+==================================================
+35. UI/UX
+==================================================
+
+Gunakan desain:
+
+MODERN PREMIUM RESTAURANT SaaS
+
+Karakter:
+
+- Clean
+- Professional
+- Modern
+- Fast
+- Minimal
+- Elegant
+- High readability
+
+Gunakan:
+
+- Responsive design
+- Desktop
+- Tablet
+- Mobile
+- Touch friendly
+- Keyboard friendly
+
+Sidebar:
+
+Dashboard
+POS
+Orders
+Tables
+Kitchen
+Products
+Inventory
+Purchases
+Suppliers
+Customers
+Promotions
+Employees
+Expenses
+Reports
+Notifications
+Settings
+
+Mobile:
+
+Gunakan bottom navigation jika sesuai.
+
+POS harus sangat cepat.
+
+Jangan membuat UI yang terlalu ramai.
+
+==================================================
+36. DESIGN SYSTEM
+==================================================
+
+Gunakan design tokens.
+
+Typography:
+Inter atau font modern yang setara.
+
+Border radius:
+Modern rounded.
+
+Cards:
+Subtle shadow.
+
+Buttons:
+Clear hierarchy.
+
+Status:
+
+Success
+Warning
+Danger
+Info
+Neutral
+
+Dark mode:
+
+WAJIB.
+
+Theme:
+
+Light
+Dark
+System
+
+==================================================
+37. ACCESSIBILITY
+==================================================
+
+Minimal:
+
+- Keyboard navigation
+- Focus states
+- ARIA labels
+- Proper contrast
+- Semantic HTML
+- Screen reader friendly
+- Touch target minimal nyaman digunakan
+
+==================================================
+38. RESPONSIVE
+==================================================
+
+WAJIB benar-benar responsive.
+
+Breakpoints:
+
+Mobile
+Tablet
+Desktop
+Large desktop
+
+Tidak boleh:
+
+- Horizontal overflow
+- Table rusak
+- Modal keluar layar
+- Button tertutup
+- Text terpotong
+- Sidebar menutupi content
+
+Untuk tabel mobile gunakan:
+
+- horizontal scroll
+atau
+- responsive card
+
+==================================================
+39. PERFORMANCE
+==================================================
+
+Optimalkan:
+
+- Server Components
+- Dynamic imports
+- Image optimization
+- Pagination
+- Debounced search
+- Database indexes
+- Query optimization
+- Caching
+- Realtime hanya jika diperlukan
+
+POS harus terasa cepat.
+
+==================================================
+40. ERROR HANDLING
+==================================================
+
+Buat:
+
+Loading
+Skeleton
+Empty state
+Error state
+Success state
+
+Toast notification.
+
+Error harus user-friendly.
+
+Jangan menampilkan:
+
+SQL error mentah
+Stack trace
+Secret
+Internal implementation
+
+==================================================
+41. SEARCH
+==================================================
+
+Global search.
+
+Cari:
+
+Product
+Order
+Customer
+Supplier
+Invoice
+Transaction
+
+POS search harus cepat.
+
+==================================================
+42. IMPORT / EXPORT
+==================================================
+
+Support:
+
+CSV
+Excel
+PDF
+
+Import:
+
+Products
+Customers
+Suppliers
+Inventory
+
+Sediakan:
+
+Template CSV/Excel.
+
+Validasi data sebelum import.
+
+==================================================
+43. SETTINGS
+==================================================
+
+Settings:
+
+Restaurant profile
+Logo
+Address
+Phone
+Tax
+Service charge
+Currency
+Receipt
+Printer
+Payment methods
+Branches
+Users
+Roles
+Permissions
+Order settings
+Inventory settings
+Notification settings
+Theme
+
+==================================================
+44. RECEIPT
+==================================================
+
+Receipt profesional.
+
+Tampilkan:
+
+Logo
+Restaurant name
+Address
+Phone
+Order number
+Date
+Cashier
+Table
+Items
+Qty
+Price
+Discount
+Tax
+Service
+Total
+Payment
+Change
+
+Format:
+
+- Thermal 58mm
+- Thermal 80mm
+- A4
+- PDF
+
+==================================================
+45. PRINTING
+==================================================
+
+Buat architecture printer-friendly.
+
+Support:
+
+- Browser printing
+- Thermal printer
+- Kitchen printer architecture
+
+Jangan membuat browser crash ketika print.
+
+==================================================
+46. SEED DATA
+==================================================
+
+Buat seed/demo data.
+
+Organization:
+
+Demo Restaurant
+
+Branches:
+
+Main Branch
+
+Users:
+
+admin
+owner
+manager
+cashier
+waiter
+kitchen
+inventory
+
+Buat password demo yang aman untuk development saja.
+
+Jangan menggunakan password demo pada production.
+
+==================================================
+47. SAMPLE MENU
+==================================================
+
+Buat contoh:
+
+FOOD
+
+Nasi Goreng
+Mie Goreng
+Ayam Geprek
+Ayam Bakar
+Soto
+Bakso
+
+BEVERAGE
+
+Es Teh
+Teh Hangat
+Es Jeruk
+Kopi
+Cappuccino
+Latte
+
+DESSERT
+
+Pisang Goreng
+Pudding
+Ice Cream
+
+==================================================
+48. ROUTING
+==================================================
+
+Buat routing yang terstruktur.
+
+Contoh:
+
+/login
+
+/dashboard
+
+/pos
+/orders
+/orders/[id]
+
+/tables
+/reservations
+
+/kitchen
+
+/products
+/products/categories
+
+/inventory
+/inventory/stock
+/inventory/opname
+
+/purchases
+/purchases/[id]
+
+/suppliers
+
+/customers
+
+/promotions
+
+/employees
+/employees/shifts
+
+/expenses
+
+/reports/sales
+/reports/profit
+/reports/inventory
+/reports/products
+/reports/customers
+/reports/cashier
+
+/notifications
+
+/settings
+/settings/users
+/settings/roles
+/settings/branches
+/settings/payment
+/settings/restaurant
+
+==================================================
+49. COMPONENT ARCHITECTURE
+==================================================
+
+Gunakan reusable components.
+
+Contoh:
+
+components/
+  ui/
+  layout/
+  dashboard/
+  pos/
+  orders/
+  tables/
+  kitchen/
+  products/
+  inventory/
+  purchases/
+  reports/
+  customers/
+  notifications/
+
+Jangan membuat satu file React berisi ribuan baris.
+
+Pisahkan:
+
+UI
+Business Logic
+Database Access
+Validation
+Types
+
+==================================================
+50. BUSINESS LOGIC
+==================================================
+
+Business logic jangan diletakkan seluruhnya di client.
+
+Gunakan:
+
+Server Actions
+Route Handlers
+Service layer
+
+Contoh:
+
+createOrder()
+calculateOrderTotal()
+processPayment()
+updateInventory()
+createStockMovement()
+calculateCOGS()
+calculateProfit()
+closeCashierShift()
+
+==================================================
+51. TRANSACTION SAFETY
+==================================================
+
+Operasi penting harus atomic.
+
+Contoh:
+
+Create order:
+
+1. Validate order
+2. Validate stock
+3. Create order
+4. Create order items
+5. Process payment
+6. Update stock
+7. Create stock movement
+8. Create audit log
+
+Jika salah satu gagal:
+
+ROLLBACK
+
+Jangan sampai:
+
+Payment berhasil
+tetapi order gagal.
+
+==================================================
+52. CONCURRENCY
+==================================================
+
+Tangani kemungkinan:
+
+2 cashier menjual produk yang sama
+secara bersamaan.
+
+Gunakan database transaction,
+proper locking atau atomic stock update
+jika diperlukan.
+
+==================================================
+53. REPORT ACCURACY
+==================================================
+
+Jangan menghitung laporan hanya dari data UI.
+
+Semua laporan harus berasal dari database.
+
+Pastikan:
+
+Total sales
+=
+sum transaksi valid
+
+Exclude:
+
+Cancelled
+Void
+
+Refund harus diperhitungkan.
+
+==================================================
+54. TESTING
+==================================================
+
+Buat:
+
+Unit test
+Integration test
+E2E test
+
+Test:
+
+Login
+Authorization
+POS
+Create order
+Payment
+Refund
+Stock
+Purchase
+Stock opname
+Reports
+Multi branch
+
+Minimal test business-critical flow.
+
+==================================================
+55. DATABASE MIGRATION
+==================================================
+
+Semua schema harus dibuat menggunakan Supabase migration.
+
+Struktur:
+
+supabase/
+  migrations/
+  seed.sql
+
+Jangan membuat database schema hanya secara manual.
+
+==================================================
+56. README
+==================================================
+
+Buat README lengkap:
+
+Project overview
+Features
+Tech stack
+Installation
+Environment variables
+Supabase setup
+Database migration
+Seed
+Development
+Build
+Deployment
+Vercel
+Production security
+Troubleshooting
+
+==================================================
+57. VERCEL DEPLOYMENT
+==================================================
+
+Pastikan aplikasi:
+
+npm run build
+
+berhasil.
+
+Tidak boleh ada:
+
+TypeScript error
+ESLint blocking error
+Build error
+
+Siapkan environment variables untuk Vercel.
+
+==================================================
+58. SUPABASE SETUP
+==================================================
+
+Berikan:
+
+SQL migrations
+RLS policies
+Indexes
+Triggers
+Functions
+Seed data
+
+Jika menggunakan database function:
+
+pastikan security definer digunakan secara aman.
+
+==================================================
+59. PWA
+==================================================
+
+Aplikasi harus dapat dikembangkan menjadi PWA.
+
+Support:
+
+- Install ke Android
+- Install ke desktop
+- Offline-friendly architecture
+- App-like experience
+
+Untuk POS, siapkan architecture offline queue
+jika memungkinkan tanpa mengorbankan konsistensi transaksi.
+
+==================================================
+60. MOBILE FIRST
+==================================================
+
+Walaupun aplikasi utama desktop,
+
+mobile harus tetap nyaman.
+
+Mobile use cases:
+
+Owner:
+Dashboard
+Reports
+Notifications
+
+Waiter:
+Tables
+Orders
+
+Kitchen:
+KDS
+
+Cashier:
+POS
+
+==================================================
+61. REALTIME
+==================================================
+
+Gunakan Supabase Realtime untuk:
+
+Order updates
+Kitchen updates
+Table status
+Notifications
+Payment status jika diperlukan
+
+Jangan subscribe ke semua table tanpa kebutuhan.
+
+Gunakan channel yang tepat.
+
+==================================================
+62. NO DATA LOSS
+==================================================
+
+Jangan melakukan destructive database migration
+tanpa backup/migration strategy.
+
+Untuk delete:
+
+gunakan soft delete jika relevan.
+
+Contoh:
+
+deleted_at
+
+Untuk transaksi keuangan:
+
+JANGAN benar-benar menghapus data.
+
+Gunakan:
+
+VOID
+CANCELLED
+REFUNDED
+
+==================================================
+63. FINANCIAL DATA
+==================================================
+
+Jangan gunakan floating point JavaScript
+untuk perhitungan uang jika menyebabkan precision issue.
+
+Gunakan integer smallest currency unit
+atau PostgreSQL NUMERIC.
+
+Contoh:
+
+Rp 10.000
+
+disimpan sebagai numeric yang konsisten.
+
+Semua perhitungan harus deterministic.
+
+==================================================
+64. AUDITABILITY
+==================================================
+
+Data transaksi tidak boleh diam-diam berubah.
+
+Contoh:
+
+Harga produk berubah:
+
+Transaksi lama TIDAK boleh berubah.
+
+Order item harus menyimpan snapshot:
+
+product_name
+unit_price
+discount
+tax
+
+Sehingga laporan historis tetap benar.
+
+==================================================
+65. USER EXPERIENCE
+==================================================
+
+POS harus dapat digunakan:
+
+tanpa mouse sebanyak mungkin.
+
+Keyboard shortcuts:
+
+F2 Search
+F4 Customer
+F8 Payment
+ESC Close modal
+Enter Confirm
+
+Tetapi shortcut harus configurable
+dan tidak mengganggu browser.
+
+==================================================
+66. GLOBAL UX RULE
+==================================================
+
+Jangan membuat fitur hanya untuk terlihat lengkap.
+
+Semua fitur harus:
+
+- benar-benar bekerja
+- terhubung database
+- memiliki validation
+- memiliki loading state
+- memiliki error handling
+- memiliki authorization
+- responsive
+- accessible
+
+JANGAN membuat tombol palsu.
+
+JANGAN membuat:
+
+"Coming Soon"
+
+untuk fitur yang diminta.
+
+Jika fitur dibuat,
+fitur tersebut harus berfungsi.
+
+==================================================
+67. DEVELOPMENT WORKFLOW
+==================================================
+
+Jangan langsung membuat seluruh aplikasi secara acak.
+
+Ikuti tahap:
+
+PHASE 1
+Architecture
+
+PHASE 2
+Database schema
+
+PHASE 3
+Authentication
+
+PHASE 4
+Authorization
+
+PHASE 5
+Dashboard
+
+PHASE 6
+Products
+
+PHASE 7
+POS
+
+PHASE 8
+Orders
+
+PHASE 9
+Tables
+
+PHASE 10
+Kitchen
+
+PHASE 11
+Inventory
+
+PHASE 12
+Purchasing
+
+PHASE 13
+Customers
+
+PHASE 14
+Employees
+
+PHASE 15
+Reports
+
+PHASE 16
+Notifications
+
+PHASE 17
+Settings
+
+PHASE 18
+Testing
+
+PHASE 19
+Performance
+
+PHASE 20
+Security audit
+
+PHASE 21
+Production build
+
+==================================================
+68. BEFORE CODING
+==================================================
+
+Pertama:
+
+1. Analisa requirements
+2. Buat architecture
+3. Buat folder structure
+4. Buat database ERD secara konseptual
+5. Buat schema
+6. Buat RLS strategy
+7. Buat permission matrix
+8. Buat implementation plan
+
+Kemudian mulai coding.
+
+==================================================
+69. QUALITY GATE
+==================================================
+
+Sebelum menyatakan selesai, lakukan:
+
+npm run lint
+npm run typecheck
+npm run build
+npm test
+
+Jika menggunakan E2E:
+
+npm run test:e2e
+
+Perbaiki SEMUA error.
+
+==================================================
+70. FINAL PRODUCTION CHECKLIST
+==================================================
+
+Pastikan:
+
+[ ] Login username/password
+[ ] Authentication aman
+[ ] Authorization
+[ ] RLS
+[ ] Multi branch
+[ ] Dashboard
+[ ] POS
+[ ] Orders
+[ ] Tables
+[ ] Kitchen Display
+[ ] Waiter
+[ ] Products
+[ ] Categories
+[ ] Variants
+[ ] Modifiers
+[ ] Recipes
+[ ] Inventory
+[ ] Stock opname
+[ ] Purchasing
+[ ] Suppliers
+[ ] Customers
+[ ] Loyalty
+[ ] Promotions
+[ ] Expenses
+[ ] Employees
+[ ] Shifts
+[ ] Reports
+[ ] Profit calculation
+[ ] Tax
+[ ] Receipt
+[ ] Printing
+[ ] QR Menu
+[ ] Reservation
+[ ] Notifications
+[ ] Audit log
+[ ] Import/export
+[ ] Dark mode
+[ ] Responsive
+[ ] Mobile
+[ ] Accessibility
+[ ] Error handling
+[ ] Loading state
+[ ] Empty state
+[ ] Validation
+[ ] Security
+[ ] Testing
+[ ] Documentation
+[ ] Vercel deployment
+[ ] Supabase production configuration
+
+==================================================
+71. IMPORTANT IMPLEMENTATION RULE
+==================================================
+
+Jika menemukan konflik antara:
+
+UI
+Business Logic
+Database
+Security
+
+prioritaskan:
+
+1. Data integrity
+2. Security
+3. Business correctness
+4. Performance
+5. UX
+6. Visual design
+
+Jangan mengorbankan security demi UI.
+
+Jangan mengorbankan data integrity demi kemudahan.
+
+==================================================
+72. OUTPUT YANG DIHARAPKAN
+==================================================
+
+Bangun aplikasi secara nyata.
+
+Jangan hanya memberikan contoh kode.
+
+Jangan membuat mockup yang tidak berfungsi.
+
+Jangan membuat tombol dummy.
+
+Jangan menggunakan fake API.
+
+Jangan menggunakan fake database.
+
+Gunakan Supabase sungguhan.
+
+Pastikan semua CRUD utama berfungsi.
+
+Pastikan authentication berfungsi.
+
+Pastikan RLS berfungsi.
+
+Pastikan POS benar-benar dapat membuat transaksi.
+
+Pastikan inventory benar-benar berubah setelah transaksi.
+
+Pastikan laporan benar-benar mengambil data database.
+
+Pastikan Kitchen Display menerima order realtime.
+
+Pastikan aplikasi dapat:
+
+npm run dev
+
+dan:
+
+npm run build
+
+serta siap deploy ke Vercel.
+
+==================================================
+FINAL GOAL
+==================================================
+
+Hasil akhir harus terasa seperti software SaaS restaurant
+professional yang siap digunakan bisnis nyata.
+
+Bukan sekadar template admin.
+
+Bukan sekadar CRUD.
+
+Bukan sekadar POS.
+
+Tetapi satu platform:
+
+RESTAURANT MANAGEMENT SYSTEM
+
+yang menggabungkan:
+
+POS
++
+ORDER MANAGEMENT
++
+TABLE MANAGEMENT
++
+KITCHEN DISPLAY
++
+INVENTORY
++
+PURCHASING
++
+RECIPE / FOOD COST
++
+CUSTOMER
++
+LOYALTY
++
+PROMOTION
++
+EMPLOYEE
++
+EXPENSE
++
+REPORTING
++
+MULTI BRANCH
++
+NOTIFICATION
++
+AUDIT
++
+RESERVATION
++
+QR MENU
+
+dengan:
+
+Next.js
++
+Supabase
++
+PostgreSQL
++
+Vercel
+
+dan desain UI/UX premium, modern, cepat,
+responsive, aman, scalable, serta production-ready.
