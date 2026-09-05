@@ -6,8 +6,8 @@
 
 create or replace function public.create_order_atomic(
   p_order_type text,
-  p_table_id uuid,
-  p_customer_id uuid,
+  p_table_id text,
+  p_customer_id text,
   p_subtotal numeric,
   p_discount numeric,
   p_tax_amount numeric,
@@ -31,7 +31,7 @@ declare
   v_order_id uuid;
   v_order_number text;
   v_order_total numeric;
-  rec jsonb;
+  rec record;
   v_quantity numeric;
   v_unit_price numeric;
   v_item_discount numeric;
@@ -101,7 +101,7 @@ begin
         service_charge, total, paid_amount, change_amount, payment_status, notes
       ) values (
         v_org, v_branch, v_order_number, 'NEW', p_order_type,
-        p_table_id, p_customer_id, v_profile_id, p_subtotal, p_discount, p_tax_amount,
+        nullif(p_table_id,'')::uuid, nullif(p_customer_id,'')::uuid, v_profile_id, p_subtotal, p_discount, p_tax_amount,
         p_service_charge, p_total, p_paid_amount, p_change_amount,
         case
           when coalesce(p_paid_amount,0) >= coalesce(p_total,0) and coalesce(p_total,0) > 0 then 'PAID'
@@ -200,8 +200,8 @@ begin
   end loop;
 
   -- Mark table occupied for dine-in
-  if p_table_id is not null and p_order_type = 'DINE_IN' then
-    update restaurant_tables set status = 'OCCUPIED', updated_at = now() where id = p_table_id;
+  if nullif(p_table_id,'') is not null and p_order_type = 'DINE_IN' then
+    update restaurant_tables set status = 'OCCUPIED', updated_at = now() where id = nullif(p_table_id,'')::uuid;
   end if;
 
   -- Notifications
@@ -224,10 +224,10 @@ begin
     jsonb_build_object('order_number', v_order_number, 'total', p_total));
 
   -- Loyalty auto-earn for member customers
-  if p_customer_id is not null then
+  if nullif(p_customer_id,'') is not null then
     select c.name, c.total_spent
       into v_cust_name, v_total_spent
-      from customers c where c.id = p_customer_id for update;
+      from customers c where c.id = nullif(p_customer_id,'')::uuid for update;
     
     if v_cust_name is not null then
       -- Fetch loyalty settings
@@ -250,7 +250,7 @@ begin
             set points = coalesce(points, 0) + v_points,
                 total_spent = coalesce(total_spent, 0) + coalesce(p_total, 0),
                 is_member = true
-            where id = p_customer_id;
+            where id = nullif(p_customer_id,'')::uuid;
           
           -- Level evaluation
           v_total_spent := coalesce(v_total_spent, 0) + coalesce(p_total, 0);
@@ -259,15 +259,15 @@ begin
           elsif v_total_spent >= v_silver_min then v_new_level := 'SILVER';
           else v_new_level := 'BRONZE';
           end if;
-          update customers set member_level = v_new_level where id = p_customer_id;
+          update customers set member_level = v_new_level where id = nullif(p_customer_id,'')::uuid;
           
           insert into customer_points (customer_id, points, type, reference, reference_id, description)
-          values (p_customer_id, v_points, 'EARN', v_order_number, v_order_id,
+          values (nullif(p_customer_id,'')::uuid, v_points, 'EARN', v_order_number, v_order_id,
             'Poin dari order ' || v_order_number);
         else
           update customers
             set total_spent = coalesce(total_spent, 0) + coalesce(p_total, 0)
-            where id = p_customer_id;
+            where id = nullif(p_customer_id,'')::uuid;
         end if;
       end if;
     end if;
@@ -277,6 +277,6 @@ begin
 end;
 $$;
 
-revoke all on function public.create_order_atomic(text, uuid, uuid, numeric, numeric, numeric, numeric, numeric, numeric, numeric, text, jsonb, jsonb) from anon;
-revoke all on function public.create_order_atomic(text, uuid, uuid, numeric, numeric, numeric, numeric, numeric, numeric, numeric, text, jsonb, jsonb) from public;
-grant execute on function public.create_order_atomic(text, uuid, uuid, numeric, numeric, numeric, numeric, numeric, numeric, numeric, text, jsonb, jsonb) to authenticated;
+revoke all on function public.create_order_atomic(text, text, text, numeric, numeric, numeric, numeric, numeric, numeric, numeric, text, jsonb, jsonb) from anon;
+revoke all on function public.create_order_atomic(text, text, text, numeric, numeric, numeric, numeric, numeric, numeric, numeric, text, jsonb, jsonb) from public;
+grant execute on function public.create_order_atomic(text, text, text, numeric, numeric, numeric, numeric, numeric, numeric, numeric, text, jsonb, jsonb) to authenticated;
