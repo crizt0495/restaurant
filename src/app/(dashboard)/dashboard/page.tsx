@@ -16,7 +16,7 @@ export default async function DashboardPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold">Dasbor</h2>
+        <h2 className="font-display text-3xl font-bold tracking-tight">Dasbor</h2>
         <p className="text-sm text-muted-foreground">Ringkasan performa hari ini</p>
       </div>
       <Suspense fallback={<DashboardSkeleton />}>

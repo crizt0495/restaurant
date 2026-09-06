@@ -76,25 +76,25 @@ export function DashboardView({ initialData }: DashboardViewProps) {
 
   return (
     <>
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
         {stats.map((stat) => (
-          <Card key={stat.title}>
+          <Card key={stat.title} className="brutal-sm bg-card">
             <CardContent className="p-4">
               <div className="flex items-center gap-2">
                 <stat.icon className={`h-4 w-4 ${stat.color}`} />
-                <span className="text-xs text-muted-foreground">{stat.title}</span>
+                <span className="text-xs font-semibold text-muted-foreground">{stat.title}</span>
                 {live && <span className="ml-auto h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />}
               </div>
-              <p className="mt-2 text-lg font-bold md:text-xl">{stat.value}</p>
+              <p className="font-display mt-2 text-lg font-bold md:text-xl">{stat.value}</p>
             </CardContent>
           </Card>
         ))}
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm">7 Hari Penjualan</CardTitle>
+        <Card className="brutal-sm">
+          <CardHeader className="pb-2">
+            <CardTitle className="font-display text-base font-bold">7 Hari Penjualan</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex h-48 items-end gap-2">
@@ -115,9 +115,9 @@ export function DashboardView({ initialData }: DashboardViewProps) {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm">Aksi Cepat</CardTitle>
+        <Card className="brutal-sm">
+          <CardHeader className="pb-2">
+            <CardTitle className="font-display text-base font-bold">Aksi Cepat</CardTitle>
           </CardHeader>
           <CardContent className="grid gap-2 sm:grid-cols-2">
             <QuickAction href="/pos" label="Buka POS" icon={ShoppingBag} />
@@ -218,10 +218,10 @@ function QuickAction({
   return (
     <a
       href={href}
-      className="flex items-center gap-3 rounded-lg border p-4 text-left transition-colors hover:bg-accent"
+      className="brutal-sm brutal-hover brutal-active flex items-center gap-3 rounded-md bg-card p-4 text-left hover:bg-accent"
     >
       <Icon className="h-5 w-5 text-primary" />
-      <span className="text-sm font-medium">{label}</span>
+      <span className="text-sm font-bold">{label}</span>
     </a>
   )
 }

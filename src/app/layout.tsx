@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "react-hot-toast";
@@ -12,9 +12,16 @@ const inter = Inter({
   preload: true,
 });
 
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-display",
+  subsets: ["latin"],
+  display: "swap",
+  preload: true,
+});
+
 export const metadata: Metadata = {
-  title: "Restaurant Management System",
-  description: "Professional restaurant management system - POS, orders, kitchen display, inventory, and reporting.",
+  title: "Sistem Manajemen Restoran",
+  description: "Sistem manajemen restoran profesional - POS, pesanan, layar dapur, inventaris, dan laporan.",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
@@ -29,7 +36,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="id" suppressHydrationWarning className={`${inter.variable} h-full antialiased`}>
+    <html
+      lang="id"
+      suppressHydrationWarning
+      className={`${inter.variable} ${spaceGrotesk.variable} h-full antialiased`}
+    >
       <head>
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#f97316" />

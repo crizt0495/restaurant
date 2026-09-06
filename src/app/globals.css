@@ -3,7 +3,7 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: 0 0% 100%;
+  --background: 44 33% 96%;
   --foreground: 222.2 84% 4.9%;
   --card: 0 0% 100%;
   --card-foreground: 222.2 84% 4.9%;
@@ -11,24 +11,28 @@
   --popover-foreground: 222.2 84% 4.9%;
   --primary: 24 95% 53%;
   --primary-foreground: 0 0% 100%;
-  --secondary: 210 40% 96.1%;
+  --secondary: 43 45% 91%;
   --secondary-foreground: 222.2 47.4% 11.2%;
-  --muted: 210 40% 96.1%;
+  --muted: 43 35% 92%;
   --muted-foreground: 215.4 16.3% 46.9%;
-  --accent: 210 40% 96.1%;
+  --accent: 43 45% 91%;
   --accent-foreground: 222.2 47.4% 11.2%;
   --destructive: 0 84.2% 60.2%;
   --destructive-foreground: 210 40% 98%;
-  --border: 214.3 31.8% 91.4%;
-  --input: 214.3 31.8% 91.4%;
+  --border: 214.3 31.8% 88%;
+  --input: 214.3 31.8% 88%;
   --ring: 24 95% 53%;
-  --radius: 0.75rem;
+  --radius: 0.65rem;
   --chart-1: 24 95% 53%;
   --chart-2: 160 84% 39%;
   --chart-3: 221 83% 53%;
   --chart-4: 280 65% 60%;
   --chart-5: 40 90% 60%;
   --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+
+:root {
+  --brutal-ink: 222 84% 7%;
 }
 
 .dark {
@@ -38,7 +42,7 @@
   --card-foreground: 210 40% 98%;
   --popover: 222.2 84% 4.9%;
   --popover-foreground: 210 40% 98%;
-  --primary: 24 95% 53%;
+  --primary: 24 95% 60%;
   --primary-foreground: 222.2 47.4% 11.2%;
   --secondary: 217.2 32.6% 17.5%;
   --secondary-foreground: 210 40% 98%;
@@ -48,9 +52,9 @@
   --accent-foreground: 210 40% 98%;
   --destructive: 0 62.8% 30.6%;
   --destructive-foreground: 210 40% 98%;
-  --border: 217.2 32.6% 17.5%;
-  --input: 217.2 32.6% 17.5%;
-  --ring: 24 95% 53%;
+  --border: 217.2 32.6% 20%;
+  --input: 217.2 32.6% 20%;
+  --ring: 24 95% 60%;
   --chart-1: 24 95% 60%;
   --chart-2: 160 84% 45%;
   --chart-3: 221 83% 60%;
@@ -84,6 +88,7 @@
   --color-chart-4: hsl(var(--chart-4));
   --color-chart-5: hsl(var(--chart-5));
   --font-sans: var(--font-sans);
+  --font-display: var(--font-display);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -126,5 +131,72 @@ body {
     max-width: 100% !important;
     box-shadow: none !important;
     border: none !important;
+  }
+}
+
+/* =====================================================
+   NEO-BRUTALISM utilities (hybrid: action screens only)
+   ===================================================== */
+@layer utilities {
+  .brutal-ink {
+    color: hsl(var(--brutal-ink));
+  }
+
+  /* 2px solid ink border + hard offset shadow */
+  .brutal {
+    border: 2px solid hsl(var(--brutal-ink));
+    box-shadow: 4px 4px 0 0 hsl(var(--brutal-ink));
+  }
+
+  .brutal-sm {
+    border: 2px solid hsl(var(--brutal-ink));
+    box-shadow: 3px 3px 0 0 hsl(var(--brutal-ink));
+  }
+
+  .brutal-shadow {
+    box-shadow: 4px 4px 0 0 hsl(var(--brutal-ink));
+  }
+
+  .brutal-shadow-sm {
+    box-shadow: 3px 3px 0 0 hsl(var(--brutal-ink));
+  }
+
+  .brutal-primary {
+    background-color: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    border: 2px solid hsl(var(--brutal-ink));
+    box-shadow: 4px 4px 0 0 hsl(var(--brutal-ink));
+  }
+
+  .brutal-hover {
+    transition:
+      transform 130ms ease,
+      box-shadow 130ms ease;
+  }
+
+  .brutal-hover:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 0 hsl(var(--brutal-ink));
+  }
+
+  .brutal-active:active {
+    transform: translate(2px, 2px);
+    box-shadow: 0 0 0 0 hsl(var(--brutal-ink));
+  }
+
+  .brutal-tag {
+    border: 2px solid hsl(var(--brutal-ink));
+    border-radius: 0.375rem;
+    box-shadow: 2px 2px 0 0 hsl(var(--brutal-ink));
+  }
+
+  .brutal-input {
+    border: 2px solid hsl(var(--brutal-ink)) !important;
+    border-radius: 0.5rem;
+    box-shadow: 3px 3px 0 0 hsl(var(--brutal-ink));
+  }
+
+  .font-display {
+    font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif;
   }
 }

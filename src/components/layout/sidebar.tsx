@@ -31,10 +31,10 @@ export function Sidebar({ user, permissions, isSuperAdmin }: SidebarProps) {
   return (
     <aside className="fixed inset-y-0 left-0 z-40 hidden w-64 flex-col border-r bg-background lg:flex">
       <div className="flex h-14 items-center gap-2 border-b px-4">
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-          <UtensilsCrossed className="h-4 w-4 text-primary-foreground" />
+        <div className="brutal-primary brutal-active flex h-9 w-9 items-center justify-center rounded-md">
+          <UtensilsCrossed className="h-4 w-4" />
         </div>
-        <span className="text-sm font-semibold">RMS</span>
+        <span className="font-display text-lg font-bold tracking-tight">RMS</span>
       </div>
 
       <nav className="flex-1 space-y-2 overflow-y-auto p-3">
@@ -54,9 +54,9 @@ export function Sidebar({ user, permissions, isSuperAdmin }: SidebarProps) {
                     key={item.href}
                     href={item.href}
                     className={cn(
-                      "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                      "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-semibold transition-colors",
                       active
-                        ? "bg-primary/10 text-primary"
+                        ? "bg-primary text-primary-foreground"
                         : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                     )}
                   >

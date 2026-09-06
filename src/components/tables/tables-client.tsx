@@ -40,23 +40,44 @@ const STATUS_COLOR: Record<string, string> = {
 
 export function TablesClient({ tables: initialTables }: { tables: TableItem[] }) {
   const [tables, setTables] = React.useState(initialTables)
+  const refreshTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null)
+  const pendingRef = React.useRef(false)
 
   React.useEffect(() => {
     setTables(initialTables)
   }, [initialTables])
 
+  const refetch = React.useCallback(async () => {
+    const { data } = await createClient()
+      .from("restaurant_tables")
+      .select("*, area:table_areas(*), active_orders:orders(*)")
+      .order("number")
+    if (data) setTables(data)
+  }, [])
+
   React.useEffect(() => {
     const supabase = createClient()
+    const schedule = () => {
+      if (refreshTimerRef.current) clearTimeout(refreshTimerRef.current)
+      refreshTimerRef.current = setTimeout(() => {
+        if (pendingRef.current) {
+          pendingRef.current = false
+          refetch()
+        }
+      }, 1500)
+    }
     const channel = supabase
       .channel("tables-status")
       .on("postgres_changes", { event: "*", schema: "public", table: "restaurant_tables" }, () => {
-        window.location.reload()
+        pendingRef.current = true
+        schedule()
       })
       .subscribe()
     return () => {
       supabase.removeChannel(channel)
+      if (refreshTimerRef.current) clearTimeout(refreshTimerRef.current)
     }
-  }, [])
+  }, [refetch])
 
   const markClear = async (tableId: string) => {
     const supabase = createClient()
@@ -72,11 +93,11 @@ export function TablesClient({ tables: initialTables }: { tables: TableItem[] })
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold">Tables</h2>
-          <p className="text-sm text-muted-foreground">Floor plan dan manajemen meja</p>
+          <h2 className="font-display text-3xl font-bold">Meja</h2>
+          <p className="text-sm text-muted-foreground">Denah lantai dan manajemen meja</p>
         </div>
-        <Button variant="outline" size="sm" onClick={() => window.location.reload()}>
-          <RefreshCw className="mr-2 h-4 w-4" /> Refresh
+        <Button variant="outline" size="sm" onClick={() => refetch()}>
+          <RefreshCw className="mr-2 h-4 w-4" /> Segarkan
         </Button>
       </div>
 
@@ -88,29 +109,29 @@ export function TablesClient({ tables: initialTables }: { tables: TableItem[] })
             (o) => o.status === "NEW" || o.status === "CONFIRMED" || o.status === "PREPARING" || o.status === "READY"
           )
           return (
-            <Card key={table.id} className={`border-2 ${color}`}>
+            <Card key={table.id} className={`brutal-sm brutal-hover border-2 ${color}`}>
               <CardContent className="p-4">
                 <div className="flex items-start justify-between">
                   <div>
-                    <p className="text-lg font-bold">{table.name || table.number}</p>
+                    <p className="font-display text-xl font-bold">{table.name || table.number}</p>
                     <p className="text-sm text-muted-foreground">
-                      {table.area?.name || "No area"} · Cap. {table.capacity}
+                      {table.area?.name || "Tanpa area"} · Kap. {table.capacity}
                     </p>
                   </div>
-                  <Badge variant={style.variant}>{style.label}</Badge>
+                  <Badge variant={style.variant} className="brutal-tag">{style.label}</Badge>
                 </div>
 
                 {activeOrder ? (
-                  <div className="mt-3 rounded-md bg-muted p-3">
+                  <div className="mt-3 rounded-md bg-background p-3">
                     <p className="text-xs text-muted-foreground">
                       {formatDateTime(activeOrder.created_at)}
                     </p>
                     <p className="text-sm font-medium">
-                      Order <Link href={`/orders/${activeOrder.id}`} className="text-primary underline">{activeOrder.order_number}</Link>
+                      Pesanan <Link href={`/orders/${activeOrder.id}`} className="text-primary underline">{activeOrder.order_number}</Link>
                     </p>
-                    <p className="mt-1 text-sm font-bold">{formatCurrency(activeOrder.total)}</p>
+                    <p className="font-display mt-1 text-base font-bold">{formatCurrency(activeOrder.total)}</p>
                     <div className="mt-2 flex gap-2">
-                      <Button size="sm" variant="secondary" onClick={() => markClear(table.id)}>
+                      <Button size="sm" variant="secondary" className="brutal-tag rounded font-bold" onClick={() => markClear(table.id)}>
                         Bersihkan
                       </Button>
                     </div>

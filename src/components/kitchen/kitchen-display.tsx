@@ -154,10 +154,10 @@ const refreshTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null)
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-        <h2 className="text-2xl font-bold">Tampilan Dapur</h2>
+        <h2 className="font-display text-3xl font-bold tracking-tight">Tampilan Dapur</h2>
         <p className="text-sm text-muted-foreground">Pesanan langsung dari kasir</p>
         </div>
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+        <div className="brutal-tag flex items-center gap-2 bg-card px-3 py-1.5 text-sm font-bold text-muted-foreground">
           <Clock className="h-4 w-4" />
           {new Date(now).toLocaleTimeString("id-ID")}
         </div>
@@ -165,8 +165,10 @@ const refreshTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null)
 
       <div className="grid gap-4 md:grid-cols-3">
         {columns.map((col) => (
-          <div key={col.status} className={`rounded-xl border p-3 ${col.color}`}>
-            <h3 className="mb-3 text-sm font-semibold">{col.label}</h3>
+          <div key={col.status} className={`brutal-sm rounded-md p-3 ${col.color}`}>
+            <div className="font-display mb-3 flex items-center justify-between rounded bg-black px-2 py-1 text-base font-bold text-white">
+              {col.label}
+            </div>
             <div className="space-y-3">
               {orders
                 .filter((o) => o.items.some((i) => i.status === col.status))
@@ -175,10 +177,10 @@ const refreshTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null)
                   return (
                     <div
                       key={order.id}
-                      className={`rounded-lg border bg-background p-3 shadow-sm ${isLate(order.created_at) ? "ring-2 ring-red-400" : ""}`}
+                      className={`brutal-sm rounded-md bg-background p-3 ${isLate(order.created_at) ? "ring-2 ring-red-500" : ""}`}
                     >
                       <div className="mb-2 flex items-center justify-between">
-                        <span className="text-sm font-bold">{order.table_number}</span>
+                        <span className="font-display text-base font-bold">{order.table_number}</span>
                         <Badge variant={isLate(order.created_at) ? "destructive" : "secondary"}>
                           {timeAgo(order.created_at)}
                         </Badge>
@@ -187,13 +189,13 @@ const refreshTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null)
                         {orderItems.map((item) => (
                           <div key={item.id} className="border-t py-1.5 first:border-t-0">
                             <div className="flex items-center justify-between gap-2">
-                              <p className="text-sm font-medium">
+                              <p className="text-sm font-semibold">
                                 {item.quantity}x {item.product_name}
                               </p>
                               <Button
                                 size="sm"
-                                variant="outline"
-                                className="h-6 shrink-0"
+                                variant="secondary"
+                                className="brutal-tag h-7 shrink-0 rounded font-bold"
                                 onClick={() => handleItemStatus(item.id, order.id)}
                               >
                                 {item.status === "NEW" ? "Mulai" : item.status === "PREPARING" ? "Selesai" : "Sajikan"}

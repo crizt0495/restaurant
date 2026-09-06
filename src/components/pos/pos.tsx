@@ -380,7 +380,7 @@ export function POS({ user, categories, products, tables, customers: initialCust
           <Input
             id="pos-search"
             placeholder="Cari produk, SKU, atau barcode... (F2)"
-            className="pl-9"
+            className="brutal-input pl-9"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             autoFocus
@@ -393,7 +393,7 @@ export function POS({ user, categories, products, tables, customers: initialCust
               <button
                 key={product.id}
                 onClick={() => addToCart(product)}
-                className="group flex flex-col rounded-lg border bg-card p-3 text-left transition-all hover:border-primary hover:shadow-md"
+                className="brutal-sm brutal-hover brutal-active group flex flex-col rounded-md bg-card p-3 text-left"
               >
                 <div className="mb-2 flex h-20 items-center justify-center rounded-md bg-muted">
                   {product.image_url ? (
@@ -403,8 +403,8 @@ export function POS({ user, categories, products, tables, customers: initialCust
                     <Utensils className="h-6 w-6 text-muted-foreground" />
                   )}
                 </div>
-                <p className="truncate text-sm font-medium">{product.name}</p>
-                <p className="mt-1 text-sm font-bold text-primary">
+                <p className="font-display truncate text-sm font-bold">{product.name}</p>
+                <p className="font-display mt-1 text-base font-bold text-primary">
                   {formatCurrency(product.selling_price)}
                 </p>
                 {product.is_favorite && <Badge variant="success" className="mt-1 w-fit text-[10px]">Favorit</Badge>}
@@ -415,7 +415,7 @@ export function POS({ user, categories, products, tables, customers: initialCust
       </div>
 
       {/* RIGHT: cart */}
-      <div className="flex w-full flex-col rounded-lg border bg-background lg:w-80">
+      <div className="flex w-full flex-col rounded-md border-2 border-foreground/15 bg-foreground/[0.02] lg:w-80">
         <div className="border-b p-3">
           <div className="flex flex-wrap items-center gap-1">
             {ORDER_TYPES.map((type) => (
@@ -562,7 +562,7 @@ export function POS({ user, categories, products, tables, customers: initialCust
               <span className="text-muted-foreground">Pajak</span>
               <span>{formatCurrency(taxAmount)}</span>
             </div>
-            <div className="flex justify-between border-t pt-1 text-base font-bold">
+            <div className="font-display flex justify-between border-t pt-1 text-lg font-bold">
               <span>Total</span>
               <span>{formatCurrency(total)}</span>
             </div>
@@ -571,7 +571,7 @@ export function POS({ user, categories, products, tables, customers: initialCust
           {error && <p className="mt-2 text-sm text-destructive">{error}</p>}
 
           <Button
-            className="mt-3 w-full"
+            className="brutal-primary brutal-hover brutal-active mt-3 w-full rounded-md"
             size="lg"
             onClick={openPaymentDialog}
             disabled={cart.length === 0}
