@@ -123,7 +123,7 @@ export function ShiftsClient({ shifts: initialShifts, canOpen, canClose }: Shift
     <div className="space-y-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-2xl font-bold">Cashier Shifts</h2>
+          <h2 className="text-2xl font-bold">Shift Kasir</h2>
           <p className="text-sm text-muted-foreground">Buka dan tutup shift kasir</p>
         </div>
         {canOpen && openShifts.length === 0 && (
@@ -181,8 +181,8 @@ export function ShiftsClient({ shifts: initialShifts, canOpen, canClose }: Shift
                 <TableHead>Ditutup</TableHead>
                 <TableHead className="text-right">Kas Awal</TableHead>
                 <TableHead className="text-right">Penjualan Tunai</TableHead>
-                <TableHead className="text-right">Expected</TableHead>
-                <TableHead className="text-right">Actual</TableHead>
+                <TableHead className="text-right">Diharapkan</TableHead>
+                <TableHead className="text-right">Aktual</TableHead>
                 <TableHead className="text-right">Selisih</TableHead>
                 <TableHead>Status</TableHead>
               </TableRow>
@@ -205,7 +205,7 @@ export function ShiftsClient({ shifts: initialShifts, canOpen, canClose }: Shift
                     <TableCell className="text-right">
                       {s.status === "CLOSED" ? (
                         <Badge variant={variance === 0 ? "success" : variance < 0 ? "destructive" : "warning"}>
-                          {variance === 0 ? "Match" : variance > 0 ? `+${formatCurrency(variance)}` : formatCurrency(variance)}
+                          {variance === 0 ? "Cocok" : variance > 0 ? `+${formatCurrency(variance)}` : formatCurrency(variance)}
                         </Badge>
                       ) : (
                         "-"
@@ -264,7 +264,7 @@ export function ShiftsClient({ shifts: initialShifts, canOpen, canClose }: Shift
                 <p>Kas awal: {formatCurrency(Number(closeDialog.opening_cash))}</p>
                 <p>Penjualan tunai selama shift: {formatCurrency(Number(closeDialog.cash_sales ?? 0))}</p>
                 <Separator className="my-2" />
-                <p>Expected cash: <span className="font-bold">{formatCurrency(Number(closeDialog.expected_cash ?? 0))}</span></p>
+                <p>                Kas yang diharapkan: <span className="font-bold">{formatCurrency(Number(closeDialog.expected_cash ?? 0))}</span></p>
               </div>
               <div className="grid gap-2">
                 <Label>Kas Aktual (hitung uang fisik)</Label>

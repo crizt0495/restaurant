@@ -56,7 +56,7 @@ export function PaymentMethodsClient({
   return (
     <div className="space-y-4">
       <div>
-        <h2 className="text-2xl font-bold">Payment Methods</h2>
+        <h2 className="text-2xl font-bold">Metode Pembayaran</h2>
         <p className="text-sm text-muted-foreground">
           Aktifkan atau nonaktifkan metode pembayaran
         </p>

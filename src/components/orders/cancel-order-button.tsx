@@ -30,7 +30,7 @@ export function CancelOrderButton({ orderId }: { orderId: string }) {
       toast.error(result.error)
       return
     }
-    toast.success("Order dibatalkan")
+    toast.success("Pesanan dibatalkan")
     setOpen(false)
     router.refresh()
   }
@@ -38,14 +38,14 @@ export function CancelOrderButton({ orderId }: { orderId: string }) {
   return (
     <>
       <Button variant="destructive" size="sm" onClick={() => setOpen(true)}>
-        <Ban className="mr-2 h-4 w-4" /> Batal Order
+        <Ban className="mr-2 h-4 w-4" /> Batal Pesanan
       </Button>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Batalkan Order</DialogTitle>
+            <DialogTitle>Batalkan Pesanan</DialogTitle>
             <DialogDescription>
-              Order akan dibatalkan dan tidak dapat dipulihkan. Pastikan anda yakin.
+              Pesanan akan dibatalkan dan tidak dapat dipulihkan. Pastikan anda yakin.
             </DialogDescription>
           </DialogHeader>
           <div>

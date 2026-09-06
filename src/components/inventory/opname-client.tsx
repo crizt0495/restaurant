@@ -185,7 +185,7 @@ export function OpnameClient({
     <div className="space-y-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-2xl font-bold">Stock Opname</h2>
+          <h2 className="text-2xl font-bold">Opname Stok</h2>
           <p className="text-sm text-muted-foreground">
             Selisih stok fisik vs sistem
           </p>
@@ -201,7 +201,7 @@ export function OpnameClient({
         <Card>
           <CardContent className="py-12 text-center text-muted-foreground">
             <ClipboardCheck className="mx-auto mb-2 h-8 w-8" />
-            <p>Belum ada stock opname</p>
+            <p>Belum ada opname stok</p>
           </CardContent>
         </Card>
       ) : (
@@ -266,7 +266,7 @@ export function OpnameClient({
       <Dialog open={createOpen} onOpenChange={setCreateOpen}>
         <DialogContent className="sm:max-w-2xl">
           <DialogHeader>
-            <DialogTitle>Buat Stock Opname</DialogTitle>
+            <DialogTitle>Buat Opname Stok</DialogTitle>
           </DialogHeader>
           <div className="grid gap-4">
             <div className="grid gap-2">
@@ -289,7 +289,7 @@ export function OpnameClient({
             </div>
 
             <div className="grid gap-2">
-              <Label>Item Inventory</Label>
+              <Label>Item Persediaan</Label>
               <div className="grid gap-2">
                 {lines.map((line, index) => {
                   const invItem = inventoryItems.find(
@@ -365,7 +365,7 @@ export function OpnameClient({
               {saving ? (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               ) : null}
-              Submit Opname
+              Kirim Opname
             </Button>
           </DialogFooter>
         </DialogContent>

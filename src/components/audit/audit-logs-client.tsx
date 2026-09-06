@@ -66,7 +66,7 @@ export function AuditLogsClient({ logs: initial }: { logs: AuditLog[] }) {
   return (
     <div className="space-y-4">
       <div>
-        <h2 className="text-2xl font-bold">Audit Logs</h2>
+        <h2 className="text-2xl font-bold">Log Audit</h2>
         <p className="text-sm text-muted-foreground">Catatan aktivitas sistem</p>
       </div>
 
@@ -86,7 +86,7 @@ export function AuditLogsClient({ logs: initial }: { logs: AuditLog[] }) {
           className="h-9 rounded-md border bg-background px-3 text-sm"
           aria-label="Filter action"
         >
-          <option value="">Semua Action</option>
+          <option value="">Semua Aksi</option>
           {allActions.map((a) => (
             <option key={a} value={a}>{a}</option>
           ))}

@@ -70,13 +70,13 @@ interface POSProps {
 
 const ORDER_TYPES = ["DINE_IN", "TAKE_AWAY", "DELIVERY", "PICK_UP"] as const
 const PAYMENT_METHODS = [
-  { key: "CASH", label: "Cash", icon: Banknote },
+  { key: "CASH", label: "Tunai", icon: Banknote },
   { key: "BANK_TRANSFER", label: "Transfer", icon: Landmark },
   { key: "QRIS", label: "QRIS", icon: Smartphone },
   { key: "DEBIT", label: "Debit", icon: CreditCard },
   { key: "CREDIT", label: "Credit", icon: CreditCard },
   { key: "E_WALLET", label: "E-Wallet", icon: Smartphone },
-  { key: "OTHER", label: "Other", icon: Utensils },
+  { key: "OTHER", label: "Lainnya", icon: Utensils },
 ]
 
 export function POS({ user, categories, products, tables, customers: initialCustomers, taxPercentage = 11, taxInclusive = false, serviceChargePercentage = 5 }: POSProps) {
@@ -593,7 +593,7 @@ export function POS({ user, categories, products, tables, customers: initialCust
           <div className="space-y-4">
             {selectedProduct?.variants?.length > 0 && (
               <div>
-                <p className="mb-1 text-sm font-medium">Variant</p>
+                <p className="mb-1 text-sm font-medium">Varian</p>
                 <div className="flex flex-wrap gap-2">
                   {selectedProduct.variants.map((v: any) => (
                     <Button
@@ -779,16 +779,16 @@ export function POS({ user, categories, products, tables, customers: initialCust
       <Dialog open={newCustomerOpen} onOpenChange={setNewCustomerOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Tambah Customer Cepat</DialogTitle>
+            <DialogTitle>Tambah Pelanggan Cepat</DialogTitle>
           </DialogHeader>
           <div className="grid gap-3">
             <div className="grid gap-2">
               <span className="text-sm font-medium">Nama</span>
-              <Input value={newCustomerName} onChange={(e) => setNewCustomerName(e.target.value)} placeholder="Nama customer" />
+              <Input value={newCustomerName} onChange={(e) => setNewCustomerName(e.target.value)} placeholder="Nama pelanggan" />
             </div>
             <div className="grid gap-2">
               <span className="text-sm font-medium">Telepon</span>
-              <Input value={newCustomerPhone} onChange={(e) => setNewCustomerPhone(e.target.value)} placeholder="Opsional" />
+              <Input value={newCustomerPhone} onChange={(e) => setNewCustomerPhone(e.target.value)} placeholder="opsional" />
             </div>
           </div>
           <DialogFooter>

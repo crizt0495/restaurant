@@ -208,7 +208,7 @@ export function RecipesClient({
     <div className="space-y-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-2xl font-bold">Recipes / BOM</h2>
+          <h2 className="text-2xl font-bold">Resep / BOM</h2>
           <p className="text-sm text-muted-foreground">
             Kelola resep dan biaya bahan produk
           </p>

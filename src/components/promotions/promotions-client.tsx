@@ -383,7 +383,7 @@ export function PromotionsClient({
               {showBuyGet && (
                 <>
                   <div className="grid gap-2">
-                    <Label>Beli Quantity</Label>
+                    <Label>Jumlah Beli</Label>
                     <Input
                       type="number"
                       min={1}

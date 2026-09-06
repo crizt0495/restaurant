@@ -101,7 +101,7 @@ export function RolesClient({ roles, permissions, rolePermissions }: RolesClient
   return (
     <div className="space-y-4">
       <div>
-        <h2 className="text-2xl font-bold">Roles & Permissions</h2>
+        <h2 className="text-2xl font-bold">Peran & Izin</h2>
         <p className="text-sm text-muted-foreground">Kelola hak akses per role</p>
       </div>
 

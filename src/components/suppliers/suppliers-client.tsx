@@ -143,12 +143,12 @@ export function SuppliersClient({ suppliers, canCreate, canEdit, canDelete }: Su
     <div className="space-y-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-2xl font-bold">Suppliers</h2>
+          <h2 className="text-2xl font-bold">Pemasok</h2>
           <p className="text-sm text-muted-foreground">Kelola pemasok</p>
         </div>
         {canCreate && (
           <Button size="sm" onClick={openCreate}>
-            <Plus className="mr-2 h-4 w-4" /> Tambah Supplier
+            <Plus className="mr-2 h-4 w-4" /> Tambah Pemasok
           </Button>
         )}
       </div>
@@ -167,7 +167,7 @@ export function SuppliersClient({ suppliers, canCreate, canEdit, canDelete }: Su
         <Card>
           <CardContent className="py-12 text-center text-muted-foreground">
             <Building2 className="mx-auto mb-2 h-8 w-8" />
-            <p>Belum ada supplier</p>
+            <p>Belum ada pemasok</p>
           </CardContent>
         </Card>
       ) : (
@@ -225,7 +225,7 @@ export function SuppliersClient({ suppliers, canCreate, canEdit, canDelete }: Su
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="sm:max-w-lg">
           <DialogHeader>
-            <DialogTitle>{editingId ? "Edit Supplier" : "Tambah Supplier"}</DialogTitle>
+            <DialogTitle>{editingId ? "Edit Pemasok" : "Tambah Pemasok"}</DialogTitle>
           </DialogHeader>
           <div className="grid gap-4">
             <div className="grid grid-cols-2 gap-3">

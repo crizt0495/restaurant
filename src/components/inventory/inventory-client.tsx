@@ -224,7 +224,7 @@ export function InventoryClient({ items, canCreate, canEdit, canDelete, canAdjus
     <div className="space-y-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-2xl font-bold">Inventory</h2>
+          <h2 className="text-2xl font-bold">Persediaan</h2>
           <p className="text-sm text-muted-foreground">Kelola stok bahan baku dan barang</p>
         </div>
         {canCreate && (
@@ -274,7 +274,7 @@ export function InventoryClient({ items, canCreate, canEdit, canDelete, canAdjus
                   <TableHead>SKU</TableHead>
                   <TableHead>Unit</TableHead>
                   <TableHead className="text-right">Qty</TableHead>
-                  <TableHead className="text-right">Min Stock</TableHead>
+                  <TableHead className="text-right">Stok Min</TableHead>
                   <TableHead className="text-right">Harga Pokok</TableHead>
                   <TableHead>Kategori</TableHead>
                   <TableHead>Status</TableHead>
@@ -378,7 +378,7 @@ export function InventoryClient({ items, canCreate, canEdit, canDelete, canAdjus
                 <Input value={form.unit} onChange={(e) => setForm({ ...form, unit: e.target.value })} />
               </div>
               <div className="grid gap-2">
-                <Label>Category</Label>
+                <Label>Kategori</Label>
                 <Select value={form.category} onValueChange={(v) => setForm({ ...form, category: v })}>
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
@@ -391,7 +391,7 @@ export function InventoryClient({ items, canCreate, canEdit, canDelete, canAdjus
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div className="grid gap-2">
-                <Label>Quantity</Label>
+                <Label>Jumlah</Label>
                 <Input
                   type="number"
                   value={form.quantity}
@@ -399,7 +399,7 @@ export function InventoryClient({ items, canCreate, canEdit, canDelete, canAdjus
                 />
               </div>
               <div className="grid gap-2">
-                <Label>Cost Price</Label>
+                <Label>Harga Pokok</Label>
                 <Input
                   type="number"
                   value={form.cost_price}
@@ -409,7 +409,7 @@ export function InventoryClient({ items, canCreate, canEdit, canDelete, canAdjus
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div className="grid gap-2">
-                <Label>Minimum Stock</Label>
+                <Label>Stok Minimum</Label>
                 <Input
                   type="number"
                   value={form.minimum_stock}
@@ -417,7 +417,7 @@ export function InventoryClient({ items, canCreate, canEdit, canDelete, canAdjus
                 />
               </div>
               <div className="grid gap-2">
-                <Label>Maximum Stock</Label>
+                <Label>Stok Maksimum</Label>
                 <Input
                   type="number"
                   value={form.maximum_stock}
@@ -440,7 +440,7 @@ export function InventoryClient({ items, canCreate, canEdit, canDelete, canAdjus
       <Dialog open={!!adjustItem} onOpenChange={(open) => !open && setAdjustItem(null)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Adjust Stok: {adjustItem?.name}</DialogTitle>
+            <DialogTitle>Sesuaikan Stok: {adjustItem?.name}</DialogTitle>
           </DialogHeader>
           {adjustItem && (
             <div className="grid gap-4">
@@ -452,10 +452,10 @@ export function InventoryClient({ items, canCreate, canEdit, canDelete, canAdjus
                 <Select value={adjustType} onValueChange={(v) => setAdjustType(v as typeof adjustType)}>
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="ADJUSTMENT">Adjustment (Umum)</SelectItem>
-                    <SelectItem value="STOCK_IN">Stock In</SelectItem>
-                    <SelectItem value="STOCK_OUT">Stock Out</SelectItem>
-                    <SelectItem value="WASTE">Waste / Rusak</SelectItem>
+                    <SelectItem value="ADJUSTMENT">Penyesuaian (Umum)</SelectItem>
+                    <SelectItem value="STOCK_IN">Stok Masuk</SelectItem>
+                    <SelectItem value="STOCK_OUT">Stok Keluar</SelectItem>
+                    <SelectItem value="WASTE">Sisa / Rusak</SelectItem>
                     <SelectItem value="TRANSFER">Transfer</SelectItem>
                   </SelectContent>
                 </Select>

@@ -228,12 +228,12 @@ export function PurchasesClient({
     <div className="space-y-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-2xl font-bold">Purchase Orders</h2>
+          <h2 className="text-2xl font-bold">Pesanan Pembelian</h2>
           <p className="text-sm text-muted-foreground">Kelola pesanan pembelian</p>
         </div>
         {canCreate && (
           <Button size="sm" onClick={openCreate}>
-            <Plus className="mr-2 h-4 w-4" /> New Purchase Order
+            <Plus className="mr-2 h-4 w-4" /> Pesanan Pembelian Baru
           </Button>
         )}
       </div>
@@ -242,7 +242,7 @@ export function PurchasesClient({
         <Card>
           <CardContent className="py-12 text-center text-muted-foreground">
             <PackageCheck className="mx-auto mb-2 h-8 w-8" />
-            <p>Belum ada purchase order</p>
+            <p>Belum ada pesanan pembelian</p>
           </CardContent>
         </Card>
       ) : (
@@ -250,8 +250,8 @@ export function PurchasesClient({
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>PO Number</TableHead>
-                <TableHead>Supplier</TableHead>
+                <TableHead>Nomor PO</TableHead>
+                <TableHead>Pemasok</TableHead>
                 <TableHead>Tanggal</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead className="text-right">Total</TableHead>
@@ -290,7 +290,7 @@ export function PurchasesClient({
                           className="h-7"
                           onClick={() => openReceive(po)}
                         >
-                          <PackageCheck className="mr-1 h-3 w-3" /> Receive
+                          <PackageCheck className="mr-1 h-3 w-3" /> Terima
                         </Button>
                       )}
                     </div>
@@ -306,14 +306,14 @@ export function PurchasesClient({
       <Dialog open={createOpen} onOpenChange={setCreateOpen}>
         <DialogContent className="sm:max-w-2xl">
           <DialogHeader>
-            <DialogTitle>New Purchase Order</DialogTitle>
+            <DialogTitle>Pesanan Pembelian Baru</DialogTitle>
           </DialogHeader>
           <div className="grid gap-4">
             <div className="grid grid-cols-2 gap-3">
               <div className="grid gap-2">
-                <Label>Supplier</Label>
+                <Label>Pemasok</Label>
                 <Select value={supplierId} onValueChange={setSupplierId}>
-                  <SelectTrigger><SelectValue placeholder="Pilih supplier" /></SelectTrigger>
+                  <SelectTrigger><SelectValue placeholder="Pilih pemasok" /></SelectTrigger>
                   <SelectContent>
                     {suppliers.map((s) => (
                       <SelectItem key={s.id} value={s.id}>
@@ -324,13 +324,13 @@ export function PurchasesClient({
                 </Select>
               </div>
               <div className="grid gap-2">
-                <Label>Expected Date</Label>
+                <Label>Tanggal Diharapkan</Label>
                 <Input type="date" value={expectedDate} onChange={(e) => setExpectedDate(e.target.value)} />
               </div>
             </div>
 
             <div className="grid gap-2">
-              <Label>Line Items</Label>
+              <Label>Item Pembelian</Label>
               <div className="grid gap-2">
                 {lines.map((line, index) => (
                   <div key={index} className="grid grid-cols-12 items-center gap-2">
@@ -381,7 +381,7 @@ export function PurchasesClient({
 
             <div className="grid gap-2">
               <Label>Catatan</Label>
-              <Input value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Opsional" />
+              <Input value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="opsional" />
             </div>
 
             <div className="flex items-center justify-between border-t pt-3">
@@ -403,12 +403,12 @@ export function PurchasesClient({
       <Dialog open={!!receivePo} onOpenChange={(open) => !open && setReceivePo(null)}>
         <DialogContent className="sm:max-w-xl">
           <DialogHeader>
-            <DialogTitle>Receive: {receivePo?.po_number}</DialogTitle>
+            <DialogTitle>Terima: {receivePo?.po_number}</DialogTitle>
           </DialogHeader>
           {receivePo && (
             <div className="grid gap-4">
               <p className="text-sm text-muted-foreground">
-                Supplier: <span className="font-medium text-foreground">{receivePo.supplier?.company || receivePo.supplier?.name || "-"}</span>
+                Pemasok: <span className="font-medium text-foreground">{receivePo.supplier?.company || receivePo.supplier?.name || "-"}</span>
               </p>
               <div className="grid gap-2">
                 <Label>Qty yang diterima</Label>
@@ -417,7 +417,7 @@ export function PurchasesClient({
                     <span className="flex-1 text-sm">
                       {item.inventory_item?.name || "Item"}
                       <span className="block text-xs text-muted-foreground">
-                        Ordered: {formatNumber(Number(item.quantity))}
+                        Dipesan: {formatNumber(Number(item.quantity))}
                       </span>
                     </span>
                     <Input

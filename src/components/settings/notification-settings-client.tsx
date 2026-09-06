@@ -36,15 +36,15 @@ const DEFAULT_PREFS: NotificationPrefs = {
 }
 
 const ITEMS: { key: keyof NotificationPrefs; label: string; description: string }[] = [
-  { key: "new_order", label: "Order Baru", description: "Notifikasi ketika ada order baru" },
-  { key: "order_ready", label: "Order Siap", description: "Notifikasi ketika order siap diambil" },
+  { key: "new_order", label: "Pesanan Baru", description: "Notifikasi ketika ada pesanan baru" },
+  { key: "order_ready", label: "Pesanan Siap", description: "Notifikasi ketika pesanan siap diambil" },
   { key: "low_stock", label: "Stok Menipis", description: "Notifikasi ketika stok di bawah minimum" },
   { key: "reservation", label: "Reservasi", description: "Notifikasi reservasi baru atau status berubah" },
   { key: "payment", label: "Pembayaran", description: "Notifikasi transaksi dan pembayaran" },
   { key: "refund", label: "Refund", description: "Notifikasi ketika refund dilakukan" },
-  { key: "void", label: "Void Order", description: "Notifikasi ketika order dibatalkan" },
-  { key: "stock_opname", label: "Stock Opname", description: "Notifikasi proses stock opname" },
-  { key: "approval", label: "Approval", description: "Notifikasi approval purchase/opname" },
+  { key: "void", label: "Batal Order", description: "Notifikasi ketika pesanan dibatalkan" },
+  { key: "stock_opname", label: "Opname Stok", description: "Notifikasi proses opname stok" },
+  { key: "approval", label: "Persetujuan", description: "Notifikasi persetujuan pembelian/opname" },
   { key: "system", label: "Sistem", description: "Notifikasi sistem umum" },
 ]
 
@@ -69,7 +69,7 @@ export function NotificationSettingsClient({ initial }: { initial?: Partial<Noti
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold">Notification Settings</h2>
+        <h2 className="text-2xl font-bold">Pengaturan Notifikasi</h2>
         <p className="text-sm text-muted-foreground">Atur notifikasi apa yang ingin diterima</p>
       </div>
 

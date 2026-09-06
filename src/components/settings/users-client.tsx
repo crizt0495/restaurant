@@ -165,12 +165,12 @@ export function UsersClient({ users, branches, roles, canCreate, canEdit }: User
     <div className="space-y-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-2xl font-bold">Users</h2>
+          <h2 className="text-2xl font-bold">Pengguna</h2>
           <p className="text-sm text-muted-foreground">Kelola pengguna sistem</p>
         </div>
         {canCreate && (
           <Button size="sm" onClick={openCreate}>
-            <Plus className="mr-2 h-4 w-4" /> Tambah User
+            <Plus className="mr-2 h-4 w-4" /> Tambah Pengguna
           </Button>
         )}
       </div>
@@ -189,7 +189,7 @@ export function UsersClient({ users, branches, roles, canCreate, canEdit }: User
         <Card>
           <CardContent className="py-12 text-center text-muted-foreground">
             <Users className="mx-auto mb-2 h-8 w-8" />
-            <p>Belum ada user</p>
+            <p>Belum ada pengguna</p>
           </CardContent>
         </Card>
       ) : (
@@ -236,7 +236,7 @@ export function UsersClient({ users, branches, roles, canCreate, canEdit }: User
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="sm:max-w-lg">
           <DialogHeader>
-            <DialogTitle>{editingId ? "Edit User" : "Tambah User"}</DialogTitle>
+            <DialogTitle>{editingId ? "Edit Pengguna" : "Tambah Pengguna"}</DialogTitle>
           </DialogHeader>
           <div className="grid gap-4">
             <div className="grid gap-2">

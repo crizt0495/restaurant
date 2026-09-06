@@ -170,12 +170,12 @@ export function CustomersClient({ customers, canCreate, canEdit }: CustomersClie
     <div className="space-y-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-2xl font-bold">Customers</h2>
+          <h2 className="text-2xl font-bold">Pelanggan</h2>
           <p className="text-sm text-muted-foreground">Kelola data customer &amp; loyalty</p>
         </div>
         {canCreate && (
           <Button size="sm" onClick={openCreate}>
-            <Plus className="mr-2 h-4 w-4" /> Tambah Customer
+            <Plus className="mr-2 h-4 w-4" /> Tambah Pelanggan
           </Button>
         )}
       </div>
@@ -194,7 +194,7 @@ export function CustomersClient({ customers, canCreate, canEdit }: CustomersClie
         <Card>
           <CardContent className="py-12 text-center text-muted-foreground">
             <Users className="mx-auto mb-2 h-8 w-8" />
-            <p>Belum ada customer</p>
+            <p>Belum ada pelanggan</p>
           </CardContent>
         </Card>
       ) : (
@@ -255,7 +255,7 @@ export function CustomersClient({ customers, canCreate, canEdit }: CustomersClie
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="sm:max-w-lg">
           <DialogHeader>
-            <DialogTitle>{editingId ? "Edit Customer" : "Tambah Customer"}</DialogTitle>
+            <DialogTitle>{editingId ? "Edit Pelanggan" : "Tambah Pelanggan"}</DialogTitle>
           </DialogHeader>
           <div className="grid gap-4">
             <div className="grid gap-2">

@@ -19,16 +19,16 @@ export function Receipt({ restaurantName, restaurantAddress, restaurantPhone, or
       <div className="mt-2 border-t border-dashed pt-2 text-xs">
         <p>Bill: {order.order_number}</p>
         <p>{formatDateTime(order.created_at)}</p>
-        <p>Type: {order.order_type.replace("_", " ")}</p>
-        {order.table?.name && <p>Table: {order.table.name}</p>}
-        {order.customer?.name && <p>Customer: {order.customer.name}</p>}
-        {order.cashier?.full_name && <p>Cashier: {order.cashier.full_name}</p>}
+        <p>Tipe: {order.order_type.replace("_", " ")}</p>
+        {order.table?.name && <p>Meja: {order.table.name}</p>}
+        {order.customer?.name && <p>Pelanggan: {order.customer.name}</p>}
+        {order.cashier?.full_name && <p>Kasir: {order.cashier.full_name}</p>}
       </div>
 
       <div className="mt-2 border-t border-dashed">
         <div className="flex justify-between py-1 text-xs font-medium">
           <span>Item</span>
-          <span>Amount</span>
+          <span>Jumlah</span>
         </div>
         {order.items?.map((item: any) => (
           <div key={item.id} className="py-1 text-xs">
@@ -39,7 +39,7 @@ export function Receipt({ restaurantName, restaurantAddress, restaurantPhone, or
             {item.modifiers?.map((m: any) => (
               <p key={m.id} className="pl-2">+ {m.option_name}</p>
             ))}
-            {item.notes && <p className="pl-2">Note: {item.notes}</p>}
+            {item.notes && <p className="pl-2">Catatan: {item.notes}</p>}
             <div className="flex justify-end font-semibold">
               <span>{formatCurrency(item.total)}</span>
             </div>
@@ -54,16 +54,16 @@ export function Receipt({ restaurantName, restaurantAddress, restaurantPhone, or
         </div>
         {Number(order.discount) > 0 && (
           <div className="flex justify-between">
-            <span>Discount</span>
+            <span>Diskon</span>
             <span>-{formatCurrency(order.discount)}</span>
           </div>
         )}
         <div className="flex justify-between">
-          <span>Service</span>
+          <span>Layanan</span>
           <span>{formatCurrency(order.service_charge)}</span>
         </div>
         <div className="flex justify-between">
-          <span>Tax</span>
+          <span>Pajak</span>
           <span>{formatCurrency(order.tax_amount)}</span>
         </div>
         <div className="flex justify-between text-sm font-bold">
@@ -71,12 +71,12 @@ export function Receipt({ restaurantName, restaurantAddress, restaurantPhone, or
           <span>{formatCurrency(order.total)}</span>
         </div>
         <div className="flex justify-between">
-          <span>Paid</span>
+          <span>Dibayar</span>
           <span>{formatCurrency(order.paid_amount)}</span>
         </div>
         {Number(order.change_amount) > 0 && (
           <div className="flex justify-between">
-            <span>Change</span>
+            <span>Kembalian</span>
             <span>{formatCurrency(order.change_amount)}</span>
           </div>
         )}
@@ -89,7 +89,7 @@ export function Receipt({ restaurantName, restaurantAddress, restaurantPhone, or
       </div>
 
       <div className="mt-3 border-t border-dashed text-center text-xs">
-        <p>Thank you, see you soon!</p>
+        <p>Terima kasih, sampai jumpa kembali!</p>
       </div>
     </div>
   )

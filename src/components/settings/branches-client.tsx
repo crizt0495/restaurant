@@ -69,7 +69,7 @@ export function BranchesClient({ branches, canEdit }: BranchesClientProps) {
   return (
     <div className="space-y-4">
       <div>
-        <h2 className="text-2xl font-bold">Branches</h2>
+        <h2 className="text-2xl font-bold">Cabang</h2>
         <p className="text-sm text-muted-foreground">Kelola cabang restoran</p>
       </div>
 

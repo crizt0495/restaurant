@@ -198,14 +198,14 @@ export function DashboardContent() {
   }, [])
 
   const stats = [
-    { title: "Today's Sales", value: formatCurrency(data.todaySales), icon: DollarSign, color: "text-emerald-500" },
-    { title: "Today's Orders", value: String(data.todayOrders), icon: ShoppingBag, color: "text-sky-500" },
-    { title: "Today's Profit", value: formatCurrency(data.todayProfit), icon: TrendingUp, color: "text-violet-500" },
-    { title: "Avg Order Value", value: formatCurrency(data.avgOrderValue), icon: Wallet, color: "text-amber-500" },
-    { title: "Total Customers", value: String(data.totalCustomers), icon: Users, color: "text-blue-500" },
-    { title: "Low Stock Items", value: String(data.lowStockItems), icon: AlertTriangle, color: "text-red-500" },
-    { title: "Pending Orders", value: String(data.pendingOrders), icon: Clock, color: "text-orange-500" },
-    { title: "Cancelled Orders", value: String(data.cancelledOrders), icon: XCircle, color: "text-rose-500" },
+    { title: "Penjualan Hari Ini", value: formatCurrency(data.todaySales), icon: DollarSign, color: "text-emerald-500" },
+    { title: "Pesanan Hari Ini", value: String(data.todayOrders), icon: ShoppingBag, color: "text-sky-500" },
+    { title: "Laba Hari Ini", value: formatCurrency(data.todayProfit), icon: TrendingUp, color: "text-violet-500" },
+    { title: "Rata-rata Nilai Pesanan", value: formatCurrency(data.avgOrderValue), icon: Wallet, color: "text-amber-500" },
+    { title: "Total Pelanggan", value: String(data.totalCustomers), icon: Users, color: "text-blue-500" },
+    { title: "Stok Menipis", value: String(data.lowStockItems), icon: AlertTriangle, color: "text-red-500" },
+    { title: "Pesanan Tertunda", value: String(data.pendingOrders), icon: Clock, color: "text-orange-500" },
+    { title: "Pesanan Dibatalkan", value: String(data.cancelledOrders), icon: XCircle, color: "text-rose-500" },
   ]
 
   const maxTrend = Math.max(...data.salesTrend.map((d) => d.value), 1)
@@ -213,7 +213,7 @@ export function DashboardContent() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold">Dashboard</h2>
+        <h2 className="text-2xl font-bold">Dasbor</h2>
         <p className="text-sm text-muted-foreground">Ringkasan performa hari ini</p>
       </div>
 
@@ -253,13 +253,13 @@ export function DashboardContent() {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm">Quick Actions</CardTitle>
+            <CardTitle className="text-sm">Aksi Cepat</CardTitle>
           </CardHeader>
           <CardContent className="grid gap-2 sm:grid-cols-2">
             <QuickAction href="/pos" label="Buka POS" icon={ShoppingBag} />
-            <QuickAction href="/orders" label="Lihat Order" icon={Wallet} />
-            <QuickAction href="/kitchen" label="Kitchen Display" icon={Clock} />
-            <QuickAction href="/inventory" label="Inventory" icon={AlertTriangle} />
+            <QuickAction href="/orders" label="Lihat Pesanan" icon={Wallet} />
+            <QuickAction href="/kitchen" label="Tampilan Dapur" icon={Clock} />
+            <QuickAction href="/inventory" label="Persediaan" icon={AlertTriangle} />
           </CardContent>
         </Card>
       </div>

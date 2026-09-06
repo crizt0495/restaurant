@@ -101,11 +101,11 @@ export function OrdersClient({ orders: initialOrders }: OrdersClientProps) {
     <div className="space-y-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-2xl font-bold">Orders</h2>
+          <h2 className="text-2xl font-bold">Pesanan</h2>
           <p className="text-sm text-muted-foreground">Kelola semua pesanan</p>
         </div>
         <Button variant="outline" size="sm" onClick={() => window.location.reload()}>
-          <RefreshCw className="mr-2 h-4 w-4" /> Refresh
+          <RefreshCw className="mr-2 h-4 w-4" /> Segarkan
         </Button>
       </div>
 
@@ -113,7 +113,7 @@ export function OrdersClient({ orders: initialOrders }: OrdersClientProps) {
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
-            placeholder="Cari nomor order atau meja..."
+            placeholder="Cari nomor pesanan atau meja..."
             className="pl-9"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -135,7 +135,7 @@ export function OrdersClient({ orders: initialOrders }: OrdersClientProps) {
       {filtered.length === 0 ? (
         <Card>
           <CardContent className="py-12 text-center text-muted-foreground">
-            <p>Belum ada order</p>
+            <p>Belum ada pesanan</p>
           </CardContent>
         </Card>
       ) : (

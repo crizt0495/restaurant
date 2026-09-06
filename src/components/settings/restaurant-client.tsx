@@ -53,7 +53,7 @@ export function RestaurantClient({ organization }: RestaurantClientProps) {
   return (
     <div className="space-y-4">
       <div>
-        <h2 className="text-2xl font-bold">Restaurant Settings</h2>
+        <h2 className="text-2xl font-bold">Pengaturan Restoran</h2>
         <p className="text-sm text-muted-foreground">Profil dan pengaturan restoran</p>
       </div>
 
@@ -109,7 +109,7 @@ export function RestaurantClient({ organization }: RestaurantClientProps) {
 
       <Card>
         <CardHeader>
-          <CardTitle>Pajak & Service Charge</CardTitle>
+          <CardTitle>Pajak & Biaya Layanan</CardTitle>
         </CardHeader>
         <Separator />
         <CardContent className="pt-4">
@@ -133,7 +133,7 @@ export function RestaurantClient({ organization }: RestaurantClientProps) {
               />
             </div>
             <div className="grid gap-2">
-              <Label>Service Charge (%)</Label>
+              <Label>Biaya Layanan (%)</Label>
               <Input
                 type="number"
                 value={form.service_charge_percentage}

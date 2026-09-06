@@ -131,17 +131,17 @@ export function KitchenDisplay({ orders: initialOrders }: { orders: KitchenOrder
 
   // Columns: NEW, PREPARING, READY
   const columns = [
-    { status: "NEW", label: "New", color: "bg-sky-50" },
-    { status: "PREPARING", label: "Preparing", color: "bg-amber-50" },
-    { status: "READY", label: "Ready", color: "bg-emerald-50" },
+    { status: "NEW", label: "Baru", color: "bg-sky-50" },
+    { status: "PREPARING", label: "Dibuat", color: "bg-amber-50" },
+    { status: "READY", label: "Siap", color: "bg-emerald-50" },
   ]
 
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold">Kitchen Display</h2>
-          <p className="text-sm text-muted-foreground">Realtime pesanan dari kasir</p>
+        <h2 className="text-2xl font-bold">Tampilan Dapur</h2>
+        <p className="text-sm text-muted-foreground">Pesanan langsung dari kasir</p>
         </div>
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <Clock className="h-4 w-4" />
@@ -182,7 +182,7 @@ export function KitchenDisplay({ orders: initialOrders }: { orders: KitchenOrder
                                 className="h-6 shrink-0"
                                 onClick={() => handleItemStatus(item.id, order.id)}
                               >
-                                {item.status === "NEW" ? "Start" : item.status === "PREPARING" ? "Done" : "Serve"}
+                                {item.status === "NEW" ? "Mulai" : item.status === "PREPARING" ? "Selesai" : "Sajikan"}
                               </Button>
                             </div>
                             {item.modifiers && item.modifiers.length > 0 && (
