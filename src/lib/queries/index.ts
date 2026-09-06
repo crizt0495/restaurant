@@ -132,11 +132,16 @@ export async function getTables() {
   const user = await getCurrentUser()
   if (!user) return []
 
-  const { data, error } = await supabase
+  let query = supabase
     .from("restaurant_tables")
     .select("*, area:table_areas(*), active_orders:orders(*)")
-    .eq("branch_id", user.branch_id ?? "")
     .order("number")
+
+  if (!user.is_super_admin) {
+    query = query.eq("branch_id", user.branch_id ?? "")
+  }
+
+  const { data, error } = await query
 
   if (error) return []
   return data ?? []
@@ -147,14 +152,19 @@ export async function getKitchenOrders() {
   const user = await getCurrentUser()
   if (!user) return []
 
-  const { data, error } = await supabase
+  let query = supabase
     .from("orders")
     .select(
       "*, table:restaurant_tables(number, name), items:order_items(*, modifiers:order_item_modifiers(*))"
     )
     .in("status", ["NEW", "CONFIRMED", "PREPARING", "READY"])
-    .eq("branch_id", user.branch_id ?? "")
     .order("created_at", { ascending: true })
+
+  if (!user.is_super_admin) {
+    query = query.eq("branch_id", user.branch_id ?? "")
+  }
+
+  const { data, error } = await query
 
   if (error) return []
   return data ?? []
@@ -389,11 +399,16 @@ export async function getWarehouses() {
   const user = await getCurrentUser()
   if (!user) return []
 
-  const { data, error } = await supabase
+  let query = supabase
     .from("warehouses")
     .select("*")
-    .eq("branch_id", user.branch_id ?? "")
     .order("name")
+
+  if (!user.is_super_admin) {
+    query = query.eq("branch_id", user.branch_id ?? "")
+  }
+
+  const { data, error } = await query
 
   if (error) return []
   return data ?? []

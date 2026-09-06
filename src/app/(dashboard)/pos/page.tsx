@@ -6,7 +6,7 @@ export default async function POSPage() {
   const user = await requirePermission("orders.create")
 
   const supabase = await getServerClient()
-  const [categoriesRes, productsRes, tablesRes, customersRes, orgSettingsRes, settingsRes] = await Promise.all([
+  const [categoriesRes, productsRes, customersRes, orgSettingsRes, settingsRes] = await Promise.all([
     supabase.from("categories").select("id, name, slug").eq("is_active", true).order("name"),
     supabase
       .from("products")
@@ -14,12 +14,6 @@ export default async function POSPage() {
       .eq("is_active", true)
       .eq("deleted_at", null)
       .order("name"),
-    supabase
-      .from("restaurant_tables")
-      .select("id, number, name, capacity, status")
-      .eq("branch_id", user.branch_id ?? "")
-      .eq("is_active", true)
-      .order("number"),
     supabase
       .from("customers")
       .select("id, name, phone, member_level, points, is_member")
@@ -33,6 +27,18 @@ export default async function POSPage() {
       .single(),
     supabase.from("settings").select("key, value").eq("key", "receipt").maybeSingle(),
   ])
+
+  let tablesQuery = supabase
+    .from("restaurant_tables")
+    .select("id, number, name, capacity, status")
+    .eq("is_active", true)
+    .order("number")
+
+  if (!user.is_super_admin) {
+    tablesQuery = tablesQuery.eq("branch_id", user.branch_id ?? "")
+  }
+
+  const { data: tablesData } = await tablesQuery
 
   let taxPercentage = 11
   let taxInclusive = false
@@ -53,7 +59,7 @@ export default async function POSPage() {
       }}
       categories={(categoriesRes.data as { id: string; name: string; slug: string }[]) ?? []}
       products={(productsRes.data as any[]) ?? []}
-      tables={(tablesRes.data as any[]) ?? []}
+      tables={(tablesData as any[]) ?? []}
       customers={(customersRes.data as any[]) ?? []}
       taxPercentage={taxPercentage}
       taxInclusive={taxInclusive}
