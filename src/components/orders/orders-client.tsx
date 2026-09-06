@@ -53,22 +53,45 @@ export function OrdersClient({ orders: initialOrders }: OrdersClientProps) {
   const [statusFilter, setStatusFilter] = React.useState("")
   const [confirmAction, setConfirmAction] = React.useState<{ order: any; action: string } | null>(null)
 
+  const refetchTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null)
+  const pendingRef = React.useRef(false)
+
   React.useEffect(() => {
     setOrders(initialOrders)
   }, [initialOrders])
 
+  const refetch = React.useCallback(async () => {
+    const supabase = createClient()
+    const { data } = await supabase
+      .from("orders")
+      .select("*, table:restaurant_tables(*)")
+      .order("created_at", { ascending: false })
+    if (data) setOrders(data)
+  }, [])
+
   React.useEffect(() => {
     const supabase = createClient()
+    const schedule = () => {
+      if (refetchTimerRef.current) clearTimeout(refetchTimerRef.current)
+      refetchTimerRef.current = setTimeout(() => {
+        if (pendingRef.current) {
+          pendingRef.current = false
+          refetch()
+        }
+      }, 1500)
+    }
     const channel = supabase
       .channel("orders-list")
       .on("postgres_changes", { event: "*", schema: "public", table: "orders" }, () => {
-        window.location.reload()
+        pendingRef.current = true
+        schedule()
       })
       .subscribe()
     return () => {
       supabase.removeChannel(channel)
+      if (refetchTimerRef.current) clearTimeout(refetchTimerRef.current)
     }
-  }, [])
+  }, [refetch])
 
   const filtered = orders.filter((o) => {
     const matchesSearch =
@@ -93,7 +116,7 @@ export function OrdersClient({ orders: initialOrders }: OrdersClientProps) {
     } else {
       toast.success("Status order diperbarui")
       setConfirmAction(null)
-      window.location.reload()
+      await refetch()
     }
   }
 
@@ -104,7 +127,7 @@ export function OrdersClient({ orders: initialOrders }: OrdersClientProps) {
           <h2 className="text-2xl font-bold">Pesanan</h2>
           <p className="text-sm text-muted-foreground">Kelola semua pesanan</p>
         </div>
-        <Button variant="outline" size="sm" onClick={() => window.location.reload()}>
+        <Button variant="outline" size="sm" onClick={() => refetch()}>
           <RefreshCw className="mr-2 h-4 w-4" /> Segarkan
         </Button>
       </div>

@@ -176,3 +176,65 @@ export async function requireRole(...roles: string[]) {
   }
   redirect("/dashboard")
 }
+
+export interface DashboardData {
+  todaySales: number
+  todayOrders: number
+  todayProfit: number
+  avgOrderValue: number
+  totalCustomers: number
+  lowStockItems: number
+  pendingOrders: number
+  cancelledOrders: number
+  salesTrend: { label: string; value: number }[]
+  topProducts: { name: string; qty: number; revenue: number }[]
+  paymentMethods: { method: string; amount: number }[]
+  busyHours: { label: string; value: number }[]
+}
+
+export async function getDashboardMetrics(): Promise<DashboardData> {
+  const supabase = await getServerClient()
+  const { data, error } = await supabase.rpc("get_dashboard_metrics")
+  if (error || !data) {
+    return {
+      todaySales: 0,
+      todayOrders: 0,
+      todayProfit: 0,
+      avgOrderValue: 0,
+      totalCustomers: 0,
+      lowStockItems: 0,
+      pendingOrders: 0,
+      cancelledOrders: 0,
+      salesTrend: [],
+      topProducts: [],
+      paymentMethods: [],
+      busyHours: [],
+    }
+  }
+
+  const parseTrend = (arr: string[] | null): { label: string; value: number }[] => {
+    if (!arr) return []
+    return arr.map((s) => {
+      const idx = s.lastIndexOf("|")
+      return {
+        label: s.slice(0, idx),
+        value: idx >= 0 ? parseFloat(s.slice(idx + 1)) : 0,
+      }
+    })
+  }
+
+  return {
+    todaySales: Number(data.todaySales ?? 0),
+    todayOrders: Number(data.todayOrders ?? 0),
+    todayProfit: Number(data.todayProfit ?? 0),
+    avgOrderValue: Number(data.avgOrderValue ?? 0),
+    totalCustomers: Number(data.totalCustomers ?? 0),
+    lowStockItems: Number(data.lowStockItems ?? 0),
+    pendingOrders: Number(data.pendingOrders ?? 0),
+    cancelledOrders: Number(data.cancelledOrders ?? 0),
+    salesTrend: parseTrend(data.salesTrend),
+    topProducts: data.topProducts ?? [],
+    paymentMethods: data.paymentMethods ?? [],
+    busyHours: data.busyHours ?? [],
+  }
+}

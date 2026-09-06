@@ -41,7 +41,7 @@ export function KitchenDisplay({ orders: initialOrders }: { orders: KitchenOrder
     return () => clearInterval(interval)
   }, [])
 
-  async function refetch() {
+  const refetch = React.useCallback(async () => {
     const supabase = createClient()
     const { data, error } = await supabase
       .from("orders")
@@ -64,26 +64,40 @@ export function KitchenDisplay({ orders: initialOrders }: { orders: KitchenOrder
         }))
       )
     }
-  }
+  }, [])
+
+const refreshTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null)
+  const pendingRef = React.useRef(false)
 
   React.useEffect(() => {
     const supabase = createClient()
+    const schedule = () => {
+      if (refreshTimerRef.current) clearTimeout(refreshTimerRef.current)
+      refreshTimerRef.current = setTimeout(() => {
+        if (pendingRef.current) {
+          pendingRef.current = false
+          refetch()
+        }
+      }, 1000)
+    }
     const channel = supabase
       .channel("kds-orders")
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "orders" },
         () => {
-          refetch()
+          pendingRef.current = true
+          schedule()
         }
       )
       .subscribe()
 
     return () => {
       supabase.removeChannel(channel)
+      if (refreshTimerRef.current) clearTimeout(refreshTimerRef.current)
     }
-     
-  }, [])
+
+  }, [refetch])
 
   const timeAgo = (ts: string) => {
     if (!now) return "--:--"

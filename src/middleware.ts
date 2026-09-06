@@ -34,8 +34,8 @@ export async function middleware(request: NextRequest) {
   )
 
   const {
-    data: { user },
-  } = await supabase.auth.getUser()
+    data: { session },
+  } = await supabase.auth.getSession()
 
   const { pathname } = request.nextUrl
 
@@ -43,13 +43,13 @@ export async function middleware(request: NextRequest) {
     (path) => pathname === path || pathname.startsWith(`${path}/`)
   )
 
-  if (!user && !isPublicPath) {
+  if (!session && !isPublicPath) {
     const loginUrl = new URL("/login", request.url)
     loginUrl.searchParams.set("redirect", pathname)
     return NextResponse.redirect(loginUrl)
   }
 
-  if (user && pathname === "/login") {
+  if (session && pathname === "/login") {
     return NextResponse.redirect(new URL("/dashboard", request.url))
   }
 

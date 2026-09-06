@@ -8,6 +8,8 @@ import { PwaRegistration } from "@/components/pwa-registration";
 const inter = Inter({
   variable: "--font-sans",
   subsets: ["latin"],
+  display: "swap",
+  preload: true,
 });
 
 export const metadata: Metadata = {
