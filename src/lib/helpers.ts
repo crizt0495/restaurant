@@ -3,6 +3,7 @@
 import { createServerClient } from "@supabase/ssr"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
+import { cache } from "react"
 
 export interface SessionUser {
   id: string
@@ -91,73 +92,30 @@ export async function getServerClient() {
   )
 }
 
-export async function getCurrentUser(): Promise<UserContext | null> {
-  const cookieStore = await cookies()
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return cookieStore.getAll()
-        },
-        setAll(cookiesToSet) {
-          try {
-            cookiesToSet.forEach(({ name, value, options }) =>
-              cookieStore.set(name, value, options)
-            )
-          } catch {}
-        },
-      },
-    }
-  )
+export const getCurrentUser = cache(async (): Promise<UserContext | null> => {
+  const supabase = await getServerClient()
 
   const {
-    data: { user },
-  } = await supabase.auth.getUser()
+    data: { session },
+  } = await supabase.auth.getSession()
 
-  if (!user) return null
+  if (!session?.user) return null
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("*, branches(organization_id)")
-    .eq("user_id", user.id)
-    .single()
-
-  if (!profile) return null
-
-  const branchObj = Array.isArray(profile.branches) ? profile.branches[0] : profile.branches
-  const organization_id = (branchObj as { organization_id?: string } | undefined)?.organization_id ?? null
-
-  // Get permissions via role_permissions
-  let permissions: string[] = []
-  if (profile.role === "SUPER_ADMIN") {
-    permissions = ["*"]
-  } else {
-    const { data: rps } = await supabase
-      .from("role_permissions")
-      .select("permissions(key)")
-      .eq("role", profile.role)
-
-    if (rps) {
-      permissions = rps
-        .map((rp) => (rp as { permissions?: { key?: string } }).permissions?.key)
-        .filter((k): k is string => Boolean(k))
-    }
-  }
+  const { data, error } = await supabase.rpc("get_my_context")
+  if (error || !data) return null
 
   return {
-    user_id: user.id,
-    profile_id: profile.id,
-    username: profile.username,
-    full_name: profile.full_name,
-    role: profile.role,
-    branch_id: profile.branch_id,
-    organization_id,
-    is_super_admin: profile.role === "SUPER_ADMIN",
-    permissions,
+    user_id: session.user.id,
+    profile_id: data.id,
+    username: data.username ?? "",
+    full_name: data.full_name ?? "",
+    role: data.role ?? "",
+    branch_id: data.branch_id ?? null,
+    organization_id: data.organization_id ?? null,
+    is_super_admin: Boolean(data.is_super_admin),
+    permissions: Array.isArray(data.permissions) ? data.permissions : [],
   }
-}
+})
 
 export async function requirePermission(permission: string) {
   const user = await getCurrentUser()

@@ -20,12 +20,11 @@ interface SearchResult {
   href: string
 }
 
-export function Header() {
+export function Header({ profileId }: { profileId?: string | null }) {
   const pathname = usePathname()
   const router = useRouter()
   const title = pathname.split("/").filter(Boolean)[0] || "Dashboard"
   const [unread, setUnread] = React.useState(0)
-  const [profileId, setProfileId] = React.useState<string | null>(null)
   const [searchOpen, setSearchOpen] = React.useState(false)
   const [searchQuery, setSearchQuery] = React.useState("")
   const [searchResults, setSearchResults] = React.useState<SearchResult[]>([])
@@ -33,40 +32,33 @@ export function Header() {
 
   React.useEffect(() => {
     const supabase = createClient()
-    supabase.auth.getUser().then(({ data }) => {
-      if (!data.user) return
+    const pid = profileId
+    if (pid) {
       supabase
-        .from("profiles")
-        .select("id")
-        .eq("user_id", data.user.id)
-        .single()
-        .then(({ data: profile }) => {
-          if (!profile) return
-          setProfileId(profile.id)
-        })
-    })
-
-    async function loadUnread(pid: string) {
-      const { count } = await supabase
         .from("notifications")
         .select("id", { count: "exact", head: true })
         .or(`user_id.is.null,user_id.eq.${pid}`)
         .eq("is_read", false)
-      setUnread(count ?? 0)
+        .then(({ count }) => setUnread(count ?? 0))
     }
 
     const channel = supabase
       .channel("header-notifications")
       .on("postgres_changes", { event: "*", schema: "public", table: "notifications" }, () => {
-        if (profileId) loadUnread(profileId)
+        if (!pid) return
+        supabase
+          .from("notifications")
+          .select("id", { count: "exact", head: true })
+          .or(`user_id.is.null,user_id.eq.${pid}`)
+          .eq("is_read", false)
+          .then(({ count }) => setUnread(count ?? 0))
       })
       .subscribe()
 
     return () => {
       supabase.removeChannel(channel)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [profileId === null])
+  }, [profileId])
 
   const runSearch = React.useCallback(async (query: string) => {
     const supabase = createClient()
