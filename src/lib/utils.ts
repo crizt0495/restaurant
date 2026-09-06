@@ -61,6 +61,51 @@ export function getInitials(name: string): string {
     .slice(0, 2)
 }
 
+export const STATUS_LABELS: Record<string, string> = {
+  NEW: "Baru",
+  CONFIRMED: "Dikonfirmasi",
+  PREPARING: "Dibuat",
+  READY: "Siap",
+  SERVED: "Disajikan",
+  COMPLETED: "Selesai",
+  CANCELLED: "Dibatalkan",
+  REFUNDED: "Dikembalikan",
+  RECEIVED: "Diterima",
+  PARTIAL: "Sebagian",
+  PENDING: "Menunggu",
+  APPROVED: "Disetujui",
+  DRAFT: "Draf",
+  OPEN: "Buka",
+  CLOSED: "Tutup",
+  SUBMITTED: "Dikirim",
+  ADJUSTED: "Disesuaikan",
+  SUCCESS: "Berhasil",
+  FAILED: "Gagal",
+  UNPAID: "Belum Bayar",
+  PAID: "Lunas",
+  REFUND: "Dikembalikan",
+  AVAILABLE: "Tersedia",
+  OCCUPIED: "Terisi",
+  RESERVED: "Dipesan",
+  WAITING_PAYMENT: "Menunggu Pembayaran",
+  CLEANING: "Dibersihkan",
+  OUT_OF_SERVICE: "Tidak Beroperasi",
+  SEATED: "Duduk",
+  NO_SHOW: "Tidak Hadir",
+  RAW: "Bahan Baku",
+  PACKAGING: "Kemasan",
+  FINISHED_GOODS: "Barang Jadi",
+  BRONZE: "Perunggu",
+  SILVER: "Perak",
+  GOLD: "Emas",
+  PLATINUM: "Platinum",
+}
+
+export function translateStatus(code: string | null | undefined): string {
+  if (!code) return "-"
+  return STATUS_LABELS[code] ?? code
+}
+
 export function slugify(text: string): string {
   return text
     .toLowerCase()

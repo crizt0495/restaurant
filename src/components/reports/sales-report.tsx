@@ -40,7 +40,7 @@ export function SalesReport({ summary, dailySales, paymentBreakdown }: SalesRepo
   const exportDailyCSV = () => {
     exportToCSV(
       "sales-daily.csv",
-      ["Date", "Orders", "Revenue"],
+      ["Tanggal", "Pesanan", "Pendapatan"],
       dailySales.map((d) => [d.date, d.orders, d.revenue])
     )
   }
@@ -48,7 +48,7 @@ export function SalesReport({ summary, dailySales, paymentBreakdown }: SalesRepo
   const exportPaymentCSV = () => {
     exportToCSV(
       "sales-payment-methods.csv",
-      ["Method", "Amount"],
+      ["Metode", "Jumlah"],
       paymentBreakdown.map((p) => [p.method, p.amount])
     )
   }
@@ -56,7 +56,7 @@ export function SalesReport({ summary, dailySales, paymentBreakdown }: SalesRepo
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold">Sales Report</h2>
+        <h2 className="text-2xl font-bold">Laporan Penjualan</h2>
         <p className="text-sm text-muted-foreground">Ringkasan penjualan periode</p>
       </div>
 
@@ -75,7 +75,7 @@ export function SalesReport({ summary, dailySales, paymentBreakdown }: SalesRepo
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardContent className="p-4">
-            <p className="text-sm text-muted-foreground">Total Sales</p>
+            <p className="text-sm text-muted-foreground">Total Penjualan</p>
             <p className="text-2xl font-bold">{formatCurrency(summary.totalSales)}</p>
           </CardContent>
         </Card>
@@ -87,13 +87,13 @@ export function SalesReport({ summary, dailySales, paymentBreakdown }: SalesRepo
         </Card>
         <Card>
           <CardContent className="p-4">
-            <p className="text-sm text-muted-foreground">Total Items</p>
+            <p className="text-sm text-muted-foreground">Total Item</p>
             <p className="text-2xl font-bold">{formatNumber(summary.totalItems)}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
-            <p className="text-sm text-muted-foreground">Avg Order</p>
+            <p className="text-sm text-muted-foreground">Rata-rata Pesanan</p>
             <p className="text-2xl font-bold">{formatCurrency(summary.avgOrder)}</p>
           </CardContent>
         </Card>
@@ -103,7 +103,7 @@ export function SalesReport({ summary, dailySales, paymentBreakdown }: SalesRepo
 
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle>Sales per Hari</CardTitle>
+          <CardTitle>Penjualan per Hari</CardTitle>
           <Button variant="outline" size="sm" onClick={exportDailyCSV}>
             <Download className="h-4 w-4 mr-1" />
             Export CSV
@@ -117,8 +117,8 @@ export function SalesReport({ summary, dailySales, paymentBreakdown }: SalesRepo
               <TableHeader>
                 <TableRow>
                   <TableHead>Tanggal</TableHead>
-                  <TableHead className="text-right">Orders</TableHead>
-                  <TableHead className="text-right">Revenue</TableHead>
+                  <TableHead className="text-right">Pesanan</TableHead>
+                  <TableHead className="text-right">Pendapatan</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -137,7 +137,7 @@ export function SalesReport({ summary, dailySales, paymentBreakdown }: SalesRepo
 
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle>Payment Methods</CardTitle>
+          <CardTitle>Metode Pembayaran</CardTitle>
           <Button variant="outline" size="sm" onClick={exportPaymentCSV}>
             <Download className="h-4 w-4 mr-1" />
             Export CSV
@@ -150,8 +150,8 @@ export function SalesReport({ summary, dailySales, paymentBreakdown }: SalesRepo
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Method</TableHead>
-                  <TableHead className="text-right">Amount</TableHead>
+                  <TableHead>Metode</TableHead>
+                  <TableHead className="text-right">Jumlah</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>

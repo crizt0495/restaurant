@@ -42,8 +42,8 @@ export default async function StockOpnameReportPage({
 
   return (
     <SimpleReport
-      title="Stock Opname Report"
-      description="Hasil stock opname periode"
+      title="Laporan Opname Stok"
+      description="Hasil opname stok periode"
       dateFrom={from}
       dateTo={to}
       columns={[
@@ -57,7 +57,7 @@ export default async function StockOpnameReportPage({
       rows={rows}
       summary={[
         { label: "Total Opname", value: formatNumber(opnames?.length ?? 0) },
-        { label: "Approved", value: formatNumber(adjusted) },
+        { label: "Disetujui", value: formatNumber(adjusted) },
         { label: "Total Selisih", value: formatCurrency(totalDiff) },
       ]}
     />

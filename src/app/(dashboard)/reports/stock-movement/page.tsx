@@ -48,7 +48,7 @@ export default async function StockMovementReportPage({
 
   return (
     <SimpleReport
-      title="Stock Movement Report"
+      title="Laporan Mutasi Stok"
       description="Gerakan stok bahan baku"
       dateFrom={from}
       dateTo={to}
@@ -57,9 +57,9 @@ export default async function StockMovementReportPage({
         { key: "item", label: "Item" },
         { key: "sku", label: "SKU" },
         { key: "type", label: "Tipe" },
-        { key: "quantity", label: "Qty" },
-        { key: "before", label: "Before" },
-        { key: "after", label: "After" },
+        { key: "quantity", label: "Jumlah" },
+        { key: "before", label: "Sebelum" },
+        { key: "after", label: "Sesudah" },
         { key: "branch", label: "Cabang" },
         { key: "by", label: "Oleh" },
       ]}

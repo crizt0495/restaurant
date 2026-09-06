@@ -41,20 +41,20 @@ export default async function RefundReportPage({
 
   return (
     <SimpleReport
-      title="Refund Report"
-      description="Rincian refund periode"
+      title="Laporan Pengembalian"
+      description="Rincian pengembalian periode"
       dateFrom={from}
       dateTo={to}
       columns={[
         { key: "date", label: "Tanggal" },
-        { key: "order_number", label: "Order" },
+        { key: "order_number", label: "Pesanan" },
         { key: "amount", label: "Jumlah" },
         { key: "method", label: "Metode" },
         { key: "reason", label: "Alasan" },
         { key: "refunded_by", label: "Oleh" },
       ]}
       rows={rows}
-      summary={[{ label: "Total Refund", value: formatCurrency(total) }]}
+      summary={[{ label: "Total Pengembalian", value: formatCurrency(total) }]}
     />
   )
 }

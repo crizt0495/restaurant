@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { createClient } from "@/lib/supabase/client"
-import { formatCurrency, formatDateTime } from "@/lib/utils"
+import { formatCurrency, formatDateTime, translateStatus } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -114,7 +114,7 @@ export function OrdersClient({ orders: initialOrders }: OrdersClientProps) {
     if (result.error) {
       toast.error(result.error)
     } else {
-      toast.success("Status order diperbarui")
+      toast.success("Status pesanan diperbarui")
       setConfirmAction(null)
       await refetch()
     }
@@ -149,7 +149,7 @@ export function OrdersClient({ orders: initialOrders }: OrdersClientProps) {
           <SelectContent>
             <SelectItem value="">Semua status</SelectItem>
             {ORDER_STATUS.map((s) => (
-              <SelectItem key={s} value={s}>{s}</SelectItem>
+              <SelectItem key={s} value={s}>{translateStatus(s)}</SelectItem>
             ))}
           </SelectContent>
         </Select>
@@ -169,10 +169,10 @@ export function OrdersClient({ orders: initialOrders }: OrdersClientProps) {
                 <div>
                   <div className="flex items-center gap-2">
                     <p className="font-semibold">{order.order_number}</p>
-                    <Badge variant={STATUS_VARIANT[order.status] || "neutral"}>{order.status}</Badge>
+                    <Badge variant={STATUS_VARIANT[order.status] || "neutral"}>{translateStatus(order.status)}</Badge>
                   </div>
                   <p className="mt-1 text-sm text-muted-foreground">
-                    {order.order_type} {order.table ? `· ${order.table.name || order.table.number}` : ""} · {formatDateTime(order.created_at)}
+                    {order.order_type === "DINE_IN" ? "Makan di Tempat" : order.order_type === "TAKE_AWAY" ? "Bawa Pulang" : order.order_type === "DELIVERY" ? "Antar" : order.order_type === "PICK_UP" ? "Ambil" : order.order_type} {order.table ? `· ${order.table.name || order.table.number}` : ""} · {formatDateTime(order.created_at)}
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
@@ -187,7 +187,7 @@ export function OrdersClient({ orders: initialOrders }: OrdersClientProps) {
                       </SelectTrigger>
                       <SelectContent>
                         {STATUS_FLOW.slice(STATUS_FLOW.indexOf(order.status) + 1).map((s) => (
-                          <SelectItem key={s} value={s}>{s}</SelectItem>
+                          <SelectItem key={s} value={s}>{translateStatus(s)}</SelectItem>
                         ))}
                       </SelectContent>
                     </Select>

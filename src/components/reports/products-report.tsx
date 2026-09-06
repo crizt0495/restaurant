@@ -41,7 +41,7 @@ export function ProductsReport({ products, dateFrom, dateTo }: ProductsReportPro
   const exportCSV = () => {
     exportToCSV(
       "products-report.csv",
-      ["Product", "Qty Sold", "Revenue"],
+      ["Produk", "Jumlah Terjual", "Pendapatan"],
       products.map((p) => [p.product_name, p.qty_sold, p.revenue])
     )
   }
@@ -52,7 +52,7 @@ export function ProductsReport({ products, dateFrom, dateTo }: ProductsReportPro
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold">Product Report</h2>
+        <h2 className="text-2xl font-bold">Laporan Produk</h2>
         <p className="text-sm text-muted-foreground">Produk terlaris dan performa</p>
       </div>
 
@@ -71,13 +71,13 @@ export function ProductsReport({ products, dateFrom, dateTo }: ProductsReportPro
       <div className="grid gap-4 sm:grid-cols-2">
         <Card>
           <CardContent className="p-4">
-            <p className="text-sm text-muted-foreground">Total Revenue</p>
+            <p className="text-sm text-muted-foreground">Total Pendapatan</p>
             <p className="text-2xl font-bold">{formatCurrency(totalRevenue)}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
-            <p className="text-sm text-muted-foreground">Total Items Sold</p>
+            <p className="text-sm text-muted-foreground">Total Item Terjual</p>
             <p className="text-2xl font-bold">{formatNumber(totalQty)}</p>
           </CardContent>
         </Card>
@@ -87,7 +87,7 @@ export function ProductsReport({ products, dateFrom, dateTo }: ProductsReportPro
 
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle>Top Products by Revenue</CardTitle>
+          <CardTitle>Produk Terlaris Berdasarkan Pendapatan</CardTitle>
           <Button variant="outline" size="sm" onClick={exportCSV}>
             <Download className="h-4 w-4 mr-1" />
             Export CSV
@@ -101,9 +101,9 @@ export function ProductsReport({ products, dateFrom, dateTo }: ProductsReportPro
               <TableHeader>
                 <TableRow>
                   <TableHead>#</TableHead>
-                  <TableHead>Product</TableHead>
-                  <TableHead className="text-right">Qty Sold</TableHead>
-                  <TableHead className="text-right">Revenue</TableHead>
+                  <TableHead>Produk</TableHead>
+                  <TableHead className="text-right">Jumlah Terjual</TableHead>
+                  <TableHead className="text-right">Pendapatan</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>

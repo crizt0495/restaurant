@@ -42,35 +42,35 @@ export function ProfitReport({ summary }: ProfitReportProps) {
   const exportCSV = () => {
     exportToCSV(
       "profit-loss.csv",
-      ["Metric", "Value"],
+      ["Metrik", "Nilai"],
       [
-        ["Revenue", summary.revenue],
-        ["Discount", summary.itemsDiscount],
-        ["COGS", summary.cogs],
-        ["Gross Profit", summary.grossProfit],
-        ["Gross Margin %", `${summary.grossMargin.toFixed(1)}%`],
-        ["Operating Expenses", summary.operatingExpenses],
-        ["Net Profit", summary.netProfit],
-        ["Net Margin %", `${summary.netMargin.toFixed(1)}%`],
+        ["Pendapatan", summary.revenue],
+        ["Diskon", summary.itemsDiscount],
+        ["HPP", summary.cogs],
+        ["Laba Kotor", summary.grossProfit],
+        ["Margin Kotor %", `${summary.grossMargin.toFixed(1)}%`],
+        ["Biaya Operasional", summary.operatingExpenses],
+        ["Laba Bersih", summary.netProfit],
+        ["Margin Bersih %", `${summary.netMargin.toFixed(1)}%`],
       ]
     )
   }
 
   const rows = [
-    { label: "Revenue (Penjualan)", value: summary.revenue, bold: true },
-    { label: "Discount", value: summary.itemsDiscount, negative: true },
-    { label: "COGS (Harga Pokok)", value: summary.cogs, negative: true },
-    { label: "Gross Profit", value: summary.grossProfit, bold: true },
-    { label: "Gross Margin %", percent: summary.grossMargin },
-    { label: "Operating Expenses", value: summary.operatingExpenses, negative: true },
-    { label: "Net Profit", value: summary.netProfit, bold: true },
-    { label: "Net Margin %", percent: summary.netMargin },
+    { label: "Pendapatan (Penjualan)", value: summary.revenue, bold: true },
+    { label: "Diskon", value: summary.itemsDiscount, negative: true },
+    { label: "HPP (Harga Pokok)", value: summary.cogs, negative: true },
+    { label: "Laba Kotor", value: summary.grossProfit, bold: true },
+    { label: "Margin Kotor %", percent: summary.grossMargin },
+    { label: "Biaya Operasional", value: summary.operatingExpenses, negative: true },
+    { label: "Laba Bersih", value: summary.netProfit, bold: true },
+    { label: "Margin Bersih %", percent: summary.netMargin },
   ]
 
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold">Profit & Loss</h2>
+        <h2 className="text-2xl font-bold">Laba Rugi</h2>
         <p className="text-sm text-muted-foreground">Ringkasan laba rugi periode</p>
       </div>
 
@@ -89,20 +89,20 @@ export function ProfitReport({ summary }: ProfitReportProps) {
       <div className="grid gap-4 sm:grid-cols-3">
         <Card>
           <CardContent className="p-4">
-            <p className="text-sm text-muted-foreground">Revenue</p>
+            <p className="text-sm text-muted-foreground">Pendapatan</p>
             <p className="text-2xl font-bold">{formatCurrency(summary.revenue)}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
-            <p className="text-sm text-muted-foreground">Gross Profit</p>
+            <p className="text-sm text-muted-foreground">Laba Kotor</p>
             <p className="text-2xl font-bold">{formatCurrency(summary.grossProfit)}</p>
             <p className="text-xs text-muted-foreground">{summary.grossMargin.toFixed(1)}% margin</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
-            <p className="text-sm text-muted-foreground">Net Profit</p>
+            <p className="text-sm text-muted-foreground">Laba Bersih</p>
             <p className="text-2xl font-bold">{formatCurrency(summary.netProfit)}</p>
             <p className="text-xs text-muted-foreground">{summary.netMargin.toFixed(1)}% margin</p>
           </CardContent>
@@ -113,7 +113,7 @@ export function ProfitReport({ summary }: ProfitReportProps) {
 
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle>Profit & Loss Statement</CardTitle>
+          <CardTitle>Laporan Laba Rugi</CardTitle>
           <Button variant="outline" size="sm" onClick={exportCSV}>
             <Download className="h-4 w-4 mr-1" />
             Export CSV

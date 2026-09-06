@@ -35,7 +35,7 @@ export function InventoryReport({ items, totalStockValue }: InventoryReportProps
   const exportCSV = () => {
     exportToCSV(
       "inventory-report.csv",
-      ["Name", "SKU", "Unit", "Qty", "Min Stock", "Cost Price", "Stock Value"],
+      ["Nama", "SKU", "Unit", "Jumlah", "Stok Min", "Harga Pokok", "Nilai Stok"],
       filtered.map((i) => [i.name, i.sku, i.unit, i.quantity, i.minimum_stock, i.cost_price, i.stock_value])
     )
   }
@@ -43,26 +43,26 @@ export function InventoryReport({ items, totalStockValue }: InventoryReportProps
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold">Inventory Report</h2>
+        <h2 className="text-2xl font-bold">Laporan Persediaan</h2>
         <p className="text-sm text-muted-foreground">Stock dan valuasi inventaris</p>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <Card>
           <CardContent className="p-4">
-            <p className="text-sm text-muted-foreground">Total Stock Value</p>
+            <p className="text-sm text-muted-foreground">Total Nilai Stok</p>
             <p className="text-2xl font-bold">{formatCurrency(totalStockValue)}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
-            <p className="text-sm text-muted-foreground">Total Items</p>
+            <p className="text-sm text-muted-foreground">Total Item</p>
             <p className="text-2xl font-bold">{formatNumber(items.length)}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
-            <p className="text-sm text-muted-foreground">Low Stock Items</p>
+            <p className="text-sm text-muted-foreground">Item Stok Rendah</p>
             <p className="text-2xl font-bold text-destructive">
               {formatNumber(items.filter((i) => i.is_low_stock).length)}
             </p>
@@ -75,14 +75,14 @@ export function InventoryReport({ items, totalStockValue }: InventoryReportProps
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <div className="flex items-center gap-4">
-            <CardTitle>Stock List</CardTitle>
+            <CardTitle>Daftar Stok</CardTitle>
             <Button
               variant={showReorderOnly ? "default" : "outline"}
               size="sm"
               onClick={() => setShowReorderOnly(!showReorderOnly)}
             >
               <AlertTriangle className="h-4 w-4 mr-1" />
-              Reorder List
+              Daftar Pemesanan Ulang
             </Button>
           </div>
           <Button variant="outline" size="sm" onClick={exportCSV}>
@@ -97,13 +97,13 @@ export function InventoryReport({ items, totalStockValue }: InventoryReportProps
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Name</TableHead>
+                  <TableHead>Nama</TableHead>
                   <TableHead>SKU</TableHead>
                   <TableHead>Unit</TableHead>
-                  <TableHead className="text-right">Qty</TableHead>
-                  <TableHead className="text-right">Min Stock</TableHead>
-                  <TableHead className="text-right">Cost Price</TableHead>
-                  <TableHead className="text-right">Stock Value</TableHead>
+                  <TableHead className="text-right">Jumlah</TableHead>
+                  <TableHead className="text-right">Stok Min</TableHead>
+                  <TableHead className="text-right">Harga Pokok</TableHead>
+                  <TableHead className="text-right">Nilai Stok</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -116,7 +116,7 @@ export function InventoryReport({ items, totalStockValue }: InventoryReportProps
                       <div className="flex items-center gap-2">
                         {item.name}
                         {item.is_low_stock && (
-                          <Badge variant="destructive" className="text-[10px]">LOW</Badge>
+                          <Badge variant="destructive" className="text-[10px]">RENDAH</Badge>
                         )}
                       </div>
                     </TableCell>

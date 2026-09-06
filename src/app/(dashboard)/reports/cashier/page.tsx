@@ -52,18 +52,18 @@ export default async function CashierReportPage({
 
   return (
     <SimpleReport
-      title="Cashier Report"
+      title="Laporan Kasir"
       description="Performa kasir per periode"
       dateFrom={from}
       dateTo={to}
       columns={[
-        { key: "cashier", label: "Cashier" },
-        { key: "orders", label: "Total Orders" },
-        { key: "revenue", label: "Revenue" },
-        { key: "avg_order", label: "Avg Order" },
+        { key: "cashier", label: "Kasir" },
+        { key: "orders", label: "Total Pesanan" },
+        { key: "revenue", label: "Pendapatan" },
+        { key: "avg_order", label: "Rata-rata Pesanan" },
       ]}
       rows={rows}
-      summary={[{ label: "Total Revenue", value: formatCurrency(total) }]}
+      summary={[{ label: "Total Pendapatan", value: formatCurrency(total) }]}
     />
   )
 }

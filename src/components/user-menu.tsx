@@ -24,7 +24,7 @@ interface UserMenuProps {
 }
 
 export function UserMenu({ user }: UserMenuProps) {
-  const name = user?.full_name ?? "User"
+  const name = user?.full_name ?? "Pengguna"
   const initials = getInitials(name)
 
   return (
@@ -53,17 +53,17 @@ export function UserMenu({ user }: UserMenuProps) {
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <Link href="/settings">
-            <Settings className="mr-2 h-4 w-4" /> Settings
+            <Settings className="mr-2 h-4 w-4" /> Pengaturan
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link href="/settings/users">
-            <User className="mr-2 h-4 w-4" /> Account
+            <User className="mr-2 h-4 w-4" /> Akun
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => signOut()}>
-          <LogOut className="mr-2 h-4 w-4" /> Logout
+          <LogOut className="mr-2 h-4 w-4" /> Keluar
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

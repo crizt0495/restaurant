@@ -41,19 +41,19 @@ export default async function VoidReportPage({
 
   return (
     <SimpleReport
-      title="Void Report"
-      description="Order yang dibatalkan (void) periode"
+      title="Laporan Pembatalan"
+      description="Pesanan yang dibatalkan periode"
       dateFrom={from}
       dateTo={to}
       columns={[
-        { key: "order_number", label: "Order" },
+        { key: "order_number", label: "Pesanan" },
         { key: "date", label: "Tanggal" },
         { key: "total", label: "Total" },
         { key: "reason", label: "Alasan" },
         { key: "cancelled_by", label: "Oleh" },
       ]}
       rows={rows}
-      summary={[{ label: "Total Void", value: formatCurrency(total) }]}
+      summary={[{ label: "Total Pembatalan", value: formatCurrency(total) }]}
     />
   )
 }

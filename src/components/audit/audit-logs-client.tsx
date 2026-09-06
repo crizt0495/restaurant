@@ -74,7 +74,7 @@ export function AuditLogsClient({ logs: initial }: { logs: AuditLog[] }) {
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
-            placeholder="Cari entity, user, action..."
+            placeholder="Cari entitas, pengguna, aksi..."
             className="pl-9"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -84,7 +84,7 @@ export function AuditLogsClient({ logs: initial }: { logs: AuditLog[] }) {
           value={actionFilter}
           onChange={(e) => setActionFilter(e.target.value)}
           className="h-9 rounded-md border bg-background px-3 text-sm"
-          aria-label="Filter action"
+          aria-label="Filter aksi"
         >
           <option value="">Semua Aksi</option>
           {allActions.map((a) => (
@@ -106,10 +106,10 @@ export function AuditLogsClient({ logs: initial }: { logs: AuditLog[] }) {
             <TableHeader>
               <TableRow>
                 <TableHead>Waktu</TableHead>
-                <TableHead>User</TableHead>
-                <TableHead>Action</TableHead>
-                <TableHead>Entity</TableHead>
-                <TableHead>Entity ID</TableHead>
+                <TableHead>Pengguna</TableHead>
+                <TableHead>Aksi</TableHead>
+                <TableHead>Entitas</TableHead>
+                <TableHead>ID Entitas</TableHead>
                 <TableHead>IP</TableHead>
               </TableRow>
             </TableHeader>

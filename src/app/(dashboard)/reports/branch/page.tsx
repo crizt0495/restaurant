@@ -50,18 +50,18 @@ export default async function BranchReportPage({
 
   return (
     <SimpleReport
-      title="Branch Sales Report"
+      title="Laporan Penjualan Cabang"
       description="Performa penjualan per cabang"
       dateFrom={from}
       dateTo={to}
       columns={[
         { key: "branch", label: "Cabang" },
-        { key: "orders", label: "Total Orders" },
-        { key: "revenue", label: "Revenue" },
-        { key: "avg_order", label: "Avg Order" },
+        { key: "orders", label: "Total Pesanan" },
+        { key: "revenue", label: "Pendapatan" },
+        { key: "avg_order", label: "Rata-rata Pesanan" },
       ]}
       rows={rows}
-      summary={[{ label: "Total Revenue", value: formatCurrency(totalRevenue) }]}
+      summary={[{ label: "Total Pendapatan", value: formatCurrency(totalRevenue) }]}
     />
   )
 }

@@ -42,15 +42,15 @@ export function RefundButton({ orderId, maxAmount }: { orderId: string; maxAmoun
   const handleRefund = async () => {
     const amt = parseFloat(amount)
     if (isNaN(amt) || amt <= 0) {
-      toast.error("Masukkan jumlah refund yang valid")
+      toast.error("Masukkan jumlah pengembalian yang valid")
       return
     }
     if (amt > maxAmount) {
-      toast.error(`Refund tidak boleh melebihi ${formatCurrency(maxAmount)}`)
+      toast.error(`Pengembalian tidak boleh melebihi ${formatCurrency(maxAmount)}`)
       return
     }
     if (!reason.trim()) {
-      toast.error("Alasan refund wajib diisi")
+      toast.error("Alasan pengembalian wajib diisi")
       return
     }
     setLoading(true)
@@ -60,7 +60,7 @@ export function RefundButton({ orderId, maxAmount }: { orderId: string; maxAmoun
       toast.error(result.error)
       return
     }
-    toast.success("Refund berhasil")
+    toast.success("Pengembalian berhasil")
     setOpen(false)
     setReason("")
     router.refresh()
@@ -69,19 +69,19 @@ export function RefundButton({ orderId, maxAmount }: { orderId: string; maxAmoun
   return (
     <>
       <Button variant="outline" size="sm" onClick={() => setOpen(true)}>
-        <Undo2 className="mr-2 h-4 w-4" /> Refund
+        <Undo2 className="mr-2 h-4 w-4" /> Kembalikan
       </Button>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Refund Order</DialogTitle>
+            <DialogTitle>Pengembalian Pesanan</DialogTitle>
             <DialogDescription>
               Pembayaran akan dikembalikan sebagian atau seluruhnya kepada pelanggan.
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4">
             <div className="grid gap-2">
-              <Label>Jumlah Refund (Maks {formatCurrency(maxAmount)})</Label>
+              <Label>Jumlah Pengembalian (Maks {formatCurrency(maxAmount)})</Label>
               <Input
                 type="number"
                 min={1}
@@ -91,7 +91,7 @@ export function RefundButton({ orderId, maxAmount }: { orderId: string; maxAmoun
               />
             </div>
             <div className="grid gap-2">
-              <Label>Metode Refund</Label>
+              <Label>Metode Pengembalian</Label>
               <Select value={method} onValueChange={setMethod}>
                 <SelectTrigger>
                   <SelectValue />
@@ -104,7 +104,7 @@ export function RefundButton({ orderId, maxAmount }: { orderId: string; maxAmoun
               </Select>
             </div>
             <div className="grid gap-2">
-              <Label>Alasan Refund</Label>
+              <Label>Alasan Pengembalian</Label>
               <Input
                 placeholder="Contoh: Pelanggan berubah pikiran"
                 value={reason}
@@ -118,7 +118,7 @@ export function RefundButton({ orderId, maxAmount }: { orderId: string; maxAmoun
             </Button>
             <Button variant="destructive" disabled={loading} onClick={handleRefund}>
               {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-              Refund
+              Kembalikan
             </Button>
           </DialogFooter>
         </DialogContent>

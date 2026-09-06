@@ -392,7 +392,7 @@ export function PromotionsClient({
                     />
                   </div>
                   <div className="grid gap-2">
-                    <Label>Gratis Quantity</Label>
+                    <Label>Jumlah Gratis</Label>
                     <Input
                       type="number"
                       min={1}

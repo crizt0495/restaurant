@@ -46,12 +46,12 @@ export default async function EmployeeReportPage({
 
   return (
     <SimpleReport
-      title="Employee Report"
+      title="Laporan Karyawan"
       description="Data karyawan dan keaktifan"
       dateFrom={from}
       dateTo={to}
       columns={[
-        { key: "employee_id", label: "Emp ID" },
+        { key: "employee_id", label: "ID Karyawan" },
         { key: "name", label: "Nama" },
         { key: "phone", label: "Telepon" },
         { key: "position", label: "Posisi" },

@@ -125,7 +125,7 @@ export function Header({ profileId }: { profileId?: string | null }) {
         aria-label="Buka pencarian global"
       >
         <Search className="h-3.5 w-3.5" />
-        Cari order, produk, customer, supplier...
+Cari pesanan, produk, pelanggan, pemasok...
         <kbd className="ml-auto rounded bg-background px-1.5 py-0.5 text-[10px]">⌘K</kbd>
       </button>
 
@@ -135,7 +135,7 @@ export function Header({ profileId }: { profileId?: string | null }) {
             <Search className="h-5 w-5" />
           </span>
         </Button>
-        <Button variant="ghost" size="icon" asChild aria-label="Notifications">
+        <Button variant="ghost" size="icon" asChild aria-label="Notifikasi">
           <Link href="/notifications" className="relative">
             <Bell className="h-5 w-5" />
             {unread > 0 && (
@@ -154,7 +154,7 @@ export function Header({ profileId }: { profileId?: string | null }) {
             <Search className="h-4 w-4 text-muted-foreground" />
             <input
               autoFocus
-              placeholder="Cari order, produk, customer, supplier..."
+              placeholder="Cari pesanan, produk, pelanggan, pemasok..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"

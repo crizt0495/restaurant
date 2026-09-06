@@ -16,43 +16,43 @@ export const dynamic = "force-dynamic"
 
 const settingsLinks = [
   {
-    title: "Users",
+    title: "Pengguna",
     description: "Kelola pengguna dan akun",
     href: "/settings/users",
     icon: Users,
   },
   {
-    title: "Roles & Permissions",
-    description: "Kelola role dan hak akses",
+    title: "Peran & Izin",
+    description: "Kelola peran dan hak akses",
     href: "/settings/roles",
     icon: Shield,
   },
   {
-    title: "Branches",
+    title: "Cabang",
     description: "Kelola cabang",
     href: "/settings/branches",
     icon: Building2,
   },
   {
-    title: "Restaurant",
+    title: "Restoran",
     description: "Profil restoran dan pengaturan umum",
     href: "/settings/restaurant",
     icon: Store,
   },
   {
-    title: "Payment Methods",
+    title: "Metode Pembayaran",
     description: "Kelola metode pembayaran",
     href: "/settings/payment",
     icon: CreditCard,
   },
   {
-    title: "Receipt",
+    title: "Struk",
     description: "Format dan tampilan struk",
     href: "/settings/receipt",
     icon: ReceiptIcon,
   },
   {
-    title: "Notifications",
+    title: "Notifikasi",
     description: "Preferensi notifikasi sistem",
     href: "/settings/notifications",
     icon: BellRing,
@@ -66,7 +66,7 @@ export default async function SettingsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold">Settings</h2>
+        <h2 className="text-2xl font-bold">Pengaturan</h2>
         <p className="text-sm text-muted-foreground">Pengaturan sistem</p>
       </div>
 

@@ -29,7 +29,7 @@ export function CustomersReport({ customers, totalSpent, memberCount }: Customer
   const exportCSV = () => {
     exportToCSV(
       "customers-report.csv",
-      ["Name", "Phone", "Member Level", "Points", "Total Spent"],
+      ["Nama", "Telepon", "Level Anggota", "Poin", "Total Belanja"],
       customers.map((c) => [c.name, c.phone, c.member_level, c.points, c.total_spent])
     )
   }
@@ -37,26 +37,26 @@ export function CustomersReport({ customers, totalSpent, memberCount }: Customer
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold">Customer Report</h2>
+        <h2 className="text-2xl font-bold">Laporan Pelanggan</h2>
         <p className="text-sm text-muted-foreground">Performa pelanggan dan loyalitas</p>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-3">
         <Card>
           <CardContent className="p-4">
-            <p className="text-sm text-muted-foreground">Total Customers</p>
+            <p className="text-sm text-muted-foreground">Total Pelanggan</p>
             <p className="text-2xl font-bold">{formatNumber(customers.length)}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
-            <p className="text-sm text-muted-foreground">Members</p>
+            <p className="text-sm text-muted-foreground">Anggota</p>
             <p className="text-2xl font-bold">{formatNumber(memberCount)}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
-            <p className="text-sm text-muted-foreground">Total Revenue from Customers</p>
+            <p className="text-sm text-muted-foreground">Total Pendapatan dari Pelanggan</p>
             <p className="text-2xl font-bold">{formatCurrency(totalSpent)}</p>
           </CardContent>
         </Card>
@@ -66,7 +66,7 @@ export function CustomersReport({ customers, totalSpent, memberCount }: Customer
 
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle>Top Customers</CardTitle>
+          <CardTitle>Pelanggan Teratas</CardTitle>
           <Button variant="outline" size="sm" onClick={exportCSV}>
             <Download className="h-4 w-4 mr-1" />
             Export CSV
@@ -80,11 +80,11 @@ export function CustomersReport({ customers, totalSpent, memberCount }: Customer
               <TableHeader>
                 <TableRow>
                   <TableHead>#</TableHead>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Phone</TableHead>
-                  <TableHead>Member</TableHead>
-                  <TableHead className="text-right">Points</TableHead>
-                  <TableHead className="text-right">Total Spent</TableHead>
+                  <TableHead>Nama</TableHead>
+                  <TableHead>Telepon</TableHead>
+                  <TableHead>Anggota</TableHead>
+                  <TableHead className="text-right">Poin</TableHead>
+                  <TableHead className="text-right">Total Belanja</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -97,7 +97,7 @@ export function CustomersReport({ customers, totalSpent, memberCount }: Customer
                       {c.is_member ? (
                         <Badge variant="info">{c.member_level}</Badge>
                       ) : (
-                        <Badge variant="neutral">Non-Member</Badge>
+                        <Badge variant="neutral">Non-Anggota</Badge>
                       )}
                     </TableCell>
                     <TableCell className="text-right">{formatNumber(c.points)}</TableCell>

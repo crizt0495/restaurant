@@ -41,7 +41,7 @@ export default async function DiscountReportPage({
 
   return (
     <SimpleReport
-      title="Discount Report"
+      title="Laporan Diskon"
       description="Order yang diberikan diskon"
       dateFrom={from}
       dateTo={to}
@@ -50,12 +50,12 @@ export default async function DiscountReportPage({
         { key: "date", label: "Tanggal" },
         { key: "discount", label: "Diskon" },
         { key: "total", label: "Total Setelah" },
-        { key: "cashier", label: "Cashier" },
+        { key: "cashier", label: "Kasir" },
       ]}
       rows={rows}
       summary={[
         { label: "Total Diskon", value: formatCurrency(total) },
-        { label: "Jumlah Order", value: formatNumber(orders?.length ?? 0) },
+        { label: "Jumlah Pesanan", value: formatNumber(orders?.length ?? 0) },
       ]}
     />
   )

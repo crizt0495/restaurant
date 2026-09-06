@@ -50,18 +50,18 @@ export default async function CategoryReportPage({
 
   return (
     <SimpleReport
-      title="Category Sales Report"
+      title="Laporan Penjualan Kategori"
       description="Penjualan per kategori produk"
       dateFrom={from}
       dateTo={to}
       columns={[
         { key: "category", label: "Kategori" },
         { key: "qty", label: "Qty Terjual" },
-        { key: "revenue", label: "Revenue" },
-        { key: "avg_price", label: "Avg Price" },
+        { key: "revenue", label: "Pendapatan" },
+        { key: "avg_price", label: "Harga Rata-rata" },
       ]}
       rows={rows}
-      summary={[{ label: "Total Revenue", value: formatCurrency(total) }]}
+      summary={[{ label: "Total Pendapatan", value: formatCurrency(total) }]}
     />
   )
 }

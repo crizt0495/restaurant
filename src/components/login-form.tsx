@@ -34,14 +34,14 @@ export function LoginForm({ redirect }: { redirect?: string }) {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="password">Password</Label>
+        <Label htmlFor="password">Kata Sandi</Label>
         <div className="relative">
           <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             id="password"
             name="password"
             type={showPassword ? "text" : "password"}
-            placeholder="Masukkan password"
+            placeholder="Masukkan kata sandi"
             autoComplete="current-password"
             className="px-9"
             required
@@ -50,7 +50,7 @@ export function LoginForm({ redirect }: { redirect?: string }) {
             type="button"
             onClick={() => setShowPassword((v) => !v)}
             className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-            aria-label={showPassword ? "Sembunyikan password" : "Tampilkan password"}
+            aria-label={showPassword ? "Sembunyikan kata sandi" : "Tampilkan kata sandi"}
           >
             {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
           </button>
@@ -66,7 +66,7 @@ export function LoginForm({ redirect }: { redirect?: string }) {
       <div className="flex items-center space-x-2">
         <Checkbox id="remember" name="remember" />
         <Label htmlFor="remember" className="text-sm text-muted-foreground">
-          Remember session
+        Ingat sesi
         </Label>
       </div>
 

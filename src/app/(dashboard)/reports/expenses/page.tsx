@@ -43,7 +43,7 @@ export default async function ExpenseReportPage({
 
   return (
     <SimpleReport
-      title="Expense Report"
+      title="Laporan Pengeluaran"
       description="Pengeluaran operasional periode"
       dateFrom={from}
       dateTo={to}
@@ -56,7 +56,7 @@ export default async function ExpenseReportPage({
       ]}
       rows={rows}
       summary={[
-        { label: "Total Expense", value: formatCurrency(total) },
+        { label: "Total Pengeluaran", value: formatCurrency(total) },
         ...Array.from(catMap.entries()).map(([k, v]) => ({ label: k, value: formatCurrency(v) })),
       ]}
     />

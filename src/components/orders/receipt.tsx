@@ -17,7 +17,7 @@ export function Receipt({ restaurantName, restaurantAddress, restaurantPhone, or
       </div>
 
       <div className="mt-2 border-t border-dashed pt-2 text-xs">
-        <p>Bill: {order.order_number}</p>
+        <p>Struk: {order.order_number}</p>
         <p>{formatDateTime(order.created_at)}</p>
         <p>Tipe: {order.order_type.replace("_", " ")}</p>
         {order.table?.name && <p>Meja: {order.table.name}</p>}

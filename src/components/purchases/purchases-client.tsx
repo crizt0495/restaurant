@@ -183,7 +183,7 @@ export function PurchasesClient({
       toast.error(result.error)
       return
     }
-    toast.success("Purchase order dibuat")
+    toast.success("Pesanan pembelian dibuat")
     setCreateOpen(false)
     window.location.reload()
   }
@@ -219,7 +219,7 @@ export function PurchasesClient({
       toast.error(result.error)
       return
     }
-    toast.success("Purchase order diterima, stok diperbarui")
+    toast.success("Pesanan pembelian diterima, stok diperbarui")
     setReceivePo(null)
     window.location.reload()
   }
@@ -352,7 +352,7 @@ export function PurchasesClient({
                     <Input
                       className="col-span-2"
                       type="number"
-                      placeholder="Qty"
+                      placeholder="Jumlah"
                       value={line.quantity}
                       onChange={(e) => updateLine(index, { quantity: Number(e.target.value) })}
                     />
@@ -411,7 +411,7 @@ export function PurchasesClient({
                 Pemasok: <span className="font-medium text-foreground">{receivePo.supplier?.company || receivePo.supplier?.name || "-"}</span>
               </p>
               <div className="grid gap-2">
-                <Label>Qty yang diterima</Label>
+                <Label>Jumlah yang diterima</Label>
                 {(receivePo.items || []).map((item) => (
                   <div key={item.id} className="flex items-center justify-between gap-2">
                     <span className="flex-1 text-sm">

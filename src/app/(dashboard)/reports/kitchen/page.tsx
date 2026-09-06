@@ -58,21 +58,21 @@ export default async function KitchenReportPage({
 
   return (
     <SimpleReport
-      title="Kitchen Performance Report"
-      description="Waktu persiapan order di dapur"
+      title="Laporan Kinerja Dapur"
+      description="Waktu persiapan pesanan di dapur"
       dateFrom={from}
       dateTo={to}
       columns={[
-        { key: "order_number", label: "Order" },
+        { key: "order_number", label: "Pesanan" },
         { key: "date", label: "Tanggal" },
         { key: "table", label: "Meja" },
         { key: "status", label: "Status" },
-        { key: "prep_time", label: "Waktu Prep" },
+        { key: "prep_time", label: "Waktu Persiapan" },
       ]}
       rows={rows}
       summary={[
-        { label: "Total Order", value: String(orders?.length ?? 0) },
-        { label: "Rata-rata Prep", value: `${avgMinutes}m ${avgSecs}s` },
+        { label: "Total Pesanan", value: String(orders?.length ?? 0) },
+        { label: "Rata-rata Persiapan", value: `${avgMinutes}m ${avgSecs}s` },
       ]}
     />
   )

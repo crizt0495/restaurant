@@ -83,11 +83,11 @@ export function PublicMenu({ branchId, tableId, branchName, tableName, orgName, 
       })
       const data = await res.json()
       if (!res.ok || data.error) {
-        setOrderInfo(data.error || "Gagal mengirim order")
+        setOrderInfo(data.error || "Gagal mengirim pesanan")
         return
       }
       setPlaced(true)
-      setOrderInfo(`Order ${data.order_number} berhasil dikirim ke dapur`)
+      setOrderInfo(`Pesanan ${data.order_number} berhasil dikirim ke dapur`)
       setCart([])
     } catch {
       setOrderInfo("Terjadi kesalahan, silakan coba lagi")
@@ -189,7 +189,7 @@ export function PublicMenu({ branchId, tableId, branchName, tableName, orgName, 
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
           <div className="w-full max-w-sm rounded-xl bg-card p-6 text-center shadow-xl">
             <CheckCircle2 className={`mx-auto mb-3 h-12 w-12 ${placed ? "text-emerald-500" : "text-amber-500"}`} />
-            <h2 className="text-lg font-bold">{placed ? "Order Terkirim!" : "Perhatian"}</h2>
+            <h2 className="text-lg font-bold">{placed ? "Pesanan Terkirim!" : "Perhatian"}</h2>
             <p className="mt-1 text-sm text-muted-foreground">{orderInfo}</p>
             <Button className="mt-4 w-full" onClick={() => { setPlaced(false); setOrderInfo(""); }}>
               Tutup

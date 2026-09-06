@@ -251,7 +251,7 @@ export function OpnameClient({
                         ) : (
                           <CheckCircle className="mr-1 h-3 w-3" />
                         )}
-                        Approve & Adjust
+                        Setujui & Sesuaikan
                       </Button>
                     )}
                   </TableCell>
@@ -319,7 +319,7 @@ export function OpnameClient({
                       </Select>
                       <div className="col-span-2 text-center text-sm text-muted-foreground">
                         {invItem ? formatNumber(Number(invItem.quantity)) : "-"}
-                        <span className="block text-xs">System</span>
+                        <span className="block text-xs">Sistem</span>
                       </div>
                       <Input
                         className="col-span-2"

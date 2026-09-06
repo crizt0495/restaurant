@@ -22,27 +22,27 @@ import {
 import { requirePermission } from "@/lib/helpers"
 
 const REPORT_LINKS = [
-  { title: "Sales Report", description: "Penjualan harian, per produk, per cashier", href: "/reports/sales", icon: BarChart3 },
-  { title: "Profit & Loss", description: "Revenue, COGS, gross & net profit", href: "/reports/profit", icon: Wallet },
-  { title: "Inventory Report", description: "Stock, valuasi, movement", href: "/reports/inventory", icon: Boxes },
-  { title: "Product Report", description: "Produk terlaris dan kategoris", href: "/reports/products", icon: Utensils },
-  { title: "Customer Report", description: "Customer performans dan loyalty", href: "/reports/customers", icon: Users },
-  { title: "Cashier Report", description: "Performa kasir dan shift", href: "/reports/cashier", icon: Percent },
-  { title: "Purchase Report", description: "Riwayat pembelian bahan baku", href: "/reports/purchase", icon: FileText },
-  { title: "Payment Report", description: "Rincian metode pembayaran", href: "/reports/payment", icon: CreditCard },
-  { title: "Tax Report", description: "Pajak penjualan periode", href: "/reports/tax", icon: Percent },
-  { title: "Refund Report", description: "Order yang direfund", href: "/reports/refund", icon: Undo2 },
-  { title: "Void Report", description: "Order yang dibatalkan", href: "/reports/void", icon: Trash2 },
-  { title: "Shift Report", description: "Ringkasan penyelesaian shift kasir", href: "/reports/shift", icon: Clock },
-  { title: "Branch Report", description: "Performa penjualan per cabang", href: "/reports/branch", icon: Building2 },
-  { title: "Category Report", description: "Penjualan per kategori produk", href: "/reports/categories", icon: BookOpen },
-  { title: "Discount Report", description: "Order yang diberikan diskon", href: "/reports/discount", icon: Percent },
-  { title: "Waiter Report", description: "Penjualan per waiter", href: "/reports/waiter", icon: User },
-  { title: "Kitchen Report", description: "Kinerja dapur dan waktu persiapan", href: "/reports/kitchen", icon: ChefHat },
-  { title: "Stock Movement Report", description: "Gerakan stok bahan baku", href: "/reports/stock-movement", icon: Activity },
-  { title: "Stock Opname Report", description: "Hasil opname stok", href: "/reports/stock-opname", icon: ClipboardList },
-  { title: "Expense Report", description: "Pengeluaran operasional", href: "/reports/expenses", icon: Zap },
-  { title: "Employee Report", description: "Keaktifan dan karyawan", href: "/reports/employees", icon: Users },
+  { title: "Laporan Penjualan", description: "Penjualan harian, per produk, per kasir", href: "/reports/sales", icon: BarChart3 },
+  { title: "Laba Rugi", description: "Pendapatan, harga pokok, laba kotor & bersih", href: "/reports/profit", icon: Wallet },
+  { title: "Laporan Inventaris", description: "Stok, valuasi, dan mutasi", href: "/reports/inventory", icon: Boxes },
+  { title: "Laporan Produk", description: "Produk terlaris dan kategori", href: "/reports/products", icon: Utensils },
+  { title: "Laporan Pelanggan", description: "Performa pelanggan dan loyalitas", href: "/reports/customers", icon: Users },
+  { title: "Laporan Kasir", description: "Performa kasir dan shift", href: "/reports/cashier", icon: Percent },
+  { title: "Laporan Pembelian", description: "Riwayat pembelian bahan baku", href: "/reports/purchase", icon: FileText },
+  { title: "Laporan Pembayaran", description: "Rincian metode pembayaran", href: "/reports/payment", icon: CreditCard },
+  { title: "Laporan Pajak", description: "Pajak penjualan periode", href: "/reports/tax", icon: Percent },
+  { title: "Laporan Pengembalian", description: "Pesanan yang dikembalikan", href: "/reports/refund", icon: Undo2 },
+  { title: "Laporan Pembatalan", description: "Pesanan yang dibatalkan", href: "/reports/void", icon: Trash2 },
+  { title: "Laporan Shift", description: "Ringkasan penyelesaian shift kasir", href: "/reports/shift", icon: Clock },
+  { title: "Laporan Cabang", description: "Performa penjualan per cabang", href: "/reports/branch", icon: Building2 },
+  { title: "Laporan Kategori", description: "Penjualan per kategori produk", href: "/reports/categories", icon: BookOpen },
+  { title: "Laporan Diskon", description: "Pesanan yang diberikan diskon", href: "/reports/discount", icon: Percent },
+  { title: "Laporan Pelayan", description: "Penjualan per pelayan", href: "/reports/waiter", icon: User },
+  { title: "Laporan Dapur", description: "Kinerja dapur dan waktu persiapan", href: "/reports/kitchen", icon: ChefHat },
+  { title: "Laporan Mutasi Stok", description: "Gerakan stok bahan baku", href: "/reports/stock-movement", icon: Activity },
+  { title: "Laporan Opname Stok", description: "Hasil opname stok", href: "/reports/stock-opname", icon: ClipboardList },
+  { title: "Laporan Pengeluaran", description: "Pengeluaran operasional", href: "/reports/expenses", icon: Zap },
+  { title: "Laporan Karyawan", description: "Keaktifan dan karyawan", href: "/reports/employees", icon: Users },
 ]
 
 export default async function ReportsPage() {
@@ -51,7 +51,7 @@ export default async function ReportsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold">Reports</h2>
+        <h2 className="text-2xl font-bold">Laporan</h2>
         <p className="text-sm text-muted-foreground">Analisa performa restoran</p>
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -59,7 +59,7 @@ export default async function ReportsPage() {
           <Link key={r.href} href={r.href} className="group rounded-xl border bg-card p-5 transition-all hover:border-primary hover:shadow-md">
             <div className="mb-3 flex items-center gap-2">
               <r.icon className="h-5 w-5 text-primary" />
-              <span className="text-sm text-muted-foreground">Report</span>
+              <span className="text-sm text-muted-foreground">Laporan</span>
             </div>
             <h3 className="text-lg font-semibold">{r.title}</h3>
             <p className="mt-1 text-sm text-muted-foreground">{r.description}</p>

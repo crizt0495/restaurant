@@ -212,7 +212,7 @@ export function ShiftsClient({ shifts: initialShifts, canOpen, canClose }: Shift
                       )}
                     </TableCell>
                     <TableCell>
-                      <Badge variant={s.status === "OPEN" ? "warning" : "neutral"}>{s.status}</Badge>
+                      <Badge variant={s.status === "OPEN" ? "warning" : "neutral"}>{s.status === "OPEN" ? "Buka" : "Tutup"}</Badge>
                     </TableCell>
                   </TableRow>
                 )

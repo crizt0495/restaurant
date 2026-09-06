@@ -120,7 +120,7 @@ export function CustomersClient({ customers, canCreate, canEdit }: CustomersClie
       toast.error(result.error)
       return
     }
-    toast.success(editingId ? "Customer diperbarui" : "Customer dibuat")
+    toast.success(editingId ? "Pelanggan diperbarui" : "Pelanggan dibuat")
     setDialogOpen(false)
     window.location.reload()
   }
@@ -148,7 +148,7 @@ export function CustomersClient({ customers, canCreate, canEdit }: CustomersClie
       toast.error(result.error)
       return
     }
-    toast.success("Poin berhasil diredeem")
+    toast.success("Poin berhasil ditukar")
     setRewardDialog(false)
     window.location.reload()
   }
@@ -302,10 +302,10 @@ export function CustomersClient({ customers, canCreate, canEdit }: CustomersClie
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="BRONZE">BRONZE</SelectItem>
-                    <SelectItem value="SILVER">SILVER</SelectItem>
-                    <SelectItem value="GOLD">GOLD</SelectItem>
-                    <SelectItem value="PLATINUM">PLATINUM</SelectItem>
+                    <SelectItem value="BRONZE">Perunggu</SelectItem>
+                    <SelectItem value="SILVER">Perak</SelectItem>
+                    <SelectItem value="GOLD">Emas</SelectItem>
+                    <SelectItem value="PLATINUM">Platinum</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -327,7 +327,7 @@ export function CustomersClient({ customers, canCreate, canEdit }: CustomersClie
       <Dialog open={rewardDialog} onOpenChange={setRewardDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Redeem Poin</DialogTitle>
+            <DialogTitle>Tukar Poin</DialogTitle>
           </DialogHeader>
           {rewardCustomer && (
             <div className="space-y-4">
@@ -337,7 +337,7 @@ export function CustomersClient({ customers, canCreate, canEdit }: CustomersClie
                 <p className="text-sm text-muted-foreground mt-1">{rewardCustomer.name}</p>
               </div>
               <div className="grid gap-2">
-                <Label>Jumlah Poin yang Diredeem</Label>
+                <Label>Jumlah Poin yang Ditukar</Label>
                 <Input
                   type="number"
                   min={1}
@@ -348,7 +348,7 @@ export function CustomersClient({ customers, canCreate, canEdit }: CustomersClie
                 />
               </div>
               <p className="text-xs text-muted-foreground">
-                Setelah redeem, poin akan dikurangi dari saldo customer.
+                Setelah ditukar, poin akan dikurangi dari saldo pelanggan.
               </p>
             </div>
           )}
@@ -358,7 +358,7 @@ export function CustomersClient({ customers, canCreate, canEdit }: CustomersClie
             </Button>
             <Button onClick={handleRedeem} disabled={redeeming}>
               {redeeming ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-              Redeem
+              Tukar
             </Button>
           </DialogFooter>
         </DialogContent>

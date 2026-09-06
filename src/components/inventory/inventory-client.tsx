@@ -7,7 +7,7 @@ import {
   deleteInventoryItem,
   adjustStock,
 } from "@/lib/actions/index"
-import { formatCurrency, formatNumber } from "@/lib/utils"
+import { formatCurrency, formatNumber, translateStatus } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -251,7 +251,7 @@ export function InventoryClient({ items, canCreate, canEdit, canDelete, canAdjus
           <SelectContent>
             <SelectItem value="">Semua kategori</SelectItem>
             {CATEGORIES.map((c) => (
-              <SelectItem key={c} value={c}>{c}</SelectItem>
+              <SelectItem key={c} value={c}>{translateStatus(c)}</SelectItem>
             ))}
           </SelectContent>
         </Select>
@@ -273,7 +273,7 @@ export function InventoryClient({ items, canCreate, canEdit, canDelete, canAdjus
                   <TableHead>Item</TableHead>
                   <TableHead>SKU</TableHead>
                   <TableHead>Unit</TableHead>
-                  <TableHead className="text-right">Qty</TableHead>
+                  <TableHead className="text-right">Jumlah</TableHead>
                   <TableHead className="text-right">Stok Min</TableHead>
                   <TableHead className="text-right">Harga Pokok</TableHead>
                   <TableHead>Kategori</TableHead>
@@ -291,7 +291,7 @@ export function InventoryClient({ items, canCreate, canEdit, canDelete, canAdjus
                       <TableCell>{i.unit}</TableCell>
                       <TableCell className="text-right font-semibold">
                         {formatNumber(Number(i.quantity))}
-                        {isLow && <span className="ml-1 text-xs text-destructive">(low)</span>}
+                        {isLow && <span className="ml-1 text-xs text-destructive">(rendah)</span>}
                       </TableCell>
                       <TableCell className="text-right">{formatNumber(Number(i.minimum_stock))}</TableCell>
                       <TableCell className="text-right">{formatCurrency(Number(i.cost_price))}</TableCell>
@@ -383,7 +383,7 @@ export function InventoryClient({ items, canCreate, canEdit, canDelete, canAdjus
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
                     {CATEGORIES.map((c) => (
-                      <SelectItem key={c} value={c}>{c}</SelectItem>
+                      <SelectItem key={c} value={c}>{translateStatus(c)}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>

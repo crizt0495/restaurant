@@ -1,7 +1,7 @@
 import { requirePermission, getCurrentUser } from "@/lib/helpers"
 import { getServerClient } from "@/lib/helpers"
 import { notFound } from "next/navigation"
-import { formatCurrency, formatDateTime } from "@/lib/utils"
+import { formatCurrency, formatDateTime, translateStatus } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -50,11 +50,11 @@ export default async function OrderDetailPage({
             <div className="flex items-center gap-2">
               <h2 className="text-xl font-bold">{order.order_number}</h2>
               <Badge variant={order.status === "COMPLETED" ? "success" : order.status === "CANCELLED" ? "destructive" : "warning"}>
-                {order.status}
+                {translateStatus(order.status)}
               </Badge>
             </div>
             <p className="text-sm text-muted-foreground">
-              {formatDateTime(order.created_at)} · {order.order_type}
+              {formatDateTime(order.created_at)} · {order.order_type === "DINE_IN" ? "Makan di Tempat" : order.order_type === "TAKE_AWAY" ? "Bawa Pulang" : order.order_type === "DELIVERY" ? "Antar" : order.order_type === "PICK_UP" ? "Ambil" : order.order_type}
               {order.table ? ` · ${order.table.name || order.table.number}` : ""}
             </p>
           </div>
@@ -62,7 +62,7 @@ export default async function OrderDetailPage({
         <div className="flex gap-2">
           <Button variant="outline" size="sm" asChild>
             <Link href={`/orders/${order.id}/receipt`} className="flex items-center gap-2">
-              <Printer className="h-4 w-4" /> Print Receipt
+              <Printer className="h-4 w-4" /> Cetak Struk
             </Link>
           </Button>
           {canCancel && <CancelOrderButton orderId={order.id} />}
@@ -73,7 +73,7 @@ export default async function OrderDetailPage({
       <div className="grid gap-4 lg:grid-cols-3">
         <Card className="lg:col-span-2">
           <CardHeader>
-            <CardTitle className="text-sm">Items</CardTitle>
+            <CardTitle className="text-sm">Item</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
             {order.items?.map((item: any) => (
@@ -104,11 +104,11 @@ export default async function OrderDetailPage({
               <span>{formatCurrency(order.subtotal)}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-muted-foreground">Service Charge</span>
+              <span className="text-muted-foreground">Biaya Layanan</span>
               <span>{formatCurrency(order.service_charge)}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-muted-foreground">Tax</span>
+              <span className="text-muted-foreground">Pajak</span>
               <span>{formatCurrency(order.tax_amount)}</span>
             </div>
             <Separator />

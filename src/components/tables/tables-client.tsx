@@ -21,12 +21,12 @@ interface TableItem {
 }
 
 const STATUS_STYLE: Record<string, { variant: "success" | "warning" | "info" | "destructive" | "neutral"; label: string }> = {
-  AVAILABLE: { variant: "success", label: "Available" },
-  OCCUPIED: { variant: "warning", label: "Occupied" },
-  RESERVED: { variant: "info", label: "Reserved" },
-  WAITING_PAYMENT: { variant: "warning", label: "Waiting Payment" },
-  CLEANING: { variant: "info", label: "Cleaning" },
-  OUT_OF_SERVICE: { variant: "destructive", label: "Out of Service" },
+  AVAILABLE: { variant: "success", label: "Tersedia" },
+  OCCUPIED: { variant: "warning", label: "Terisi" },
+  RESERVED: { variant: "info", label: "Dipesan" },
+  WAITING_PAYMENT: { variant: "warning", label: "Menunggu Pembayaran" },
+  CLEANING: { variant: "info", label: "Dibersihkan" },
+  OUT_OF_SERVICE: { variant: "destructive", label: "Tidak Beroperasi" },
 }
 
 const STATUS_COLOR: Record<string, string> = {

@@ -45,7 +45,7 @@ export default async function PaymentReportPage({
 
   return (
     <SimpleReport
-      title="Payment Report"
+      title="Laporan Pembayaran"
       description="Rincian pembayaran per metode"
       dateFrom={from}
       dateTo={to}

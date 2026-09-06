@@ -40,7 +40,7 @@ export default async function TaxReportPage({
 
   return (
     <SimpleReport
-      title="Tax Report"
+      title="Laporan Pajak"
       description="Pajak yang dikenakan pada penjualan periode"
       dateFrom={from}
       dateTo={to}

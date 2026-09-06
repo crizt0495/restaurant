@@ -156,7 +156,7 @@ export function UsersClient({ users, branches, roles, canCreate, canEdit }: User
       toast.error(result.error)
       return
     }
-    toast.success(editingId ? "User diperbarui" : "User dibuat")
+    toast.success(editingId ? "Pengguna diperbarui" : "Pengguna dibuat")
     setDialogOpen(false)
     window.location.reload()
   }
@@ -178,7 +178,7 @@ export function UsersClient({ users, branches, roles, canCreate, canEdit }: User
       <div className="relative">
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         <Input
-          placeholder="Cari user..."
+          placeholder="Cari pengguna..."
           className="pl-9"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -198,8 +198,8 @@ export function UsersClient({ users, branches, roles, canCreate, canEdit }: User
             <TableHeader>
               <TableRow>
                 <TableHead>Nama</TableHead>
-                <TableHead>Username</TableHead>
-                <TableHead>Role</TableHead>
+                <TableHead>Nama Pengguna</TableHead>
+                <TableHead>Peran</TableHead>
                 <TableHead>Cabang</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead className="text-right">Aksi</TableHead>
@@ -240,7 +240,7 @@ export function UsersClient({ users, branches, roles, canCreate, canEdit }: User
           </DialogHeader>
           <div className="grid gap-4">
             <div className="grid gap-2">
-              <Label>Full Name</Label>
+              <Label>Nama Lengkap</Label>
               <Input
                 value={form.full_name}
                 onChange={(e) => setForm({ ...form, full_name: e.target.value })}
@@ -248,14 +248,14 @@ export function UsersClient({ users, branches, roles, canCreate, canEdit }: User
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div className="grid gap-2">
-                <Label>Username</Label>
+                <Label>Nama Pengguna</Label>
                 <Input
                   value={form.username}
                   onChange={(e) => setForm({ ...form, username: e.target.value })}
                 />
               </div>
               <div className="grid gap-2">
-                <Label>Phone</Label>
+                <Label>Telepon</Label>
                 <Input
                   value={form.phone}
                   onChange={(e) => setForm({ ...form, phone: e.target.value })}
@@ -264,7 +264,7 @@ export function UsersClient({ users, branches, roles, canCreate, canEdit }: User
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div className="grid gap-2">
-                <Label>Role</Label>
+                <Label>Peran</Label>
                 <Select
                   value={form.role}
                   onValueChange={(v) => setForm({ ...form, role: v })}
@@ -302,12 +302,12 @@ export function UsersClient({ users, branches, roles, canCreate, canEdit }: User
             </div>
             {!editingId && (
               <div className="grid gap-2">
-                <Label>Password</Label>
+                <Label>Kata Sandi</Label>
                 <Input
                   type="password"
                   value={form.password}
                   onChange={(e) => setForm({ ...form, password: e.target.value })}
-                  placeholder="Default: password123"
+                  placeholder="Default: kata sandi123"
                 />
               </div>
             )}

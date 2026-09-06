@@ -51,18 +51,18 @@ export default async function WaiterReportPage({
 
   return (
     <SimpleReport
-      title="Waiter Sales Report"
-      description="Performa waiter per periode"
+      title="Laporan Penjualan Pelayan"
+      description="Performa pelayan per periode"
       dateFrom={from}
       dateTo={to}
       columns={[
-        { key: "waiter", label: "Waiter" },
-        { key: "orders", label: "Total Orders" },
-        { key: "revenue", label: "Revenue" },
-        { key: "avg_order", label: "Avg Order" },
+        { key: "waiter", label: "Pelayan" },
+        { key: "orders", label: "Total Pesanan" },
+        { key: "revenue", label: "Pendapatan" },
+        { key: "avg_order", label: "Rata-rata Pesanan" },
       ]}
       rows={rows}
-      summary={[{ label: "Total Revenue", value: formatCurrency(total) }]}
+      summary={[{ label: "Total Pendapatan", value: formatCurrency(total) }]}
     />
   )
 }

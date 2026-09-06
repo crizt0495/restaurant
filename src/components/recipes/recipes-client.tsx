@@ -358,7 +358,7 @@ export function RecipesClient({
             </div>
 
             <div className="grid gap-2">
-              <Label>Bahan / Ingredients</Label>
+              <Label>Bahan</Label>
               <div className="grid gap-2">
                 {ingredients.map((ing, index) => (
                   <div
@@ -389,7 +389,7 @@ export function RecipesClient({
                     <Input
                       className="col-span-2"
                       type="number"
-                      placeholder="Qty"
+                      placeholder="Jumlah"
                       value={ing.quantity}
                       onChange={(e) =>
                         updateIngredient(index, {

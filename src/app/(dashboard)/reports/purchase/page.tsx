@@ -38,12 +38,12 @@ export default async function PurchaseReportPage({
 
   return (
     <SimpleReport
-      title="Purchase Report"
-      description="Ringkasan purchase order periode"
+      title="Laporan Pembelian"
+      description="Ringkasan pesanan pembelian periode"
       dateFrom={from}
       dateTo={to}
       columns={[
-        { key: "po_number", label: "PO Number" },
+        { key: "po_number", label: "Nomor PO" },
         { key: "date", label: "Tanggal" },
         { key: "supplier", label: "Supplier" },
         { key: "status", label: "Status" },

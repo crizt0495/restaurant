@@ -156,7 +156,7 @@ export function SuppliersClient({ suppliers, canCreate, canEdit, canDelete }: Su
       <div className="relative flex-1 sm:max-w-sm">
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         <Input
-          placeholder="Cari supplier..."
+          placeholder="Cari pemasok..."
           className="pl-9"
           value={search}
           onChange={(e) => setSearch(e.target.value)}

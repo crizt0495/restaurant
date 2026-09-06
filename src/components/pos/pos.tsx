@@ -74,7 +74,7 @@ const PAYMENT_METHODS = [
   { key: "BANK_TRANSFER", label: "Transfer", icon: Landmark },
   { key: "QRIS", label: "QRIS", icon: Smartphone },
   { key: "DEBIT", label: "Debit", icon: CreditCard },
-  { key: "CREDIT", label: "Credit", icon: CreditCard },
+  { key: "CREDIT", label: "Kartu Kredit", icon: CreditCard },
   { key: "E_WALLET", label: "E-Wallet", icon: Smartphone },
   { key: "OTHER", label: "Lainnya", icon: Utensils },
 ]
@@ -300,7 +300,7 @@ export function POS({ user, categories, products, tables, customers: initialCust
 
   const handleQuickAddCustomer = async () => {
     if (!newCustomerName.trim()) {
-      toast.error("Nama customer wajib diisi")
+      toast.error("Nama pelanggan wajib diisi")
       return
     }
     setNewCustomerSaving(true)
@@ -315,7 +315,7 @@ export function POS({ user, categories, products, tables, customers: initialCust
       toast.error(result.error)
       return
     }
-    toast.success("Customer dibuat")
+    toast.success("Pelanggan dibuat")
     setNewCustomerOpen(false)
     setNewCustomerName("")
     setNewCustomerPhone("")
@@ -451,7 +451,7 @@ export function POS({ user, categories, products, tables, customers: initialCust
             <div className="flex gap-1">
               <Select value={customerId} onValueChange={setCustomerId}>
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Pilih customer" />
+                  <SelectValue placeholder="Pilih pelanggan" />
                 </SelectTrigger>
                 <SelectContent>
                   {customers.map((c) => (
@@ -555,11 +555,11 @@ export function POS({ user, categories, products, tables, customers: initialCust
               </div>
             )}
             <div className="flex justify-between">
-              <span className="text-muted-foreground">Service Charge</span>
+              <span className="text-muted-foreground">Biaya Layanan</span>
               <span>{formatCurrency(serviceCharge)}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-muted-foreground">Tax</span>
+              <span className="text-muted-foreground">Pajak</span>
               <span>{formatCurrency(taxAmount)}</span>
             </div>
             <div className="flex justify-between border-t pt-1 text-base font-bold">

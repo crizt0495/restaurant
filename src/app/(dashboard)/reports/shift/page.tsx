@@ -37,7 +37,7 @@ export default async function ShiftReportPage({
     difference: s.difference != null
       ? `${Number(s.difference) >= 0 ? "+" : ""}${formatCurrency(Number(s.difference))}`
       : "-",
-    status: Number(s.difference ?? 0) === 0 ? "Match" : Number(s.difference) > 0 ? "OVER" : "SHORT",
+    status: Number(s.difference ?? 0) === 0 ? "Cocok" : Number(s.difference) > 0 ? "Lebih" : "Kurang",
   }))
 
   const matched = (shifts ?? []).filter((s: any) => Number(s.difference ?? 0) === 0).length
@@ -48,7 +48,7 @@ export default async function ShiftReportPage({
 
   return (
     <SimpleReport
-      title="Shift Report"
+      title="Laporan Shift"
       description="Ringkasan penyelesaian shift kasir"
       dateFrom={from}
       dateTo={to}
@@ -57,17 +57,17 @@ export default async function ShiftReportPage({
         { key: "branch", label: "Cabang" },
         { key: "opening", label: "Kas Awal" },
         { key: "cash_sales", label: "Penjualan Tunai" },
-        { key: "expected", label: "Expected" },
-        { key: "actual", label: "Actual" },
+        { key: "expected", label: "Diharapkan" },
+        { key: "actual", label: "Aktual" },
         { key: "difference", label: "Selisih" },
         { key: "status", label: "Status" },
       ]}
       rows={rows}
       summary={[
         { label: "Total Shift", value: String(shifts?.length ?? 0) },
-        { label: "Match", value: String(matched) },
-        { label: "Short", value: `${String(short)} (${formatCurrency(totalShort)})` },
-        { label: "Over", value: `${String(over)} (${formatCurrency(totalOver)})` },
+        { label: "Cocok", value: String(matched) },
+        { label: "Kurang", value: `${String(short)} (${formatCurrency(totalShort)})` },
+        { label: "Lebih", value: `${String(over)} (${formatCurrency(totalOver)})` },
       ]}
     />
   )
