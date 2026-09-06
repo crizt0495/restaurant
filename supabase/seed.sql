@@ -36,33 +36,39 @@ insert into permissions (id, key, name, description, module) values
   ('10000000-0000-0000-0000-000000000013', 'products.delete', 'Delete Products', 'Delete products', 'Products'),
   ('10000000-0000-0000-0000-000000000014', 'inventory.view', 'View Inventory', 'View inventory', 'Inventory'),
   ('10000000-0000-0000-0000-000000000015', 'inventory.create', 'Create Inventory', 'Create inventory items', 'Inventory'),
-  ('10000000-0000-0000-0000-000000000016', 'inventory.adjust', 'Adjust Inventory', 'Adjust stock quantities', 'Inventory'),
-  ('10000000-0000-0000-0000-000000000017', 'purchases.view', 'View Purchases', 'View purchase orders', 'Purchases'),
-  ('10000000-0000-0000-0000-000000000018', 'purchases.create', 'Create Purchases', 'Create purchase orders', 'Purchases'),
-  ('10000000-0000-0000-0000-000000000019', 'reports.view', 'View Reports', 'View reports', 'Reports'),
-  ('10000000-0000-0000-0000-000000000020', 'reports.export', 'Export Reports', 'Export reports', 'Reports'),
-  ('10000000-0000-0000-0000-000000000021', 'users.view', 'View Users', 'View users', 'Users'),
-  ('10000000-0000-0000-0000-000000000022', 'users.create', 'Create Users', 'Create users', 'Users'),
-  ('10000000-0000-0000-0000-000000000023', 'users.edit', 'Edit Users', 'Edit users', 'Users'),
-  ('10000000-0000-0000-0000-000000000024', 'settings.manage', 'Manage Settings', 'Manage system settings', 'Settings'),
-  ('10000000-0000-0000-0000-000000000025', 'branches.manage', 'Manage Branches', 'Manage branches', 'Branches'),
-  ('10000000-0000-0000-0000-000000000026', 'customers.view', 'View Customers', 'View customers', 'Customers'),
-  ('10000000-0000-0000-0000-000000000027', 'customers.create', 'Create Customers', 'Create customers', 'Customers'),
-  ('10000000-0000-0000-0000-000000000028', 'customers.edit', 'Edit Customers', 'Edit customers', 'Customers'),
-  ('10000000-0000-0000-0000-000000000029', 'expenses.view', 'View Expenses', 'View expenses', 'Expenses'),
-  ('10000000-0000-0000-0000-000000000030', 'expenses.create', 'Create Expenses', 'Create expenses', 'Expenses'),
-  ('10000000-0000-0000-0000-000000000031', 'employees.view', 'View Employees', 'View employees', 'Employees'),
-  ('10000000-0000-0000-0000-000000000032', 'employees.create', 'Create Employees', 'Create employees', 'Employees'),
-  ('10000000-0000-0000-0000-000000000033', 'employees.edit', 'Edit Employees', 'Edit employees', 'Employees'),
-  ('10000000-0000-0000-0000-000000000034', 'reservations.view', 'View Reservations', 'View reservations', 'Reservations'),
-  ('10000000-0000-0000-0000-000000000035', 'reservations.create', 'Create Reservations', 'Create reservations', 'Reservations'),
-  ('10000000-0000-0000-0000-000000000036', 'promotions.view', 'View Promotions', 'View promotions', 'Promotions'),
-  ('10000000-0000-0000-0000-000000000037', 'promotions.create', 'Create Promotions', 'Create promotions', 'Promotions'),
-  ('10000000-0000-0000-0000-000000000038', 'shifts.view', 'View Cashier Shifts', 'View cashier shifts', 'Shifts'),
-  ('10000000-0000-0000-0000-000000000039', 'shifts.open', 'Open Shift', 'Open a cashier shift', 'Shifts'),
-  ('10000000-0000-0000-0000-000000000040', 'shifts.close', 'Close Shift', 'Close a cashier shift', 'Shifts'),
-  ('10000000-0000-0000-0000-000000000041', 'audit.view', 'View Audit Log', 'View audit logs', 'Audit'),
-  ('10000000-0000-0000-0000-000000000042', 'purchases.receive', 'Receive Purchases', 'Receive purchase orders', 'Purchases');
+  ('10000000-0000-0000-0000-000000000016', 'inventory.edit', 'Edit Inventory', 'Edit inventory item details', 'Inventory'),
+  ('10000000-0000-0000-0000-000000000017', 'inventory.adjust', 'Adjust Inventory', 'Adjust stock quantities', 'Inventory'),
+  ('10000000-0000-0000-0000-000000000018', 'inventory.delete', 'Delete Inventory', 'Delete inventory items', 'Inventory'),
+  ('10000000-0000-0000-0000-000000000019', 'purchases.view', 'View Purchases', 'View purchase orders', 'Purchases'),
+  ('10000000-0000-0000-0000-000000000020', 'purchases.create', 'Create Purchases', 'Create purchase orders', 'Purchases'),
+  ('10000000-0000-0000-0000-000000000021', 'purchases.receive', 'Receive Purchases', 'Receive purchase orders', 'Purchases'),
+  ('10000000-0000-0000-0000-000000000022', 'reports.view', 'View Reports', 'View reports', 'Reports'),
+  ('10000000-0000-0000-0000-000000000023', 'reports.export', 'Export Reports', 'Export reports', 'Reports'),
+  ('10000000-0000-0000-0000-000000000024', 'users.view', 'View Users', 'View users', 'Users'),
+  ('10000000-0000-0000-0000-000000000025', 'users.create', 'Create Users', 'Create users', 'Users'),
+  ('10000000-0000-0000-0000-000000000026', 'users.edit', 'Edit Users', 'Edit users', 'Users'),
+  ('10000000-0000-0000-0000-000000000027', 'settings.manage', 'Manage Settings', 'Manage system settings', 'Settings'),
+  ('10000000-0000-0000-0000-000000000028', 'branches.manage', 'Manage Branches', 'Manage branches', 'Branches'),
+  ('10000000-0000-0000-0000-000000000029', 'customers.view', 'View Customers', 'View customers', 'Customers'),
+  ('10000000-0000-0000-0000-000000000030', 'customers.create', 'Create Customers', 'Create customers', 'Customers'),
+  ('10000000-0000-0000-0000-000000000031', 'customers.edit', 'Edit Customers', 'Edit customers', 'Customers'),
+  ('10000000-0000-0000-0000-000000000032', 'expenses.view', 'View Expenses', 'View expenses', 'Expenses'),
+  ('10000000-0000-0000-0000-000000000033', 'expenses.create', 'Create Expenses', 'Create expenses', 'Expenses'),
+  ('10000000-0000-0000-0000-000000000034', 'employees.view', 'View Employees', 'View employees', 'Employees'),
+  ('10000000-0000-0000-0000-000000000035', 'employees.create', 'Create Employees', 'Create employees', 'Employees'),
+  ('10000000-0000-0000-0000-000000000036', 'employees.edit', 'Edit Employees', 'Edit employees', 'Employees'),
+  ('10000000-0000-0000-0000-000000000037', 'reservations.view', 'View Reservations', 'View reservations', 'Reservations'),
+  ('10000000-0000-0000-0000-000000000038', 'reservations.create', 'Create Reservations', 'Create reservations', 'Reservations'),
+  ('10000000-0000-0000-0000-000000000039', 'promotions.view', 'View Promotions', 'View promotions', 'Promotions'),
+  ('10000000-0000-0000-0000-000000000040', 'promotions.create', 'Create Promotions', 'Create promotions', 'Promotions'),
+  ('10000000-0000-0000-0000-000000000041', 'shifts.view', 'View Cashier Shifts', 'View cashier shifts', 'Shifts'),
+  ('10000000-0000-0000-0000-000000000042', 'shifts.open', 'Open Shift', 'Open a cashier shift', 'Shifts'),
+  ('10000000-0000-0000-0000-000000000043', 'shifts.close', 'Close Shift', 'Close a cashier shift', 'Shifts'),
+  ('10000000-0000-0000-0000-000000000044', 'audit.view', 'View Audit Log', 'View audit logs', 'Audit'),
+  ('10000000-0000-0000-0000-000000000045', 'suppliers.view', 'View Suppliers', 'View suppliers', 'Suppliers'),
+  ('10000000-0000-0000-0000-000000000046', 'suppliers.create', 'Create Suppliers', 'Create suppliers', 'Suppliers'),
+  ('10000000-0000-0000-0000-000000000047', 'suppliers.edit', 'Edit Suppliers', 'Edit suppliers', 'Suppliers'),
+  ('10000000-0000-0000-0000-000000000048', 'suppliers.delete', 'Delete Suppliers', 'Delete suppliers', 'Suppliers');
 
 -- =====================================================
 -- ROLE PERMISSIONS
@@ -74,9 +80,10 @@ select 'SUPER_ADMIN', id from permissions;
 -- OWNER
 insert into role_permissions (role, permission_id)
 select 'OWNER', id from permissions
-where key in ('dashboard.view','sales.view','orders.view','orders.create','orders.edit','orders.cancel',
+where key in ('dashboard.view','sales.view','sales.create','sales.edit','sales.delete',
+  'orders.view','orders.create','orders.edit','orders.cancel',
   'products.view','products.create','products.edit','products.delete',
-  'inventory.view','inventory.create','inventory.adjust',
+  'inventory.view','inventory.create','inventory.edit','inventory.adjust','inventory.delete',
   'purchases.view','purchases.create','purchases.receive',
   'reports.view','reports.export',
   'users.view','users.create','users.edit',
@@ -86,25 +93,28 @@ where key in ('dashboard.view','sales.view','orders.view','orders.create','order
   'employees.view','employees.create','employees.edit',
   'reservations.view','reservations.create',
   'promotions.view','promotions.create',
-  'shifts.view','shifts.open','shifts.close','audit.view');
+  'shifts.view','shifts.open','shifts.close','audit.view',
+  'suppliers.view','suppliers.create','suppliers.edit','suppliers.delete');
 
 -- MANAGER
 insert into role_permissions (role, permission_id)
 select 'MANAGER', id from permissions
-where key in ('dashboard.view','sales.view','orders.view','orders.create','orders.edit','orders.cancel',
+where key in ('dashboard.view','sales.view','sales.create','sales.edit',
+  'orders.view','orders.create','orders.edit','orders.cancel',
   'products.view','products.create','products.edit',
-  'inventory.view','inventory.create','inventory.adjust',
+  'inventory.view','inventory.create','inventory.edit','inventory.adjust','inventory.delete',
   'purchases.view','purchases.create','purchases.receive',
   'reports.view','reports.export',
   'customers.view','customers.create','customers.edit',
   'expenses.view','expenses.create',
-  'employees.view','reservations.view','reservations.create',
-  'shifts.view','shifts.open','shifts.close');
+  'employees.view','employees.create','reservations.view','reservations.create',
+  'shifts.view','shifts.open','shifts.close',
+  'suppliers.view','suppliers.create','suppliers.edit');
 
 -- CASHIER
 insert into role_permissions (role, permission_id)
 select 'CASHIER', id from permissions
-where key in ('dashboard.view','sales.view',
+where key in ('dashboard.view','sales.view','sales.create','sales.edit',
   'orders.view','orders.create','orders.edit',
   'customers.view','customers.create',
   'shifts.view','shifts.open','shifts.close');
@@ -112,23 +122,25 @@ where key in ('dashboard.view','sales.view',
 -- KITCHEN
 insert into role_permissions (role, permission_id)
 select 'KITCHEN', id from permissions
-where key in ('orders.view','orders.edit');
+where key in ('dashboard.view','orders.view','orders.edit','customers.view');
 
 -- WAITER
 insert into role_permissions (role, permission_id)
 select 'WAITER', id from permissions
-where key in ('orders.view','orders.create','orders.edit');
+where key in ('dashboard.view','orders.view','orders.create','orders.edit',
+  'customers.view','customers.create','reservations.view','reservations.create');
 
 -- INVENTORY
 insert into role_permissions (role, permission_id)
 select 'INVENTORY', id from permissions
-where key in ('inventory.view','inventory.create','inventory.adjust',
-  'purchases.view','purchases.create');
+where key in ('inventory.view','inventory.create','inventory.edit','inventory.adjust',
+  'purchases.view','purchases.create',
+  'suppliers.view','suppliers.create');
 
 -- ACCOUNTING
 insert into role_permissions (role, permission_id)
 select 'ACCOUNTING', id from permissions
-where key in ('reports.view','reports.export','expenses.view','audit.view');
+where key in ('dashboard.view','reports.view','reports.export','expenses.view','audit.view');
 
 -- =====================================================
 -- CATEGORIES

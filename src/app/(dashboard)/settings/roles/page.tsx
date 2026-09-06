@@ -7,6 +7,7 @@ import { Role } from "@/types"
 export const dynamic = "force-dynamic"
 
 const ROLES: Role[] = [
+  "SUPER_ADMIN",
   "OWNER",
   "MANAGER",
   "CASHIER",

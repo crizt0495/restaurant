@@ -18,7 +18,7 @@ export default async function InventoryPage() {
       items={items}
       canCreate={user.is_super_admin || user.permissions.includes("inventory.create")}
       canEdit={user.is_super_admin || user.permissions.includes("inventory.edit")}
-      canDelete={user.is_super_admin || user.permissions.includes("inventory.edit")}
+      canDelete={user.is_super_admin || user.permissions.includes("inventory.delete")}
       canAdjust={user.is_super_admin || user.permissions.includes("inventory.adjust")}
     />
   )

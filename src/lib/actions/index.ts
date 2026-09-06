@@ -202,7 +202,7 @@ export async function updateInventoryItem(
 export async function deleteInventoryItem(id: string) {
   const user = await getCurrentUser()
   if (!user) return { error: "Unauthorized" }
-  if (!user.is_super_admin && !user.permissions.includes("inventory.edit")) {
+  if (!user.is_super_admin && !user.permissions.includes("inventory.delete")) {
     return { error: "Forbidden" }
   }
 

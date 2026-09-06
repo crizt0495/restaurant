@@ -50,10 +50,13 @@ export function RolesClient({ roles, permissions, rolePermissions }: RolesClient
   }, [])
 
   const isPermissionEnabled = (role: string, permissionKey: string) => {
-    return rpState.some(
-      (rp) =>
-        rp.role === role &&
-        (rp.permissions?.key === permissionKey || rp.permission_id === permissionKey)
+    return (
+      role === "SUPER_ADMIN" ||
+      rpState.some(
+        (rp) =>
+          rp.role === role &&
+          (rp.permissions?.key === permissionKey || rp.permission_id === permissionKey)
+      )
     )
   }
 
@@ -139,8 +142,8 @@ export function RolesClient({ roles, permissions, rolePermissions }: RolesClient
                         >
                           <Checkbox
                             checked={isPermissionEnabled(role, pm.key)}
-                            disabled={savingKey === `${role}:${pm.key}`}
-                            onCheckedChange={() => handleToggle(role, pm.key)}
+                            disabled={savingKey === `${role}:${pm.key}` || role === "SUPER_ADMIN"}
+                            onCheckedChange={() => role !== "SUPER_ADMIN" && handleToggle(role, pm.key)}
                           />
                           <div className="flex-1 min-w-0">
                             <span className="font-medium">{pm.name}</span>
