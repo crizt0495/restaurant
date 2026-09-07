@@ -4,6 +4,7 @@ import { createServerClient } from "@supabase/ssr"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import { cache } from "react"
+import { unstable_cache } from "next/cache"
 
 export interface SessionUser {
   id: string
@@ -22,9 +23,9 @@ export interface UserContext {
   permissions: string[]
 }
 
-export async function getServerSession() {
+export async function getServerClient() {
   const cookieStore = await cookies()
-  const supabase = createServerClient(
+  return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
@@ -42,7 +43,71 @@ export async function getServerSession() {
       },
     }
   )
+}
 
+async function fetchUserContext(): Promise<UserContext | null> {
+  const supabase = await getServerClient()
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
+
+  if (!session?.user) return null
+
+  const { data, error } = await supabase.rpc("get_my_context")
+  if (error || !data) return null
+
+  return {
+    user_id: session.user.id,
+    profile_id: data.id,
+    username: data.username ?? "",
+    full_name: data.full_name ?? "",
+    role: data.role ?? "",
+    branch_id: data.branch_id ?? null,
+    organization_id: data.organization_id ?? null,
+    is_super_admin: Boolean(data.is_super_admin),
+    permissions: Array.isArray(data.permissions) ? data.permissions : [],
+  }
+}
+
+export const getCurrentUser = cache(async (): Promise<UserContext | null> => {
+  const supabase = await getServerClient()
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
+
+  if (!session?.user) return null
+
+  const getUserCtx = unstable_cache(
+    async () => fetchUserContext(),
+    ["user-context"],
+    { revalidate: 5, tags: [`user-${session.user.id}`] }
+  )
+
+  return getUserCtx()
+})
+
+export async function requirePermission(permission: string) {
+  const user = await getCurrentUser()
+  if (!user) redirect("/login")
+  if (user.is_super_admin || user.permissions.includes("*") || user.permissions.includes(permission)) {
+    return user
+  }
+  redirect("/dashboard")
+}
+
+export async function requireRole(...roles: string[]) {
+  const user = await getCurrentUser()
+  if (!user) redirect("/login")
+  if (user.is_super_admin || roles.includes(user.role)) {
+    return user
+  }
+  redirect("/dashboard")
+}
+
+export async function getServerSession() {
+  const supabase = await getServerClient()
   const {
     data: { user },
   } = await supabase.auth.getUser()
@@ -68,71 +133,6 @@ export async function requireAuth() {
     redirect("/login")
   }
   return session
-}
-
-export async function getServerClient() {
-  const cookieStore = await cookies()
-  return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return cookieStore.getAll()
-        },
-        setAll(cookiesToSet) {
-          try {
-            cookiesToSet.forEach(({ name, value, options }) =>
-              cookieStore.set(name, value, options)
-            )
-          } catch {}
-        },
-      },
-    }
-  )
-}
-
-export const getCurrentUser = cache(async (): Promise<UserContext | null> => {
-  const supabase = await getServerClient()
-
-  const {
-    data: { session },
-  } = await supabase.auth.getSession()
-
-  if (!session?.user) return null
-
-  const { data, error } = await supabase.rpc("get_my_context")
-  if (error || !data) return null
-
-  return {
-    user_id: session.user.id,
-    profile_id: data.id,
-    username: data.username ?? "",
-    full_name: data.full_name ?? "",
-    role: data.role ?? "",
-    branch_id: data.branch_id ?? null,
-    organization_id: data.organization_id ?? null,
-    is_super_admin: Boolean(data.is_super_admin),
-    permissions: Array.isArray(data.permissions) ? data.permissions : [],
-  }
-})
-
-export async function requirePermission(permission: string) {
-  const user = await getCurrentUser()
-  if (!user) redirect("/login")
-  if (user.is_super_admin || user.permissions.includes("*") || user.permissions.includes(permission)) {
-    return user
-  }
-  redirect("/dashboard")
-}
-
-export async function requireRole(...roles: string[]) {
-  const user = await getCurrentUser()
-  if (!user) redirect("/login")
-  if (user.is_super_admin || roles.includes(user.role)) {
-    return user
-  }
-  redirect("/dashboard")
 }
 
 export interface DashboardData {

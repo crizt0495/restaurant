@@ -1,13 +1,24 @@
 import { createServerClient } from "@supabase/ssr"
 import { NextResponse, type NextRequest } from "next/server"
 
-const PUBLIC_PATHS = ["/login", "/menu", "/_next", "/favicon.ico", "/api/auth", "/api/seed", "/api/orders"]
+const PUBLIC_PATHS = new Set(["/login", "/api/seed", "/favicon.ico", "/manifest.json"])
+
+const PUBLIC_PREFIXES = ["/menu/", "/api/auth/", "/_next/"]
+
+function isPublicPath(pathname: string): boolean {
+  if (PUBLIC_PATHS.has(pathname)) return true
+  return PUBLIC_PREFIXES.some((p) => pathname.startsWith(p))
+}
 
 export async function middleware(request: NextRequest) {
-  let response = NextResponse.next({
-    request: {
-      headers: request.headers,
-    },
+  const { pathname } = request.nextUrl
+
+  if (isPublicPath(pathname)) {
+    return NextResponse.next()
+  }
+
+  const response = NextResponse.next({
+    request: { headers: request.headers },
   })
 
   const supabase = createServerClient(
@@ -20,11 +31,6 @@ export async function middleware(request: NextRequest) {
         },
         setAll(cookiesToSet) {
           cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
-          response = NextResponse.next({
-            request: {
-              headers: request.headers,
-            },
-          })
           cookiesToSet.forEach(({ name, value, options }) =>
             response.cookies.set(name, value, options)
           )
@@ -37,20 +43,10 @@ export async function middleware(request: NextRequest) {
     data: { session },
   } = await supabase.auth.getSession()
 
-  const { pathname } = request.nextUrl
-
-  const isPublicPath = PUBLIC_PATHS.some(
-    (path) => pathname === path || pathname.startsWith(`${path}/`)
-  )
-
-  if (!session && !isPublicPath) {
+  if (!session) {
     const loginUrl = new URL("/login", request.url)
     loginUrl.searchParams.set("redirect", pathname)
     return NextResponse.redirect(loginUrl)
-  }
-
-  if (session && pathname === "/login") {
-    return NextResponse.redirect(new URL("/dashboard", request.url))
   }
 
   return response
@@ -58,6 +54,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|json|woff2)$).*)",
   ],
 }

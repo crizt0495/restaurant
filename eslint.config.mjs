@@ -13,6 +13,8 @@ const eslintConfig = defineConfig([
       "@typescript-eslint/no-explicit-any": "off",
       // Server data fetched in RSC is synced to client state in effects by design
       "react-hooks/set-state-in-effect": "off",
+      // Using self-hosted fonts via @font-face pointing to gstatic CDN (not Google Fonts API)
+      "@next/next/google-font-preconnect": "off",
     },
   },
   // Override default ignores of eslint-config-next.
