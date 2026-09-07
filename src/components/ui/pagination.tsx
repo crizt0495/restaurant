@@ -3,6 +3,7 @@
 import * as React from "react"
 import { Button } from "@/components/ui/button"
 import { ChevronLeft, ChevronRight } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 interface PaginationProps {
   totalItems: number
@@ -33,13 +34,15 @@ export function Pagination({ totalItems, itemsPerPage, currentPage, onPageChange
   }, [currentPage, totalPages])
 
   return (
-    <div className="flex items-center justify-between px-1 py-3 text-sm text-muted-foreground">
-      <span>Menampilkan {from}–{to} dari {totalItems}</span>
-      <div className="flex items-center gap-1">
+    <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-1 py-4 text-sm">
+      <span className="font-bold uppercase tracking-wider text-xs text-muted-foreground">
+        Menampilkan {from}–{to} dari {totalItems}
+      </span>
+      <div className="flex items-center gap-2">
         <Button
           variant="outline"
           size="icon"
-          className="h-8 w-8"
+          className="h-10 w-10"
           disabled={currentPage <= 1}
           onClick={() => onPageChange(currentPage - 1)}
           aria-label="Halaman sebelumnya"
@@ -48,13 +51,13 @@ export function Pagination({ totalItems, itemsPerPage, currentPage, onPageChange
         </Button>
         {getPages.map((p, i) =>
           typeof p === "string" ? (
-            <span key={`ellipsis-${i}`} className="px-1 text-xs">…</span>
+            <span key={`ellipsis-${i}`} className="px-1 font-bold text-xs">…</span>
           ) : (
             <Button
               key={p}
-              variant={p === currentPage ? "default" : "ghost"}
+              variant={p === currentPage ? "default" : "outline"}
               size="icon"
-              className="h-8 w-8"
+              className={cn("h-10 w-10", p === currentPage && "bg-foreground text-background")}
               onClick={() => onPageChange(p)}
               aria-label={`Halaman ${p}`}
             >
@@ -65,7 +68,7 @@ export function Pagination({ totalItems, itemsPerPage, currentPage, onPageChange
         <Button
           variant="outline"
           size="icon"
-          className="h-8 w-8"
+          className="h-10 w-10"
           disabled={currentPage >= totalPages}
           onClick={() => onPageChange(currentPage + 1)}
           aria-label="Halaman berikutnya"

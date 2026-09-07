@@ -1,26 +1,11 @@
-import type { Metadata } from "next";
-import { Inter, Space_Grotesk } from "next/font/google";
-import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
-import { Toaster } from "react-hot-toast";
-import { PwaRegistration } from "@/components/pwa-registration";
-
-const inter = Inter({
-  variable: "--font-sans",
-  subsets: ["latin"],
-  display: "swap",
-  preload: true,
-});
-
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-display",
-  subsets: ["latin"],
-  display: "swap",
-  preload: true,
-});
+import type { Metadata } from "next"
+import "./globals.css"
+import { ThemeProvider } from "@/components/theme-provider"
+import { Toaster } from "react-hot-toast"
+import { PwaRegistration } from "@/components/pwa-registration"
 
 export const metadata: Metadata = {
-  title: "Sistem Manajemen Restoran",
+  title: "RMS - Sistem Manajemen Restoran",
   description: "Sistem manajemen restoran profesional - POS, pesanan, layar dapur, inventaris, dan laporan.",
   manifest: "/manifest.json",
   appleWebApp: {
@@ -28,31 +13,31 @@ export const metadata: Metadata = {
     statusBarStyle: "default",
     title: "RMS",
   },
-};
+}
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
-    <html
-      lang="id"
-      suppressHydrationWarning
-      className={`${inter.variable} ${spaceGrotesk.variable} h-full antialiased`}
-    >
+    <html lang="id" suppressHydrationWarning className="dark">
       <head>
         <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#f97316" />
+        <meta name="theme-color" content="#a855f7" />
         <link rel="apple-touch-icon" href="/icon-192.png" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full flex flex-col antialiased">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           {children}
-          <Toaster position="top-right" />
+          <Toaster position="top-right" toastOptions={{
+            className: "border-3 border-foreground shadow-[5px_5px_0_0_hsl(var(--brutal-ink))] font-bold",
+          }} />
           <PwaRegistration />
         </ThemeProvider>
       </body>
     </html>
-  );
+  )
 }

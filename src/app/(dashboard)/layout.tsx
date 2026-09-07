@@ -17,7 +17,7 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="min-h-screen bg-muted/30">
+    <div className="min-h-screen bg-muted/40 brutal-stripe">
       <Sidebar
         user={{
           full_name: user.full_name,
@@ -27,9 +27,9 @@ export default async function DashboardLayout({
         permissions={user.permissions}
         isSuperAdmin={user.is_super_admin}
       />
-      <div className="flex min-h-screen flex-col lg:pl-64">
+      <div className="flex min-h-screen flex-col lg:pl-72">
         <Header profileId={user.profile_id} />
-        <main className="flex-1 p-4 pb-20 lg:pb-6 md:p-6">
+        <main className="flex-1 p-4 pb-24 lg:pb-8 md:p-6 lg:p-8">
           {children}
         </main>
       </div>

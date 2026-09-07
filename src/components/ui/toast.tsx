@@ -17,19 +17,19 @@ interface ToastProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const variantStyles: Record<ToastVariant, string> = {
-  default: "border bg-background text-foreground",
-  destructive: "border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive",
-  success: "border-green-500/50 text-green-700 dark:text-green-400 [&>svg]:text-green-500",
-  warning: "border-yellow-500/50 text-yellow-700 dark:text-yellow-400 [&>svg]:text-yellow-500",
-  info: "border-blue-500/50 text-blue-700 dark:text-blue-400 [&>svg]:text-blue-500",
+  default: "bg-foreground text-background",
+  destructive: "bg-destructive text-destructive-foreground",
+  success: "bg-success text-success-foreground",
+  warning: "bg-warning text-warning-foreground",
+  info: "bg-info text-info-foreground",
 }
 
 const variantIcons: Record<ToastVariant, React.ReactNode> = {
   default: null,
-  destructive: <AlertCircle className="h-4 w-4" />,
-  success: <CheckCircle2 className="h-4 w-4" />,
-  warning: <AlertTriangle className="h-4 w-4" />,
-  info: <Info className="h-4 w-4" />,
+  destructive: <AlertCircle className="h-5 w-5" strokeWidth={3} />,
+  success: <CheckCircle2 className="h-5 w-5" strokeWidth={3} />,
+  warning: <AlertTriangle className="h-5 w-5" strokeWidth={3} />,
+  info: <Info className="h-5 w-5" strokeWidth={3} />,
 }
 
 const Toast = React.forwardRef<HTMLDivElement, ToastProps>(
@@ -37,7 +37,7 @@ const Toast = React.forwardRef<HTMLDivElement, ToastProps>(
     <div
       ref={ref}
       className={cn(
-        "pointer-events-auto relative flex w-full items-center gap-3 overflow-hidden rounded-md border p-4 pr-8 shadow-lg transition-all",
+        "pointer-events-auto relative flex w-full items-center gap-3 overflow-hidden border-3 border-border p-4 pr-10 shadow-[5px_5px_0_0_hsl(var(--brutal-ink))] transition-all font-medium",
         variantStyles[variant],
         className
       )}
@@ -50,9 +50,10 @@ const Toast = React.forwardRef<HTMLDivElement, ToastProps>(
       {onClose && (
         <button
           onClick={onClose}
-          className="absolute right-2 top-2 rounded-md p-1 opacity-70 transition-opacity hover:opacity-100 focus:outline-none focus:ring-1 focus:ring-ring"
+          className="absolute right-2 top-2 inline-flex items-center justify-center h-6 w-6 border-2 border-current opacity-90 hover:opacity-100 hover:bg-background hover:text-foreground transition-colors focus:outline-none"
+          aria-label="Close"
         >
-          <X className="h-4 w-4" />
+          <X className="h-3 w-3" strokeWidth={3} />
         </button>
       )}
     </div>
@@ -66,7 +67,7 @@ const ToastTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <p
     ref={ref}
-    className={cn("text-sm font-semibold [&+div]:text-xs", className)}
+    className={cn("text-sm font-bold uppercase tracking-wider [&+div]:text-xs", className)}
     {...props}
   />
 ))
@@ -78,7 +79,7 @@ const ToastDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <p
     ref={ref}
-    className={cn("text-sm opacity-90", className)}
+    className={cn("text-sm opacity-90 font-medium", className)}
     {...props}
   />
 ))

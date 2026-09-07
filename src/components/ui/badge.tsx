@@ -3,18 +3,26 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const badgeVariants = cva(
-  "inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+  "inline-flex items-center justify-center text-xs font-bold uppercase tracking-wider border-2 transition-all duration-100",
   {
     variants: {
       variant: {
-        default: "border-transparent bg-primary text-primary-foreground shadow",
-        secondary: "border-transparent bg-secondary text-secondary-foreground",
-        destructive: "border-transparent bg-destructive text-destructive-foreground shadow",
-        outline: "text-foreground",
-        success: "border-transparent bg-emerald-100 text-emerald-800",
-        warning: "border-transparent bg-amber-100 text-amber-800",
-        info: "border-transparent bg-sky-100 text-sky-800",
-        neutral: "border-transparent bg-slate-100 text-slate-700",
+        default:
+          "bg-primary text-primary-foreground border-border shadow-[3px_3px_0_0_hsl(var(--brutal-ink))]",
+        secondary:
+          "bg-secondary text-secondary-foreground border-border shadow-[3px_3px_0_0_hsl(var(--brutal-ink))]",
+        destructive:
+          "bg-destructive text-destructive-foreground border-border shadow-[3px_3px_0_0_hsl(var(--brutal-ink))]",
+        outline:
+          "bg-background text-foreground border-border shadow-[3px_3px_0_0_hsl(var(--brutal-ink))]",
+        success:
+          "bg-success text-success-foreground border-border shadow-[3px_3px_0_0_hsl(var(--brutal-ink))]",
+        warning:
+          "bg-warning text-warning-foreground border-border shadow-[3px_3px_0_0_hsl(var(--brutal-ink))]",
+        info:
+          "bg-info text-info-foreground border-border shadow-[3px_3px_0_0_hsl(var(--brutal-ink))]",
+        neutral:
+          "bg-muted text-muted-foreground border-border shadow-[3px_3px_0_0_hsl(var(--brutal-ink))]",
       },
     },
     defaultVariants: {
@@ -29,7 +37,7 @@ export interface BadgeProps
 
 function Badge({ className, variant, ...props }: BadgeProps) {
   return (
-    <div className={cn(badgeVariants({ variant }), className)} {...props} />
+    <div className={cn(badgeVariants({ variant }), "px-2.5 py-1", className)} {...props} />
   )
 }
 

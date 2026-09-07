@@ -14,8 +14,8 @@ export function MobileNav() {
       : pathname.startsWith(item.href)
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-40 border-t bg-background lg:hidden">
-      <div className="flex items-center justify-around">
+    <nav className="fixed inset-x-0 bottom-0 z-40 border-t-[3px] border-foreground bg-background lg:hidden">
+      <div className="flex items-stretch justify-around">
         {bottomNav.map((item) => {
           const Icon = item.icon
           const active = isActive(item)
@@ -24,11 +24,14 @@ export function MobileNav() {
               key={item.href}
               href={item.href}
               className={cn(
-                "flex h-16 w-full flex-col items-center justify-center gap-1 text-xs",
-                active ? "text-primary" : "text-muted-foreground"
+                "relative flex h-16 w-full flex-col items-center justify-center gap-1 text-[10px] font-black uppercase tracking-wider transition-colors",
+                active ? "bg-foreground text-background" : "text-foreground hover:bg-muted"
               )}
             >
-              <Icon className="h-5 w-5" />
+              {active && (
+                <span className="absolute top-0 left-1/2 -translate-x-1/2 h-1 w-10 bg-primary" />
+              )}
+              <Icon className="h-5 w-5" strokeWidth={active ? 3 : 2.5} />
               {item.title}
             </Link>
           )

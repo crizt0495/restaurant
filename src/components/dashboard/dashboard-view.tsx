@@ -4,12 +4,24 @@ import * as React from "react"
 import { createClient } from "@/lib/supabase/client"
 import { formatCurrency } from "@/lib/utils"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { DollarSign, ShoppingBag, TrendingUp, Users, AlertTriangle, Clock, XCircle } from "lucide-react"
+import { DollarSign, ShoppingBag, TrendingUp, Users, AlertTriangle, Clock, XCircle, ArrowUpRight } from "lucide-react"
 import type { DashboardData } from "@/lib/helpers"
+import Link from "next/link"
 
 interface DashboardViewProps {
   initialData: DashboardData
 }
+
+const statStyles = [
+  { color: "bg-success", icon: "text-success-foreground" },
+  { color: "bg-info", icon: "text-info-foreground" },
+  { color: "bg-primary", icon: "text-primary-foreground" },
+  { color: "bg-warning", icon: "text-warning-foreground" },
+  { color: "bg-secondary", icon: "text-secondary-foreground" },
+  { color: "bg-destructive", icon: "text-destructive-foreground" },
+  { color: "bg-accent", icon: "text-accent-foreground" },
+  { color: "bg-muted", icon: "text-muted-foreground" },
+]
 
 export function DashboardView({ initialData }: DashboardViewProps) {
   const [data, setData] = React.useState<DashboardData>(initialData)
@@ -62,52 +74,62 @@ export function DashboardView({ initialData }: DashboardViewProps) {
   }, [])
 
   const stats = [
-    { title: "Penjualan Hari Ini", value: formatCurrency(data.todaySales), icon: DollarSign, color: "text-emerald-500" },
-    { title: "Pesanan Hari Ini", value: String(data.todayOrders), icon: ShoppingBag, color: "text-sky-500" },
-    { title: "Laba Hari Ini", value: formatCurrency(data.todayProfit), icon: TrendingUp, color: "text-violet-500" },
-    { title: "Rata-rata Nilai Pesanan", value: formatCurrency(data.avgOrderValue), icon: DollarSign, color: "text-amber-500" },
-    { title: "Total Pelanggan", value: String(data.totalCustomers), icon: Users, color: "text-blue-500" },
-    { title: "Stok Menipis", value: String(data.lowStockItems), icon: AlertTriangle, color: "text-red-500" },
-    { title: "Pesanan Tertunda", value: String(data.pendingOrders), icon: Clock, color: "text-orange-500" },
-    { title: "Pesanan Dibatalkan", value: String(data.cancelledOrders), icon: XCircle, color: "text-rose-500" },
+    { title: "Penjualan Hari Ini", value: formatCurrency(data.todaySales), icon: DollarSign, idx: 0 },
+    { title: "Pesanan Hari Ini", value: String(data.todayOrders), icon: ShoppingBag, idx: 1 },
+    { title: "Laba Hari Ini", value: formatCurrency(data.todayProfit), icon: TrendingUp, idx: 2 },
+    { title: "Rata-rata Pesanan", value: formatCurrency(data.avgOrderValue), icon: DollarSign, idx: 3 },
+    { title: "Total Pelanggan", value: String(data.totalCustomers), icon: Users, idx: 4 },
+    { title: "Stok Menipis", value: String(data.lowStockItems), icon: AlertTriangle, idx: 5 },
+    { title: "Tertunda", value: String(data.pendingOrders), icon: Clock, idx: 6 },
+    { title: "Dibatalkan", value: String(data.cancelledOrders), icon: XCircle, idx: 7 },
   ]
 
   const maxTrend = Math.max(...data.salesTrend.map((d) => d.value), 1)
 
   return (
-    <>
+    <div className="space-y-6">
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-        {stats.map((stat) => (
-          <Card key={stat.title} className="brutal-sm bg-card">
-            <CardContent className="p-4">
-              <div className="flex items-center gap-2">
-                <stat.icon className={`h-4 w-4 ${stat.color}`} />
-                <span className="text-xs font-semibold text-muted-foreground">{stat.title}</span>
-                {live && <span className="ml-auto h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />}
-              </div>
-              <p className="font-display mt-2 text-lg font-bold md:text-xl">{stat.value}</p>
-            </CardContent>
-          </Card>
-        ))}
+        {stats.map((stat) => {
+          const style = statStyles[stat.idx]
+          return (
+            <Card key={stat.title}>
+              <CardContent className="p-4">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className={`flex h-8 w-8 items-center justify-center border-2 border-border ${style.color}`}>
+                    <stat.icon className={`h-4 w-4 ${style.icon}`} strokeWidth={3} />
+                  </div>
+                  {live && <span className="ml-auto h-2 w-2 bg-success animate-pulse" />}
+                </div>
+                <p className="text-[10px] font-black uppercase tracking-wider text-muted-foreground">{stat.title}</p>
+                <p className="font-display mt-1 text-xl font-black leading-none">{stat.value}</p>
+              </CardContent>
+            </Card>
+          )
+        })}
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <Card className="brutal-sm">
-          <CardHeader className="pb-2">
-            <CardTitle className="font-display text-base font-bold">7 Hari Penjualan</CardTitle>
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <span className="bg-foreground text-background px-2 py-1 text-xs font-black">7H</span>
+              <span>Penjualan 7 Hari</span>
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex h-48 items-end gap-2">
               {data.salesTrend.length === 0 ? (
-                <p className="py-8 w-full text-center text-sm text-muted-foreground">Belum ada data</p>
+                <p className="py-8 w-full text-center text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                  Belum ada data
+                </p>
               ) : (
                 data.salesTrend.map((d, i) => (
                   <div key={i} className="flex flex-1 flex-col items-center gap-1">
                     <div
-                      className="w-full rounded-t bg-primary/80 transition-all"
+                      className="w-full bg-primary border-2 border-border transition-all"
                       style={{ height: `${(d.value / maxTrend) * 100}%`, minHeight: "4px" }}
                     />
-                    <span className="text-[10px] text-muted-foreground">{d.label}</span>
+                    <span className="text-[10px] font-mono font-bold">{d.label}</span>
                   </div>
                 ))
               )}
@@ -115,15 +137,15 @@ export function DashboardView({ initialData }: DashboardViewProps) {
           </CardContent>
         </Card>
 
-        <Card className="brutal-sm">
-          <CardHeader className="pb-2">
-            <CardTitle className="font-display text-base font-bold">Aksi Cepat</CardTitle>
+        <Card>
+          <CardHeader>
+            <CardTitle>Aksi Cepat</CardTitle>
           </CardHeader>
-          <CardContent className="grid gap-2 sm:grid-cols-2">
-            <QuickAction href="/pos" label="Buka POS" icon={ShoppingBag} />
-            <QuickAction href="/orders" label="Lihat Pesanan" icon={Clock} />
-            <QuickAction href="/kitchen" label="Tampilan Dapur" icon={TrendingUp} />
-            <QuickAction href="/inventory" label="Persediaan" icon={AlertTriangle} />
+          <CardContent className="grid gap-3 sm:grid-cols-2">
+            <QuickAction href="/pos" label="Buka POS" icon={ShoppingBag} color="bg-primary text-primary-foreground" />
+            <QuickAction href="/orders" label="Pesanan" icon={Clock} color="bg-info text-info-foreground" />
+            <QuickAction href="/kitchen" label="Dapur" icon={TrendingUp} color="bg-accent text-accent-foreground" />
+            <QuickAction href="/inventory" label="Inventaris" icon={AlertTriangle} color="bg-warning text-warning-foreground" />
           </CardContent>
         </Card>
       </div>
@@ -131,22 +153,25 @@ export function DashboardView({ initialData }: DashboardViewProps) {
       <div className="grid gap-4 lg:grid-cols-3">
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm">Produk Terlaris (Hari Ini)</CardTitle>
+            <CardTitle className="flex items-center gap-2">
+              <span className="bg-foreground text-background px-2 py-1 text-xs font-black">#1</span>
+              Produk Terlaris
+            </CardTitle>
           </CardHeader>
           <CardContent>
             {data.topProducts.length === 0 ? (
-              <p className="py-8 text-center text-sm text-muted-foreground">Belum ada penjualan</p>
+              <p className="py-8 text-center text-xs font-bold uppercase tracking-wider text-muted-foreground">Belum ada data</p>
             ) : (
               <ul className="space-y-2">
                 {data.topProducts.map((p, i) => (
-                  <li key={i} className="flex items-center justify-between gap-2 text-sm">
+                  <li key={i} className="flex items-center justify-between gap-2 text-sm border-b-2 border-border last:border-0 pb-2">
                     <span className="flex items-center gap-2">
-                      <span className="flex h-6 w-6 items-center justify-center rounded bg-primary/10 text-xs font-bold text-primary">
+                      <span className="flex h-6 w-6 items-center justify-center bg-foreground text-background text-[10px] font-black">
                         {i + 1}
                       </span>
-                      <span className="truncate">{p.name}</span>
+                      <span className="font-bold uppercase truncate">{p.name}</span>
                     </span>
-                    <span className="text-muted-foreground">{formatCurrency(p.revenue)}</span>
+                    <span className="font-mono text-xs font-bold text-muted-foreground whitespace-nowrap">{formatCurrency(p.revenue)}</span>
                   </li>
                 ))}
               </ul>
@@ -156,17 +181,17 @@ export function DashboardView({ initialData }: DashboardViewProps) {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm">Metode Pembayaran (Hari Ini)</CardTitle>
+            <CardTitle>Metode Pembayaran</CardTitle>
           </CardHeader>
           <CardContent>
             {data.paymentMethods.length === 0 ? (
-              <p className="py-8 text-center text-sm text-muted-foreground">Belum ada pembayaran</p>
+              <p className="py-8 text-center text-xs font-bold uppercase tracking-wider text-muted-foreground">Belum ada data</p>
             ) : (
               <ul className="space-y-2">
                 {data.paymentMethods.map((p, i) => (
-                  <li key={i} className="flex items-center justify-between gap-2 text-sm">
-                    <span>{String(p.method).replace(/_/g, " ")}</span>
-                    <span className="font-semibold">{formatCurrency(Number(p.amount))}</span>
+                  <li key={i} className="flex items-center justify-between gap-2 border-b-2 border-border last:border-0 pb-2">
+                    <span className="text-xs font-bold uppercase tracking-wider">{String(p.method).replace(/_/g, " ")}</span>
+                    <span className="font-mono text-sm font-black">{formatCurrency(Number(p.amount))}</span>
                   </li>
                 ))}
               </ul>
@@ -176,25 +201,25 @@ export function DashboardView({ initialData }: DashboardViewProps) {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm">Jam Paling Ramai</CardTitle>
+            <CardTitle>Jam Ramai</CardTitle>
           </CardHeader>
           <CardContent>
             {data.busyHours.length === 0 ? (
-              <p className="py-8 text-center text-sm text-muted-foreground">Belum ada data</p>
+              <p className="py-8 text-center text-xs font-bold uppercase tracking-wider text-muted-foreground">Belum ada data</p>
             ) : (
-              <ul className="space-y-1.5">
+              <ul className="space-y-2">
                 {data.busyHours.map((h, i) => (
-                  <li key={i} className="flex items-center gap-2 text-sm">
-                    <span className="w-12 text-muted-foreground">{String(h.label)}</span>
-                    <div className="h-4 flex-1 overflow-hidden rounded bg-muted">
+                  <li key={i} className="flex items-center gap-2">
+                    <span className="w-12 text-xs font-mono font-bold text-muted-foreground">{String(h.label)}</span>
+                    <div className="h-5 flex-1 overflow-hidden border-2 border-border bg-muted">
                       <div
-                        className="h-full rounded bg-primary/80"
+                        className="h-full bg-primary"
                         style={{
                           width: `${Math.min(100, (Number(h.value) / Math.max(...data.busyHours.map((x) => Number(x.value)), 1)) * 100)}%`,
                         }}
                       />
                     </div>
-                    <span className="w-8 text-right text-xs text-muted-foreground">{String(h.value)}</span>
+                    <span className="w-8 text-right text-[10px] font-mono font-black text-muted-foreground">{String(h.value)}</span>
                   </li>
                 ))}
               </ul>
@@ -202,7 +227,7 @@ export function DashboardView({ initialData }: DashboardViewProps) {
           </CardContent>
         </Card>
       </div>
-    </>
+    </div>
   )
 }
 
@@ -210,23 +235,28 @@ function QuickAction({
   href,
   label,
   icon: Icon,
+  color,
 }: {
   href: string
   label: string
-  icon: React.ComponentType<{ className?: string }>
+  icon: React.ComponentType<{ className?: string; strokeWidth?: number }>
+  color: string
 }) {
   return (
-    <a
+    <Link
       href={href}
-      className="brutal-sm brutal-hover brutal-active flex items-center gap-3 rounded-md bg-card p-4 text-left hover:bg-accent"
+      className="group flex items-center gap-3 border-3 border-border bg-card p-4 transition-all duration-100 hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0_0_hsl(var(--brutal-ink))]"
     >
-      <Icon className="h-5 w-5 text-primary" />
-      <span className="text-sm font-bold">{label}</span>
-    </a>
+      <div className={`flex h-10 w-10 items-center justify-center border-2 border-border shadow-[2px_2px_0_0_hsl(var(--brutal-ink))] ${color}`}>
+        <Icon className="h-5 w-5" strokeWidth={3} />
+      </div>
+      <span className="text-sm font-black uppercase tracking-wide">{label}</span>
+      <ArrowUpRight className="h-4 w-4 ml-auto opacity-50 group-hover:opacity-100 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5" strokeWidth={3} />
+    </Link>
   )
 }
 
-function parseRpcResult(data: any): DashboardData {
+function parseRpcResult(data: Record<string, unknown>): DashboardData {
   const parseTrend = (arr: string[] | null): { label: string; value: number }[] => {
     if (!arr) return []
     return arr.map((s: string) => {
@@ -246,9 +276,9 @@ function parseRpcResult(data: any): DashboardData {
     lowStockItems: Number(data.lowStockItems ?? 0),
     pendingOrders: Number(data.pendingOrders ?? 0),
     cancelledOrders: Number(data.cancelledOrders ?? 0),
-    salesTrend: parseTrend(data.salesTrend),
-    topProducts: data.topProducts ?? [],
-    paymentMethods: data.paymentMethods ?? [],
-    busyHours: data.busyHours ?? [],
+    salesTrend: parseTrend(data.salesTrend as string[] | null),
+    topProducts: ((data.topProducts as { name: string; revenue: number }[]) ?? []).map((p) => ({ ...p, qty: 0 })),
+    paymentMethods: (data.paymentMethods as { method: string; amount: number }[]) ?? [],
+    busyHours: (data.busyHours as { label: string; value: number }[]) ?? [],
   }
 }

@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { usePathname, useRouter } from "next/navigation"
-import { Bell, Search } from "lucide-react"
+import { Bell, Search, Command } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { createClient } from "@/lib/supabase/client"
 import Link from "next/link"
@@ -20,10 +20,18 @@ interface SearchResult {
   href: string
 }
 
+const typeColors: Record<SearchResult["type"], string> = {
+  order: "bg-primary text-primary-foreground",
+  product: "bg-secondary text-secondary-foreground",
+  customer: "bg-accent text-accent-foreground",
+  supplier: "bg-info text-info-foreground",
+}
+
 export function Header({ profileId }: { profileId?: string | null }) {
   const pathname = usePathname()
   const router = useRouter()
-  const title = pathname.split("/").filter(Boolean)[0] || "Dashboard"
+  const segments = pathname.split("/").filter(Boolean)
+  const title = segments[0] || "Dashboard"
   const [unread, setUnread] = React.useState(0)
   const [searchOpen, setSearchOpen] = React.useState(false)
   const [searchQuery, setSearchQuery] = React.useState("")
@@ -115,31 +123,36 @@ export function Header({ profileId }: { profileId?: string | null }) {
   }, [searchOpen])
 
   return (
-    <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b bg-background/95 px-4 backdrop-blur md:px-6">
-      <h1 className="text-sm font-semibold capitalize">{title}</h1>
+    <header className="sticky top-0 z-30 flex h-16 items-center gap-3 border-b-[3px] border-foreground bg-background/95 px-4 backdrop-blur md:px-6">
+      <div className="flex flex-col">
+        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">Halaman</span>
+        <h1 className="text-base font-black uppercase tracking-tight leading-none mt-0.5">{title}</h1>
+      </div>
 
       <button
         type="button"
         onClick={() => setSearchOpen(true)}
-        className="ml-2 hidden h-8 w-72 items-center gap-2 rounded-md border bg-muted/40 px-3 text-left text-xs text-muted-foreground transition-colors hover:bg-muted md:flex"
+        className="ml-auto hidden h-10 w-72 items-center gap-2 border-2 border-foreground bg-background px-3 text-left text-xs font-bold uppercase tracking-wide transition-all duration-100 hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0_0_hsl(var(--brutal-ink))] md:flex"
         aria-label="Buka pencarian global"
       >
-        <Search className="h-3.5 w-3.5" />
-Cari pesanan, produk, pelanggan, pemasok...
-        <kbd className="ml-auto rounded bg-background px-1.5 py-0.5 text-[10px]">⌘K</kbd>
+        <Search className="h-4 w-4" strokeWidth={3} />
+        <span className="text-muted-foreground">Cari...</span>
+        <kbd className="ml-auto flex items-center gap-1 border-2 border-foreground bg-muted px-1.5 py-0.5 text-[10px] font-mono font-bold">
+          <Command className="h-3 w-3" strokeWidth={3} />K
+        </kbd>
       </button>
 
-      <div className="ml-auto flex items-center gap-2">
-        <Button variant="ghost" size="icon" className="md:hidden" asChild aria-label="Buka pencarian">
+      <div className="flex items-center gap-2">
+        <Button variant="ghost" size="icon" className="md:hidden border-2 border-foreground" asChild aria-label="Buka pencarian">
           <span onClick={() => setSearchOpen(true)}>
-            <Search className="h-5 w-5" />
+            <Search className="h-5 w-5" strokeWidth={3} />
           </span>
         </Button>
-        <Button variant="ghost" size="icon" asChild aria-label="Notifikasi">
+        <Button variant="ghost" size="icon" className="relative border-2 border-foreground hover:bg-foreground hover:text-background" asChild aria-label="Notifikasi">
           <Link href="/notifications" className="relative">
-            <Bell className="h-5 w-5" />
+            <Bell className="h-5 w-5" strokeWidth={3} />
             {unread > 0 && (
-              <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-semibold text-primary-foreground">
+              <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center bg-destructive text-destructive-foreground border-2 border-foreground px-1 text-[10px] font-black">
                 {unread > 99 ? "99+" : unread}
               </span>
             )}
@@ -150,26 +163,26 @@ Cari pesanan, produk, pelanggan, pemasok...
       <Dialog open={searchOpen} onOpenChange={setSearchOpen}>
         <DialogContent className="max-w-xl">
           <DialogTitle className="sr-only">Pencarian Global</DialogTitle>
-          <div className="flex items-center gap-2 border-b pb-2">
-            <Search className="h-4 w-4 text-muted-foreground" />
+          <div className="flex items-center gap-3 -mx-6 -mt-6 px-6 py-4 border-b-[3px] border-foreground bg-foreground text-background">
+            <Search className="h-5 w-5" strokeWidth={3} />
             <input
               autoFocus
               placeholder="Cari pesanan, produk, pelanggan, pemasok..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+              className="flex-1 bg-transparent text-base font-bold placeholder:opacity-50 outline-none"
             />
-            <kbd className="rounded bg-muted px-1.5 py-0.5 text-[10px]">Esc</kbd>
+            <kbd className="border-2 border-background bg-transparent px-2 py-1 text-[10px] font-mono font-bold">ESC</kbd>
           </div>
           <div className="max-h-80 overflow-y-auto py-2">
             {searching ? (
-              <p className="py-6 text-center text-xs text-muted-foreground">Mencari...</p>
+              <p className="py-6 text-center text-xs font-bold uppercase tracking-wider text-muted-foreground">Mencari...</p>
             ) : searchQuery.length < 2 ? (
-              <p className="py-6 text-center text-xs text-muted-foreground">Ketik minimal 2 karakter</p>
+              <p className="py-6 text-center text-xs font-bold uppercase tracking-wider text-muted-foreground">Ketik minimal 2 karakter</p>
             ) : searchResults.length === 0 ? (
-              <p className="py-6 text-center text-xs text-muted-foreground">Tidak ada hasil</p>
+              <p className="py-6 text-center text-xs font-bold uppercase tracking-wider text-muted-foreground">Tidak ada hasil</p>
             ) : (
-              <ul className="space-y-1">
+              <ul className="space-y-2">
                 {searchResults.map((r) => (
                   <li key={`${r.type}-${r.id}`}>
                     <button
@@ -178,13 +191,15 @@ Cari pesanan, produk, pelanggan, pemasok...
                         setSearchOpen(false)
                         router.push(r.href)
                       }}
-                      className="flex w-full items-center justify-between rounded-md px-3 py-2 text-left text-sm hover:bg-accent"
+                      className="flex w-full items-center justify-between gap-3 border-2 border-border px-3 py-2 text-left transition-all hover:border-foreground hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0_0_hsl(var(--brutal-ink))]"
                     >
-                      <div>
-                        <p className="font-medium">{r.label}</p>
-                        {r.sub && <p className="text-xs text-muted-foreground">{r.sub}</p>}
+                      <div className="flex-1 min-w-0">
+                        <p className="font-bold text-sm uppercase truncate">{r.label}</p>
+                        {r.sub && <p className="text-xs text-muted-foreground font-mono truncate">{r.sub}</p>}
                       </div>
-                      <span className="rounded bg-muted px-2 py-0.5 text-[10px] uppercase">{r.type}</span>
+                      <span className={`px-2 py-1 text-[10px] font-black uppercase tracking-wider border-2 border-foreground ${typeColors[r.type]}`}>
+                        {r.type}
+                      </span>
                     </button>
                   </li>
                 ))}

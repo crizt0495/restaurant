@@ -29,23 +29,32 @@ export function Sidebar({ user, permissions, isSuperAdmin }: SidebarProps) {
   }
 
   return (
-    <aside className="fixed inset-y-0 left-0 z-40 hidden w-64 flex-col border-r bg-background lg:flex">
-      <div className="flex h-14 items-center gap-2 border-b px-4">
-        <div className="brutal-primary brutal-active flex h-9 w-9 items-center justify-center rounded-md">
-          <UtensilsCrossed className="h-4 w-4" />
+    <aside className="fixed inset-y-0 left-0 z-40 hidden w-72 flex-col border-r-[3px] border-foreground bg-background lg:flex">
+      <div className="flex h-20 items-center gap-3 border-b-[3px] border-foreground px-5 bg-foreground text-background">
+        <div className="flex h-11 w-11 items-center justify-center bg-primary text-primary-foreground border-2 border-background shadow-[3px_3px_0_0_hsl(var(--background))]">
+          <UtensilsCrossed className="h-5 w-5" strokeWidth={2.5} />
         </div>
-        <span className="font-display text-lg font-bold tracking-tight">RMS</span>
+        <div className="flex-1">
+          <span className="block font-display text-xl font-black uppercase tracking-tighter leading-none">Resto</span>
+          <span className="block text-[10px] font-bold uppercase tracking-[0.2em] opacity-70">Manager v2</span>
+        </div>
       </div>
 
-      <nav className="flex-1 space-y-2 overflow-y-auto p-3">
-        {dashboardNav.map((section) => {
+      <nav className="flex-1 space-y-4 overflow-y-auto p-4">
+        {dashboardNav.map((section, sIdx) => {
           const items = section.items.filter(canView)
           if (items.length === 0) return null
           return (
-            <div key={section.title} className="space-y-1">
-              <p className="px-2 pt-4 text-xs font-medium text-muted-foreground">
-                {section.title}
-              </p>
+            <div key={section.title} className="space-y-1.5">
+              <div className="flex items-center gap-2 px-2 pt-2">
+                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">
+                  {section.title}
+                </span>
+                <div className="h-[2px] flex-1 bg-border" />
+                <span className="text-[10px] font-mono text-muted-foreground">
+                  {String(sIdx + 1).padStart(2, "0")}
+                </span>
+              </div>
               {items.map((item) => {
                 const Icon = item.icon
                 const active = pathname.startsWith(item.href)
@@ -54,14 +63,23 @@ export function Sidebar({ user, permissions, isSuperAdmin }: SidebarProps) {
                     key={item.href}
                     href={item.href}
                     className={cn(
-                      "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-semibold transition-colors",
+                      "group relative flex items-center gap-3 px-3 py-2.5 text-sm font-bold uppercase tracking-wide border-2 transition-all duration-100",
                       active
-                        ? "bg-primary text-primary-foreground"
-                        : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                        ? "bg-foreground text-background border-foreground shadow-[3px_3px_0_0_hsl(var(--primary))] translate-x-[-1px] translate-y-[-1px]"
+                        : "border-transparent text-foreground hover:bg-muted hover:border-border hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0_0_hsl(var(--brutal-ink))]"
                     )}
                   >
-                    <Icon className="h-4 w-4" />
-                    {item.title}
+                    <Icon
+                      className={cn(
+                        "h-4 w-4 transition-transform group-hover:scale-110",
+                        active && "text-primary"
+                      )}
+                      strokeWidth={2.5}
+                    />
+                    <span className="flex-1">{item.title}</span>
+                    {active && (
+                      <span className="h-2 w-2 bg-primary" />
+                    )}
                   </Link>
                 )
               })}
@@ -70,7 +88,7 @@ export function Sidebar({ user, permissions, isSuperAdmin }: SidebarProps) {
         })}
       </nav>
 
-      <div className="border-t p-3">
+      <div className="border-t-[3px] border-foreground p-3 bg-muted">
         <div className="flex items-center justify-between">
           <UserMenu user={user} />
           <ThemeToggle />

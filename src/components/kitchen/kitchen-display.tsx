@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Clock, ChefHat } from "lucide-react"
 import toast from "react-hot-toast"
+import { format } from "date-fns"
 
 interface KitchenItem {
   id: string
@@ -26,6 +27,12 @@ interface KitchenOrder {
   table_number: string
   items: KitchenItem[]
 }
+
+const columns = [
+  { status: "NEW", label: "BARU", color: "bg-info text-info-foreground" },
+  { status: "PREPARING", label: "DIBUAT", color: "bg-warning text-warning-foreground" },
+  { status: "READY", label: "SIAP", color: "bg-success text-success-foreground" },
+] as const
 
 export function KitchenDisplay({ orders: initialOrders }: { orders: KitchenOrder[] }) {
   const [orders, setOrders] = React.useState<KitchenOrder[]>(initialOrders)
@@ -66,7 +73,7 @@ export function KitchenDisplay({ orders: initialOrders }: { orders: KitchenOrder
     }
   }, [])
 
-const refreshTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null)
+  const refreshTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null)
   const pendingRef = React.useRef(false)
 
   React.useEffect(() => {
@@ -96,7 +103,6 @@ const refreshTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null)
       supabase.removeChannel(channel)
       if (refreshTimerRef.current) clearTimeout(refreshTimerRef.current)
     }
-
   }, [refetch])
 
   const timeAgo = (ts: string) => {
@@ -143,31 +149,24 @@ const refreshTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null)
     )
   }
 
-  // Columns: NEW, PREPARING, READY
-  const columns = [
-    { status: "NEW", label: "Baru", color: "bg-sky-50" },
-    { status: "PREPARING", label: "Dibuat", color: "bg-amber-50" },
-    { status: "READY", label: "Siap", color: "bg-emerald-50" },
-  ]
-
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 brutal-stripe">
       <div className="flex items-center justify-between">
         <div>
-        <h2 className="font-display text-3xl font-bold tracking-tight">Tampilan Dapur</h2>
-        <p className="text-sm text-muted-foreground">Pesanan langsung dari kasir</p>
+          <h2 className="font-display text-3xl font-black uppercase tracking-tighter leading-none">Tampilan Dapur</h2>
+          <p className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Pesanan langsung dari kasir</p>
         </div>
-        <div className="brutal-tag flex items-center gap-2 bg-card px-3 py-1.5 text-sm font-bold text-muted-foreground">
-          <Clock className="h-4 w-4" />
-          {new Date(now).toLocaleTimeString("id-ID")}
+        <div className="brutal-sm brutal-hover brutal-active flex items-center gap-2 bg-foreground text-background px-4 py-2 text-sm font-black">
+          <Clock className="h-4 w-4" strokeWidth={3} />
+          {format(now, "HH:mm:ss")}
         </div>
       </div>
 
       <div className="grid gap-4 md:grid-cols-3">
         {columns.map((col) => (
-          <div key={col.status} className={`brutal-sm rounded-md p-3 ${col.color}`}>
-            <div className="font-display mb-3 flex items-center justify-between rounded bg-black px-2 py-1 text-base font-bold text-white">
-              {col.label}
+          <div key={col.status} className={`brutal-card ${col.color}`}>
+            <div className="mb-3 flex items-center justify-between">
+              <span className="text-xs font-black uppercase tracking-wider">{col.label}</span>
             </div>
             <div className="space-y-3">
               {orders
@@ -177,55 +176,55 @@ const refreshTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null)
                   return (
                     <div
                       key={order.id}
-                      className={`brutal-sm rounded-md bg-background p-3 ${isLate(order.created_at) ? "ring-2 ring-red-500" : ""}`}
+                      className={`brutal-sm bg-background p-3 ${isLate(order.created_at) ? "ring-2 ring-destructive" : ""}`}
                     >
                       <div className="mb-2 flex items-center justify-between">
-                        <span className="font-display text-base font-bold">{order.table_number}</span>
+                        <span className="font-display text-base font-black">{order.table_number}</span>
                         <Badge variant={isLate(order.created_at) ? "destructive" : "secondary"}>
                           {timeAgo(order.created_at)}
                         </Badge>
                       </div>
                       <div>
                         {orderItems.map((item) => (
-                          <div key={item.id} className="border-t py-1.5 first:border-t-0">
+                          <div key={item.id} className="border-t-2 border-border py-1.5 first:border-t-0">
                             <div className="flex items-center justify-between gap-2">
-                              <p className="text-sm font-semibold">
-                                {item.quantity}x {item.product_name}
-                              </p>
+                              <p className="text-sm font-bold">{item.quantity}x {item.product_name}</p>
                               <Button
                                 size="sm"
                                 variant="secondary"
-                                className="brutal-tag h-7 shrink-0 rounded font-bold"
+                                className="brutal-tag h-7 shrink-0 font-black"
                                 onClick={() => handleItemStatus(item.id, order.id)}
                               >
-                                {item.status === "NEW" ? "Mulai" : item.status === "PREPARING" ? "Selesai" : "Sajikan"}
+                                {item.status === "NEW" ? "MULAI" : item.status === "PREPARING" ? "SELESAI" : "SAJIKAN"}
                               </Button>
                             </div>
                             {item.modifiers && item.modifiers.length > 0 && (
                               <div className="mt-1 flex flex-wrap gap-1">
                                 {(item.modifiers ?? []).map((m, i) => (
-                                  <span key={i} className="text-[10px] text-muted-foreground">
+                                  <span key={i} className="text-[10px] font-bold text-muted-foreground bg-muted px-1.5 py-0.5 border-2 border-border">
                                     {m.option_name}
                                   </span>
                                 ))}
                               </div>
                             )}
                             {item.notes && (
-                              <p className="mt-1 text-xs text-amber-600">📝 {item.notes}</p>
+                              <p className="mt-1 text-xs font-bold text-warning bg-warning/10 px-2 py-1 border-2 border-warning">
+                                📝 {item.notes}
+                              </p>
                             )}
                           </div>
                         ))}
                       </div>
                       {order.notes && (
-                        <p className="mt-2 text-xs text-amber-600">📝 {order.notes}</p>
+                        <p className="mt-2 text-xs font-bold text-warning bg-warning/10 px-2 py-1 border-2 border-warning">📝 {order.notes}</p>
                       )}
                     </div>
                   )
                 })}
               {orders.filter((o) => o.items.some((i) => i.status === col.status)).length === 0 && (
                 <div className="flex flex-col items-center justify-center py-8 text-muted-foreground">
-                  <ChefHat className="mb-2 h-8 w-8" />
-                  <p className="text-sm">Tidak ada pesanan</p>
+                  <ChefHat className="mb-2 h-10 w-10" strokeWidth={2} />
+                  <p className="text-xs font-bold uppercase tracking-wider">Tidak ada pesanan</p>
                 </div>
               )}
             </div>
