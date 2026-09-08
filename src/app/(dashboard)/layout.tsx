@@ -17,7 +17,7 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="min-h-screen bg-muted/40 brutal-stripe">
+    <div className="min-h-screen bg-background brutal-dots">
       <Sidebar
         user={{
           full_name: user.full_name,

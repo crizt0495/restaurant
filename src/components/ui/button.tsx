@@ -4,25 +4,25 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-bold uppercase tracking-wide transition-all duration-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-bold uppercase tracking-wide transition-all duration-150 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 active:translate-x-[3px] active:translate-y-[3px] active:shadow-none",
   {
     variants: {
       variant: {
         default:
-          "bg-primary text-primary-foreground border-3 border-border shadow-[var(--brutal-shadow)] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[7px_7px_0_0_hsl(var(--brutal-ink))] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none",
+          "bg-primary text-primary-foreground border-3 border-foreground shadow-[5px_5px_0_0_hsl(var(--foreground))] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[7px_7px_0_0_hsl(var(--foreground))]",
         destructive:
-          "bg-destructive text-destructive-foreground border-3 border-border shadow-[var(--brutal-shadow)] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[7px_7px_0_0_hsl(var(--brutal-ink))] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none",
+          "bg-destructive text-destructive-foreground border-3 border-foreground shadow-[5px_5px_0_0_hsl(var(--foreground))] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[7px_7px_0_0_hsl(var(--foreground))]",
         outline:
-          "bg-background text-foreground border-3 border-border shadow-[var(--brutal-shadow-sm)] hover:bg-foreground hover:text-background hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[5px_5px_0_0_hsl(var(--brutal-ink))] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none",
+          "bg-background text-foreground border-3 border-foreground shadow-[4px_4px_0_0_hsl(var(--foreground))] hover:bg-foreground hover:text-background hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[5px_5px_0_0_hsl(var(--foreground))]",
         secondary:
-          "bg-secondary text-secondary-foreground border-3 border-border shadow-[var(--brutal-shadow)] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[7px_7px_0_0_hsl(var(--brutal-ink))] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none",
+          "bg-secondary text-secondary-foreground border-3 border-foreground shadow-[5px_5px_0_0_hsl(var(--foreground))] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[7px_7px_0_0_hsl(var(--foreground))]",
         ghost:
-          "hover:bg-foreground hover:text-background border-3 border-transparent hover:border-border hover:shadow-[var(--brutal-shadow-sm)] hover:translate-x-[-1px] hover:translate-y-[-1px]",
+          "hover:bg-foreground hover:text-background border-3 border-transparent hover:border-foreground hover:shadow-[3px_3px_0_0_hsl(var(--foreground))] hover:translate-x-[-1px] hover:translate-y-[-1px]",
         link: "text-primary underline-offset-4 hover:underline border-3 border-transparent",
         accent:
-          "bg-accent text-accent-foreground border-3 border-border shadow-[var(--brutal-shadow)] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[7px_7px_0_0_hsl(var(--brutal-ink))] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none",
+          "bg-accent text-accent-foreground border-3 border-foreground shadow-[5px_5px_0_0_hsl(var(--foreground))] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[7px_7px_0_0_hsl(var(--foreground))]",
         success:
-          "bg-success text-success-foreground border-3 border-border shadow-[var(--brutal-shadow)] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[7px_7px_0_0_hsl(var(--brutal-ink))] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none",
+          "bg-success text-success-foreground border-3 border-foreground shadow-[5px_5px_0_0_hsl(var(--foreground))] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[7px_7px_0_0_hsl(var(--foreground))]",
       },
       size: {
         default: "h-10 px-5 py-2",

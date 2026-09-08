@@ -35,7 +35,7 @@ export function Pagination({ totalItems, itemsPerPage, currentPage, onPageChange
 
   return (
     <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-1 py-4 text-sm">
-      <span className="font-bold uppercase tracking-wider text-xs text-muted-foreground">
+      <span className="font-black uppercase tracking-widest text-[10px] text-muted-foreground">
         Menampilkan {from}–{to} dari {totalItems}
       </span>
       <div className="flex items-center gap-2">
@@ -47,17 +47,17 @@ export function Pagination({ totalItems, itemsPerPage, currentPage, onPageChange
           onClick={() => onPageChange(currentPage - 1)}
           aria-label="Halaman sebelumnya"
         >
-          <ChevronLeft className="h-4 w-4" />
+          <ChevronLeft className="h-4 w-4" strokeWidth={3} />
         </Button>
         {getPages.map((p, i) =>
           typeof p === "string" ? (
-            <span key={`ellipsis-${i}`} className="px-1 font-bold text-xs">…</span>
+            <span key={`ellipsis-${i}`} className="px-1 font-black text-xs">…</span>
           ) : (
             <Button
               key={p}
               variant={p === currentPage ? "default" : "outline"}
               size="icon"
-              className={cn("h-10 w-10", p === currentPage && "bg-foreground text-background")}
+              className={cn("h-10 w-10", p === currentPage && "bg-foreground text-background border-foreground")}
               onClick={() => onPageChange(p)}
               aria-label={`Halaman ${p}`}
             >
@@ -73,7 +73,7 @@ export function Pagination({ totalItems, itemsPerPage, currentPage, onPageChange
           onClick={() => onPageChange(currentPage + 1)}
           aria-label="Halaman berikutnya"
         >
-          <ChevronRight className="h-4 w-4" />
+          <ChevronRight className="h-4 w-4" strokeWidth={3} />
         </Button>
       </div>
     </div>

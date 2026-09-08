@@ -29,9 +29,9 @@ interface KitchenOrder {
 }
 
 const columns = [
-  { status: "NEW", label: "BARU", color: "bg-info text-info-foreground" },
-  { status: "PREPARING", label: "DIBUAT", color: "bg-warning text-warning-foreground" },
-  { status: "READY", label: "SIAP", color: "bg-success text-success-foreground" },
+  { status: "NEW", label: "BARU", color: "bg-info text-info-foreground border-info" },
+  { status: "PREPARING", label: "DIBUAT", color: "bg-warning text-warning-foreground border-warning" },
+  { status: "READY", label: "SIAP", color: "bg-success text-success-foreground border-success" },
 ] as const
 
 export function KitchenDisplay({ orders: initialOrders }: { orders: KitchenOrder[] }) {
@@ -150,13 +150,13 @@ export function KitchenDisplay({ orders: initialOrders }: { orders: KitchenOrder
   }
 
   return (
-    <div className="space-y-4 brutal-stripe">
+    <div className="space-y-4 animate-brutal-slide-up">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="font-display text-3xl font-black uppercase tracking-tighter leading-none">Tampilan Dapur</h2>
           <p className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Pesanan langsung dari kasir</p>
         </div>
-        <div className="brutal-sm brutal-hover brutal-active flex items-center gap-2 bg-foreground text-background px-4 py-2 text-sm font-black">
+        <div className="border-3 border-foreground shadow-[4px_4px_0_0_hsl(var(--accent))] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all duration-150 flex items-center gap-2 bg-foreground text-background px-4 py-2 text-sm font-black">
           <Clock className="h-4 w-4" strokeWidth={3} />
           {format(now, "HH:mm:ss")}
         </div>

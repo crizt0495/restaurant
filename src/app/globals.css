@@ -2,93 +2,81 @@
 
 @custom-variant dark (&:is(.dark *));
 
-@font-face {
-  font-family: 'Space Grotesk';
-  font-style: normal;
-  font-weight: 300 700;
-  font-display: swap;
-  src: url(https://fonts.gstatic.com/s/spacegrotesk/v16/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj62UUsjNsFjTDJK.woff2) format('woff2');
-}
-
-@font-face {
-  font-family: 'Space Mono';
-  font-style: normal;
-  font-weight: 400 700;
-  font-display: swap;
-  src: url(https://fonts.gstatic.com/s/spacemono/v13/i7dPIFZifjKcF5UAWdDRYEF8RQ.woff2) format('woff2');
-}
-
 :root {
-  --background: 60 10% 96%;
-  --foreground: 0 0% 6%;
+  --background: 40 33% 97%;
+  --foreground: 240 10% 7%;
   --card: 0 0% 100%;
-  --card-foreground: 0 0% 6%;
+  --card-foreground: 240 10% 7%;
   --popover: 0 0% 100%;
-  --popover-foreground: 0 0% 6%;
+  --popover-foreground: 240 10% 7%;
   --primary: 262 83% 58%;
   --primary-foreground: 0 0% 100%;
-  --secondary: 152 76% 40%;
+  --secondary: 160 51% 32%;
   --secondary-foreground: 0 0% 100%;
-  --muted: 60 6% 90%;
-  --muted-foreground: 0 0% 38%;
-  --accent: 37 100% 56%;
-  --accent-foreground: 0 0% 6%;
+  --muted: 40 15% 93%;
+  --muted-foreground: 240 5% 40%;
+  --accent: 14 91% 57%;
+  --accent-foreground: 0 0% 100%;
   --destructive: 0 84% 60%;
   --destructive-foreground: 0 0% 100%;
-  --success: 142 71% 45%;
+  --success: 152 60% 40%;
   --success-foreground: 0 0% 100%;
   --warning: 38 92% 50%;
-  --warning-foreground: 0 0% 6%;
-  --info: 199 89% 48%;
+  --warning-foreground: 240 10% 7%;
+  --info: 210 100% 48%;
   --info-foreground: 0 0% 100%;
-  --border: 0 0% 10%;
+  --border: 240 10% 12%;
   --input: 0 0% 100%;
   --ring: 262 83% 58%;
   --radius: 0rem;
   --brutal-shadow: 5px 5px 0 0;
   --brutal-shadow-sm: 3px 3px 0 0;
   --brutal-shadow-lg: 8px 8px 0 0;
-  --brutal-ink: 0 0% 6%;
+  --brutal-shadow-xl: 12px 12px 0 0;
+  --brutal-ink: 240 10% 12%;
   --brutal-yellow: 48 96% 53%;
   --brutal-pink: 330 81% 60%;
-  --brutal-blue: 199 89% 48%;
-  --brutal-green: 142 71% 45%;
-  --brutal-orange: 24 95% 53%;
-  --font-sans: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
-  --font-mono: 'Space Mono', ui-monospace, monospace;
-  --font-display: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+  --brutal-blue: 210 100% 48%;
+  --brutal-green: 152 60% 40%;
+  --brutal-orange: 14 91% 57%;
+  --brutal-purple: 262 83% 58%;
+  --brutal-lime: 84 60% 42%;
+  --font-sans: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-space-mono), ui-monospace, monospace;
+  --font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
 }
 
 .dark {
-  --background: 240 6% 10%;
-  --foreground: 0 0% 96%;
-  --card: 240 5% 14%;
-  --card-foreground: 0 0% 96%;
-  --popover: 240 5% 14%;
-  --popover-foreground: 0 0% 96%;
+  --background: 245 15% 9%;
+  --foreground: 40 20% 95%;
+  --card: 245 12% 13%;
+  --card-foreground: 40 20% 95%;
+  --popover: 245 12% 13%;
+  --popover-foreground: 40 20% 95%;
   --primary: 262 83% 65%;
-  --primary-foreground: 0 0% 6%;
-  --secondary: 152 76% 48%;
-  --secondary-foreground: 0 0% 6%;
-  --muted: 240 5% 20%;
-  --muted-foreground: 0 0% 65%;
-  --accent: 37 100% 60%;
-  --accent-foreground: 0 0% 6%;
+  --primary-foreground: 245 15% 9%;
+  --secondary: 160 51% 42%;
+  --secondary-foreground: 245 15% 9%;
+  --muted: 245 12% 18%;
+  --muted-foreground: 240 5% 65%;
+  --accent: 14 91% 62%;
+  --accent-foreground: 245 15% 9%;
   --destructive: 0 84% 65%;
   --destructive-foreground: 0 0% 100%;
-  --success: 142 71% 50%;
-  --success-foreground: 0 0% 6%;
-  --warning: 38 92% 55%;
-  --warning-foreground: 0 0% 6%;
-  --info: 199 89% 55%;
-  --info-foreground: 0 0% 6%;
-  --border: 0 0% 30%;
-  --input: 240 5% 14%;
+  --success: 152 60% 50%;
+  --success-foreground: 245 15% 9%;
+  --warning: 38 92% 58%;
+  --warning-foreground: 245 15% 9%;
+  --info: 210 100% 55%;
+  --info-foreground: 0 0% 100%;
+  --border: 240 8% 25%;
+  --input: 245 12% 13%;
   --ring: 262 83% 65%;
-  --brutal-shadow: 5px 5px 0 0 hsl(0 0% 100%);
-  --brutal-shadow-sm: 3px 3px 0 0 hsl(0 0% 100%);
-  --brutal-shadow-lg: 8px 8px 0 0 hsl(0 0% 100%);
-  --brutal-ink: 0 0% 96%;
+  --brutal-shadow: 5px 5px 0 0 hsl(262 83% 65%);
+  --brutal-shadow-sm: 3px 3px 0 0 hsl(262 83% 65%);
+  --brutal-shadow-lg: 8px 8px 0 0 hsl(262 83% 65%);
+  --brutal-shadow-xl: 12px 12px 0 0 hsl(262 83% 65%);
+  --brutal-ink: 40 20% 95%;
 }
 
 @theme inline {
@@ -122,9 +110,9 @@
   --color-chart-3: hsl(var(--accent));
   --color-chart-4: hsl(var(--destructive));
   --color-chart-5: hsl(var(--info));
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-mono);
-  --font-display: var(--font-display);
+  --font-sans: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-space-mono), ui-monospace, monospace;
+  --font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
   --radius-sm: 0rem;
   --radius-md: 0rem;
   --radius-lg: 0rem;
@@ -134,6 +122,8 @@
   --color-brutal-blue: hsl(var(--brutal-blue));
   --color-brutal-green: hsl(var(--brutal-green));
   --color-brutal-orange: hsl(var(--brutal-orange));
+  --color-brutal-purple: hsl(var(--brutal-purple));
+  --color-brutal-lime: hsl(var(--brutal-lime));
 }
 
 * {
@@ -191,6 +181,11 @@ body {
     box-shadow: var(--brutal-shadow-lg);
   }
 
+  .brutal-xl {
+    border: 3px solid hsl(var(--brutal-ink));
+    box-shadow: var(--brutal-shadow-xl);
+  }
+
   .brutal-flat {
     border: 3px solid hsl(var(--brutal-ink));
     box-shadow: none;
@@ -206,6 +201,10 @@ body {
 
   .brutal-shadow-lg {
     box-shadow: var(--brutal-shadow-lg);
+  }
+
+  .brutal-shadow-xl {
+    box-shadow: var(--brutal-shadow-xl);
   }
 
   .brutal-primary {
@@ -351,15 +350,63 @@ body {
       -45deg,
       transparent,
       transparent 10px,
-      hsl(var(--brutal-ink) / 0.05) 10px,
-      hsl(var(--brutal-ink) / 0.05) 20px
+      hsl(var(--brutal-ink) / 0.04) 10px,
+      hsl(var(--brutal-ink) / 0.04) 20px
     );
+  }
+
+  .brutal-dots {
+    background-image: radial-gradient(
+      circle,
+      hsl(var(--brutal-ink) / 0.08) 1px,
+      transparent 1px
+    );
+    background-size: 16px 16px;
+  }
+
+  .brutal-grid {
+    background-image:
+      linear-gradient(hsl(var(--brutal-ink) / 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--brutal-ink) / 0.05) 1px, transparent 1px);
+    background-size: 20px 20px;
   }
 
   .neo-gradient {
     background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%);
     border: 3px solid hsl(var(--brutal-ink));
     box-shadow: var(--brutal-shadow-lg);
+  }
+
+  .neo-gradient-subtle {
+    background: linear-gradient(135deg, hsl(var(--card)) 0%, hsl(var(--muted)) 100%);
+    border: 3px solid hsl(var(--brutal-ink));
+    box-shadow: var(--brutal-shadow);
+  }
+
+  .neo-glow {
+    box-shadow: 0 0 0 3px hsl(var(--primary)), var(--brutal-shadow);
+  }
+
+  .neo-glow-accent {
+    box-shadow: 0 0 0 3px hsl(var(--accent)), var(--brutal-shadow);
+  }
+
+  .neo-offset {
+    position: relative;
+  }
+
+  .neo-offset::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 3px solid hsl(var(--brutal-ink));
+    transform: translate(4px, 4px);
+    z-index: -1;
+    background: hsl(var(--primary) / 0.15);
+  }
+
+  .neo-offset-accent::before {
+    background: hsl(var(--accent) / 0.15);
   }
 
   .animate-brutal-bounce {
@@ -379,5 +426,33 @@ body {
     0% { transform: scale(0.95); opacity: 0.8; }
     50% { transform: scale(1.02); }
     100% { transform: scale(1); opacity: 1; }
+  }
+
+  .animate-brutal-slide-up {
+    animation: brutal-slide-up 0.4s ease-out;
+  }
+
+  @keyframes brutal-slide-up {
+    0% { transform: translateY(20px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+  }
+
+  .animate-brutal-shake {
+    animation: brutal-shake 0.5s ease-in-out;
+  }
+
+  @keyframes brutal-shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-3px); }
+    75% { transform: translateX(3px); }
+  }
+
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
   }
 }

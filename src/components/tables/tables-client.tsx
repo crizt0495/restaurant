@@ -30,12 +30,12 @@ const STATUS_STYLE: Record<string, { variant: "success" | "warning" | "info" | "
 }
 
 const STATUS_COLOR: Record<string, string> = {
-  AVAILABLE: "border-emerald-300 bg-emerald-50",
-  OCCUPIED: "border-amber-300 bg-amber-50",
-  RESERVED: "border-sky-300 bg-sky-50",
-  WAITING_PAYMENT: "border-orange-300 bg-orange-50",
-  CLEANING: "border-blue-300 bg-blue-50",
-  OUT_OF_SERVICE: "border-red-300 bg-red-50",
+  AVAILABLE: "border-success bg-success/10 shadow-[3px_3px_0_0_hsl(var(--success))]",
+  OCCUPIED: "border-warning bg-warning/10 shadow-[3px_3px_0_0_hsl(var(--warning))]",
+  RESERVED: "border-info bg-info/10 shadow-[3px_3px_0_0_hsl(var(--info))]",
+  WAITING_PAYMENT: "border-accent bg-accent/10 shadow-[3px_3px_0_0_hsl(var(--accent))]",
+  CLEANING: "border-info bg-info/10 shadow-[3px_3px_0_0_hsl(var(--info))]",
+  OUT_OF_SERVICE: "border-destructive bg-destructive/10 shadow-[3px_3px_0_0_hsl(var(--destructive))]",
 }
 
 export function TablesClient({ tables: initialTables }: { tables: TableItem[] }) {
@@ -93,8 +93,8 @@ export function TablesClient({ tables: initialTables }: { tables: TableItem[] })
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="font-display text-3xl font-bold">Meja</h2>
-          <p className="text-sm text-muted-foreground">Denah lantai dan manajemen meja</p>
+          <h2 className="font-display text-3xl font-black uppercase tracking-tighter">Meja</h2>
+          <p className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Denah lantai dan manajemen meja</p>
         </div>
         <Button variant="outline" size="sm" onClick={() => refetch()}>
           <RefreshCw className="mr-2 h-4 w-4" /> Segarkan

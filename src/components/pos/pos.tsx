@@ -393,7 +393,7 @@ export function POS({ user, categories, products, tables, customers: initialCust
               <button
                 key={product.id}
                 onClick={() => addToCart(product)}
-                className="group flex flex-col bg-card border-3 border-border p-3 text-left transition-all duration-100 hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0_0_hsl(var(--brutal-ink))]"
+                className="group flex flex-col bg-card border-3 border-foreground p-3 text-left shadow-[4px_4px_0_0_hsl(var(--foreground))] transition-all duration-150 hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0_0_hsl(var(--foreground))]"
               >
                 <div className="mb-2 flex h-20 items-center justify-center bg-muted border-2 border-border">
                   {product.image_url ? (
@@ -704,7 +704,7 @@ export function POS({ user, categories, products, tables, customers: initialCust
             <DialogTitle>Pembayaran</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
-            <div className="bg-foreground text-background p-4 text-center border-3 border-foreground shadow-[5px_5px_0_0_hsl(var(--brutal-ink))]">
+            <div className="bg-foreground text-background p-4 text-center border-3 border-foreground shadow-[5px_5px_0_0_hsl(var(--foreground))]">
               <p className="text-xs font-bold uppercase tracking-wider opacity-70">Total Tagihan</p>
               <p className="font-mono text-3xl font-black mt-1">{formatCurrency(total)}</p>
             </div>

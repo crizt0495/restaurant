@@ -37,7 +37,7 @@ const Toast = React.forwardRef<HTMLDivElement, ToastProps>(
     <div
       ref={ref}
       className={cn(
-        "pointer-events-auto relative flex w-full items-center gap-3 overflow-hidden border-3 border-border p-4 pr-10 shadow-[5px_5px_0_0_hsl(var(--brutal-ink))] transition-all font-medium",
+        "pointer-events-auto relative flex w-full items-center gap-3 overflow-hidden border-3 border-foreground p-4 pr-10 shadow-[5px_5px_0_0_hsl(var(--foreground))] transition-all font-medium",
         variantStyles[variant],
         className
       )}

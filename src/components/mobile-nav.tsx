@@ -29,7 +29,7 @@ export function MobileNav() {
               )}
             >
               {active && (
-                <span className="absolute top-0 left-1/2 -translate-x-1/2 h-1 w-10 bg-primary" />
+                <span className="absolute top-0 left-1/2 -translate-x-1/2 h-1 w-10 bg-primary animate-brutal-pop" />
               )}
               <Icon className="h-5 w-5" strokeWidth={active ? 3 : 2.5} />
               {item.title}

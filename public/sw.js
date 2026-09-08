@@ -1,6 +1,6 @@
 // Service worker minimal: cache-first for static assets, network-first for navigation.
-const CACHE_NAME = "rms-v1"
-const STATIC_ASSETS = ["/", "/dashboard", "/manifest.json"]
+const CACHE_NAME = "rms-v2"
+const STATIC_ASSETS = ["/manifest.json"]
 
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(CACHE_NAME).then((c) => c.addAll(STATIC_ASSETS)))
