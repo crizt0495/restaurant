@@ -4,7 +4,6 @@ import { createServerClient } from "@supabase/ssr"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import { cache } from "react"
-import { unstable_cache } from "next/cache"
 
 export interface SessionUser {
   id: string
@@ -45,20 +44,20 @@ export async function getServerClient() {
   )
 }
 
-async function fetchUserContext(): Promise<UserContext | null> {
+export const getCurrentUser = cache(async (): Promise<UserContext | null> => {
   const supabase = await getServerClient()
 
   const {
-    data: { session },
-  } = await supabase.auth.getSession()
+    data: { user },
+  } = await supabase.auth.getUser()
 
-  if (!session?.user) return null
+  if (!user) return null
 
   const { data, error } = await supabase.rpc("get_my_context")
   if (error || !data) return null
 
   return {
-    user_id: session.user.id,
+    user_id: user.id,
     profile_id: data.id,
     username: data.username ?? "",
     full_name: data.full_name ?? "",
@@ -68,24 +67,6 @@ async function fetchUserContext(): Promise<UserContext | null> {
     is_super_admin: Boolean(data.is_super_admin),
     permissions: Array.isArray(data.permissions) ? data.permissions : [],
   }
-}
-
-export const getCurrentUser = cache(async (): Promise<UserContext | null> => {
-  const supabase = await getServerClient()
-
-  const {
-    data: { session },
-  } = await supabase.auth.getSession()
-
-  if (!session?.user) return null
-
-  const getUserCtx = unstable_cache(
-    async () => fetchUserContext(),
-    ["user-context"],
-    { revalidate: 5, tags: [`user-${session.user.id}`] }
-  )
-
-  return getUserCtx()
 })
 
 export async function requirePermission(permission: string) {
