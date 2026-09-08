@@ -91,8 +91,8 @@ export function CategoriesClient({ categories, productCount }: CategoriesClientP
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold">Kategori</h2>
-          <p className="text-sm text-muted-foreground">Manajemen kategori produk</p>
+          <h2 className="font-display text-3xl font-black uppercase tracking-tighter leading-none">Kategori</h2>
+          <p className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Manajemen kategori produk</p>
         </div>
         <Button size="sm" onClick={openCreate}>
           <Plus className="mr-2 h-4 w-4" /> Tambah Kategori

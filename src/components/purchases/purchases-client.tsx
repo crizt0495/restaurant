@@ -228,8 +228,8 @@ export function PurchasesClient({
     <div className="space-y-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-2xl font-bold">Pesanan Pembelian</h2>
-          <p className="text-sm text-muted-foreground">Kelola pesanan pembelian</p>
+          <h2 className="font-display text-3xl font-black uppercase tracking-tighter leading-none">Pesanan Pembelian</h2>
+          <p className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Kelola pesanan pembelian</p>
         </div>
         {canCreate && (
           <Button size="sm" onClick={openCreate}>
@@ -246,7 +246,7 @@ export function PurchasesClient({
           </CardContent>
         </Card>
       ) : (
-        <div className="overflow-x-auto rounded-lg border">
+        <div className="overflow-x-auto border-3 border-foreground shadow-[5px_5px_0_0_hsl(var(--foreground))]">
           <Table>
             <TableHeader>
               <TableRow>

@@ -122,7 +122,7 @@ export function TablesClient({ tables: initialTables }: { tables: TableItem[] })
                 </div>
 
                 {activeOrder ? (
-                  <div className="mt-3 rounded-md bg-background p-3">
+                  <div className="mt-3 border-2 border-foreground bg-background p-3 shadow-[2px_2px_0_0_hsl(var(--foreground))]">
                     <p className="text-xs text-muted-foreground">
                       {formatDateTime(activeOrder.created_at)}
                     </p>
@@ -131,7 +131,7 @@ export function TablesClient({ tables: initialTables }: { tables: TableItem[] })
                     </p>
                     <p className="font-display mt-1 text-base font-bold">{formatCurrency(activeOrder.total)}</p>
                     <div className="mt-2 flex gap-2">
-                      <Button size="sm" variant="secondary" className="brutal-tag rounded font-bold" onClick={() => markClear(table.id)}>
+                      <Button size="sm" variant="secondary" className="brutal-tag font-bold" onClick={() => markClear(table.id)}>
                         Bersihkan
                       </Button>
                     </div>

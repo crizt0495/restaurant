@@ -123,7 +123,7 @@ export function ShiftsClient({ shifts: initialShifts, canOpen, canClose }: Shift
     <div className="space-y-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-2xl font-bold">Shift Kasir</h2>
+          <h2 className="font-display text-3xl font-black uppercase tracking-tighter leading-none">Shift Kasir</h2>
           <p className="text-sm text-muted-foreground">Buka dan tutup shift kasir</p>
         </div>
         {canOpen && openShifts.length === 0 && (
@@ -134,16 +134,16 @@ export function ShiftsClient({ shifts: initialShifts, canOpen, canClose }: Shift
       </div>
 
       {openShifts.length > 0 && (
-        <Card className="border-amber-300 bg-amber-50 dark:bg-amber-950/30">
+        <Card className="border-warning bg-warning/10 shadow-[5px_5px_0_0_hsl(var(--warning))]">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-base">
-              <Clock className="h-4 w-4 text-amber-600" />
+              <Clock className="h-4 w-4 text-warning" />
               Shift Aktif ({openShifts.length})
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
             {openShifts.map((s) => (
-              <div key={s.id} className="flex flex-col gap-2 rounded-lg border bg-background p-3 sm:flex-row sm:items-center sm:justify-between">
+              <div key={s.id} className="flex flex-col gap-2 border-2 border-foreground bg-card p-3 shadow-[3px_3px_0_0_hsl(var(--foreground))] transition-all duration-150 hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[4px_4px_0_0_hsl(var(--foreground))] sm:flex-row sm:items-center sm:justify-between">
                 <div>
                   <p className="font-medium">{s.user?.full_name || "Kasir"}</p>
                   <p className="text-xs text-muted-foreground">
@@ -171,7 +171,7 @@ export function ShiftsClient({ shifts: initialShifts, canOpen, canClose }: Shift
           </CardContent>
         </Card>
       ) : (
-        <div className="overflow-x-auto rounded-lg border">
+        <div className="overflow-x-auto border-3 border-foreground shadow-[5px_5px_0_0_hsl(var(--foreground))]">
           <Table>
             <TableHeader>
               <TableRow>
@@ -228,7 +228,7 @@ export function ShiftsClient({ shifts: initialShifts, canOpen, canClose }: Shift
             <DialogTitle>Buka Shift Baru</DialogTitle>
           </DialogHeader>
           <div className="grid gap-4">
-            <div className="rounded-lg bg-muted p-3 text-sm">
+            <div className="border-2 border-foreground bg-muted p-3 text-sm shadow-[2px_2px_0_0_hsl(var(--foreground))]">
               <p>Kas awal adalah jumlah uang fisik di laci kasir pada saat shift dibuka.</p>
             </div>
             <div className="grid gap-2">
@@ -258,7 +258,7 @@ export function ShiftsClient({ shifts: initialShifts, canOpen, canClose }: Shift
           </DialogHeader>
           {closeDialog && (
             <div className="space-y-4">
-              <div className="rounded-lg bg-muted p-3 text-sm space-y-1">
+              <div className="border-2 border-foreground bg-muted p-3 text-sm shadow-[2px_2px_0_0_hsl(var(--foreground))] space-y-1">
                 <p>Kasir: <span className="font-medium">{closeDialog.user?.full_name}</span></p>
                 <p>Dibuka: {formatDateTime(closeDialog.opening_time)}</p>
                 <p>Kas awal: {formatCurrency(Number(closeDialog.opening_cash))}</p>
@@ -285,10 +285,10 @@ export function ShiftsClient({ shifts: initialShifts, canOpen, canClose }: Shift
               </div>
               {parseFloat(actualCash) > 0 && closeDialog.expected_cash != null && (
                 <div
-                  className={`flex items-center gap-2 rounded-lg p-3 text-sm ${
+                  className={`flex items-center gap-2 border-2 border-foreground p-3 text-sm shadow-[2px_2px_0_0_hsl(var(--foreground))] ${
                     parseFloat(actualCash) === Number(closeDialog.expected_cash)
-                      ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40"
-                      : "bg-amber-50 text-amber-700 dark:bg-amber-950/40"
+                      ? "bg-success/10 text-success"
+                      : "bg-warning/10 text-warning"
                   }`}
                 >
                   <AlertCircle className="h-4 w-4" />

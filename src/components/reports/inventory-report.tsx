@@ -43,7 +43,7 @@ export function InventoryReport({ items, totalStockValue }: InventoryReportProps
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold">Laporan Persediaan</h2>
+        <h2 className="font-display text-3xl font-black uppercase tracking-tighter leading-none">Laporan Persediaan</h2>
         <p className="text-sm text-muted-foreground">Stock dan valuasi inventaris</p>
       </div>
 
@@ -51,19 +51,19 @@ export function InventoryReport({ items, totalStockValue }: InventoryReportProps
         <Card>
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">Total Nilai Stok</p>
-            <p className="text-2xl font-bold">{formatCurrency(totalStockValue)}</p>
+            <p className="font-display text-3xl font-black uppercase tracking-tighter leading-none">{formatCurrency(totalStockValue)}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">Total Item</p>
-            <p className="text-2xl font-bold">{formatNumber(items.length)}</p>
+            <p className="font-display text-3xl font-black uppercase tracking-tighter leading-none">{formatNumber(items.length)}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">Item Stok Rendah</p>
-            <p className="text-2xl font-bold text-destructive">
+            <p className="font-display text-3xl font-black text-destructive leading-none">
               {formatNumber(items.filter((i) => i.is_low_stock).length)}
             </p>
           </CardContent>

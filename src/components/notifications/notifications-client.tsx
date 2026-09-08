@@ -108,7 +108,7 @@ export function NotificationsClient({ notifications: initial, unread: initialUnr
     <div className="space-y-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-2xl font-bold">Notifikasi</h2>
+          <h2 className="font-display text-3xl font-black uppercase tracking-tighter leading-none">Notifikasi</h2>
           <p className="text-sm text-muted-foreground">
             {unreadCount > 0 ? (
               <Badge variant="warning">{unreadCount} belum dibaca</Badge>

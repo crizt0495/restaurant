@@ -49,20 +49,31 @@ export default async function ReportsPage() {
   await requirePermission("reports.view")
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold">Laporan</h2>
-        <p className="text-sm text-muted-foreground">Analisa performa restoran</p>
+    <div className="space-y-6 animate-brutal-slide-up">
+      <div className="flex items-end justify-between">
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <span className="bg-primary text-primary-foreground px-2 py-0.5 text-[10px] font-black font-mono">21 REPORTS</span>
+            <span className="h-[3px] w-16 bg-foreground" />
+          </div>
+          <h2 className="font-display text-3xl font-black uppercase tracking-tighter">Laporan</h2>
+          <p className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Analisa performa restoran</p>
+        </div>
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {REPORT_LINKS.map((r) => (
-          <Link key={r.href} href={r.href} className="group rounded-xl border bg-card p-5 transition-all hover:border-primary hover:shadow-md">
-            <div className="mb-3 flex items-center gap-2">
-              <r.icon className="h-5 w-5 text-primary" />
-              <span className="text-sm text-muted-foreground">Laporan</span>
+          <Link key={r.href} href={r.href} className="group relative border-3 border-foreground bg-card p-5 shadow-[4px_4px_0_0_hsl(var(--foreground))] transition-all duration-150 hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0_0_hsl(var(--primary))]">
+            <div className="absolute right-0 top-0 h-10 w-10 bg-foreground text-background flex items-center justify-center font-mono text-xs font-black">
+              {String(REPORT_LINKS.indexOf(r) + 1).padStart(2, "0")}
             </div>
-            <h3 className="text-lg font-semibold">{r.title}</h3>
-            <p className="mt-1 text-sm text-muted-foreground">{r.description}</p>
+            <div className="mb-3 flex items-center gap-2">
+              <div className="flex h-9 w-9 items-center justify-center border-2 border-foreground bg-primary text-primary-foreground shadow-[2px_2px_0_0_hsl(var(--foreground))]">
+                <r.icon className="h-4 w-4" strokeWidth={3} />
+              </div>
+              <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Laporan</span>
+            </div>
+            <h3 className="font-display text-lg font-black uppercase tracking-wide">{r.title}</h3>
+            <p className="mt-1 text-sm font-bold text-muted-foreground">{r.description}</p>
           </Link>
         ))}
       </div>

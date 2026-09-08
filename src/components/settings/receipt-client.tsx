@@ -45,8 +45,8 @@ export function ReceiptSettingsClient({ initial }: { initial?: any }) {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold">Pengaturan Struk</h2>
-        <p className="text-sm text-muted-foreground">Konfigurasi tampilan struk</p>
+        <h2 className="font-display text-3xl font-black uppercase tracking-tighter leading-none">Pengaturan Struk</h2>
+        <p className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Konfigurasi tampilan struk</p>
       </div>
 
       <Card>

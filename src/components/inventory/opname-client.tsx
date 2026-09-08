@@ -185,7 +185,7 @@ export function OpnameClient({
     <div className="space-y-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-2xl font-bold">Opname Stok</h2>
+          <h2 className="font-display text-3xl font-black uppercase tracking-tighter leading-none">Opname Stok</h2>
           <p className="text-sm text-muted-foreground">
             Selisih stok fisik vs sistem
           </p>
@@ -205,7 +205,7 @@ export function OpnameClient({
           </CardContent>
         </Card>
       ) : (
-        <div className="overflow-x-auto rounded-lg border">
+        <div className="overflow-x-auto border-3 border-foreground shadow-[5px_5px_0_0_hsl(var(--foreground))]">
           <Table>
             <TableHeader>
               <TableRow>

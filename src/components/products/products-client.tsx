@@ -195,8 +195,8 @@ export function ProductsClient({ products, categories, canCreate, canEdit, canDe
     <div className="space-y-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-2xl font-bold">Produk</h2>
-          <p className="text-sm text-muted-foreground">Kelola menu produk</p>
+          <h2 className="font-display text-3xl font-black uppercase tracking-tighter leading-none">Produk</h2>
+          <p className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Kelola menu produk</p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" size="sm" onClick={() => setCategoryDialog(true)}>
@@ -237,7 +237,7 @@ export function ProductsClient({ products, categories, canCreate, canEdit, canDe
         </Card>
       ) : (
         <>
-        <div className="overflow-x-auto rounded-lg border">
+        <div className="overflow-x-auto border-3 border-foreground shadow-[5px_5px_0_0_hsl(var(--foreground))]">
           <Table>
             <TableHeader>
               <TableRow>
@@ -255,7 +255,7 @@ export function ProductsClient({ products, categories, canCreate, canEdit, canDe
                 <TableRow key={p.id}>
                   <TableCell>
                     <div className="flex items-center gap-2">
-                      {p.is_favorite && <Star className="h-3 w-3 fill-amber-400 text-amber-400" />}
+                      {p.is_favorite && <Star className="h-3 w-3 fill-warning text-warning" />}
                       <span className="font-medium">{p.name}</span>
                     </div>
                   </TableCell>
@@ -381,7 +381,7 @@ export function ProductsClient({ products, categories, canCreate, canEdit, canDe
             <Input placeholder="Nama kategori" value={newCategory} onChange={(e) => setNewCategory(e.target.value)} />
             <div className="grid gap-1.5">
               {categories.map((c) => (
-                <div key={c.id} className="flex items-center justify-between rounded border px-3 py-2 text-sm">
+                <div key={c.id} className="flex items-center justify-between border-2 border-foreground bg-card px-3 py-2 text-sm shadow-[2px_2px_0_0_hsl(var(--foreground))]">
                   <span>{c.name}</span>
                   <Badge variant="secondary">{getInitials(c.name)}</Badge>
                 </div>

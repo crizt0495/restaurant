@@ -56,8 +56,8 @@ export function SalesReport({ summary, dailySales, paymentBreakdown }: SalesRepo
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold">Laporan Penjualan</h2>
-        <p className="text-sm text-muted-foreground">Ringkasan penjualan periode</p>
+        <h2 className="font-display text-3xl font-black uppercase tracking-tighter leading-none">Laporan Penjualan</h2>
+        <p className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Ringkasan penjualan periode</p>
       </div>
 
       <div className="flex flex-wrap items-end gap-4">
@@ -76,25 +76,25 @@ export function SalesReport({ summary, dailySales, paymentBreakdown }: SalesRepo
         <Card>
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">Total Penjualan</p>
-            <p className="text-2xl font-bold">{formatCurrency(summary.totalSales)}</p>
+            <p className="font-display text-3xl font-black uppercase tracking-tighter leading-none">{formatCurrency(summary.totalSales)}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">Orders</p>
-            <p className="text-2xl font-bold">{formatNumber(summary.orderCount)}</p>
+            <p className="font-display text-3xl font-black uppercase tracking-tighter leading-none">{formatNumber(summary.orderCount)}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">Total Item</p>
-            <p className="text-2xl font-bold">{formatNumber(summary.totalItems)}</p>
+            <p className="font-display text-3xl font-black uppercase tracking-tighter leading-none">{formatNumber(summary.totalItems)}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">Rata-rata Pesanan</p>
-            <p className="text-2xl font-bold">{formatCurrency(summary.avgOrder)}</p>
+            <p className="font-display text-3xl font-black uppercase tracking-tighter leading-none">{formatCurrency(summary.avgOrder)}</p>
           </CardContent>
         </Card>
       </div>

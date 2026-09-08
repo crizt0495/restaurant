@@ -70,8 +70,8 @@ export function ProfitReport({ summary }: ProfitReportProps) {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold">Laba Rugi</h2>
-        <p className="text-sm text-muted-foreground">Ringkasan laba rugi periode</p>
+        <h2 className="font-display text-3xl font-black uppercase tracking-tighter leading-none">Laba Rugi</h2>
+        <p className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Ringkasan laba rugi periode</p>
       </div>
 
       <div className="flex flex-wrap items-end gap-4">
@@ -90,20 +90,20 @@ export function ProfitReport({ summary }: ProfitReportProps) {
         <Card>
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">Pendapatan</p>
-            <p className="text-2xl font-bold">{formatCurrency(summary.revenue)}</p>
+            <p className="font-display text-3xl font-black uppercase tracking-tighter leading-none">{formatCurrency(summary.revenue)}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">Laba Kotor</p>
-            <p className="text-2xl font-bold">{formatCurrency(summary.grossProfit)}</p>
+            <p className="font-display text-3xl font-black uppercase tracking-tighter leading-none">{formatCurrency(summary.grossProfit)}</p>
             <p className="text-xs text-muted-foreground">{summary.grossMargin.toFixed(1)}% margin</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">Laba Bersih</p>
-            <p className="text-2xl font-bold">{formatCurrency(summary.netProfit)}</p>
+            <p className="font-display text-3xl font-black uppercase tracking-tighter leading-none">{formatCurrency(summary.netProfit)}</p>
             <p className="text-xs text-muted-foreground">{summary.netMargin.toFixed(1)}% margin</p>
           </CardContent>
         </Card>

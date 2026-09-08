@@ -53,8 +53,8 @@ export function RestaurantClient({ organization }: RestaurantClientProps) {
   return (
     <div className="space-y-4">
       <div>
-        <h2 className="text-2xl font-bold">Pengaturan Restoran</h2>
-        <p className="text-sm text-muted-foreground">Profil dan pengaturan restoran</p>
+        <h2 className="font-display text-3xl font-black uppercase tracking-tighter leading-none">Pengaturan Restoran</h2>
+        <p className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Profil dan pengaturan restoran</p>
       </div>
 
       <Card>

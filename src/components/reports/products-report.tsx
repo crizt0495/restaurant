@@ -52,8 +52,8 @@ export function ProductsReport({ products, dateFrom, dateTo }: ProductsReportPro
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold">Laporan Produk</h2>
-        <p className="text-sm text-muted-foreground">Produk terlaris dan performa</p>
+        <h2 className="font-display text-3xl font-black uppercase tracking-tighter leading-none">Laporan Produk</h2>
+        <p className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Produk terlaris dan performa</p>
       </div>
 
       <div className="flex flex-wrap items-end gap-4">
@@ -72,13 +72,13 @@ export function ProductsReport({ products, dateFrom, dateTo }: ProductsReportPro
         <Card>
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">Total Pendapatan</p>
-            <p className="text-2xl font-bold">{formatCurrency(totalRevenue)}</p>
+            <p className="font-display text-3xl font-black uppercase tracking-tighter leading-none">{formatCurrency(totalRevenue)}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">Total Item Terjual</p>
-            <p className="text-2xl font-bold">{formatNumber(totalQty)}</p>
+            <p className="font-display text-3xl font-black uppercase tracking-tighter leading-none">{formatNumber(totalQty)}</p>
           </CardContent>
         </Card>
       </div>

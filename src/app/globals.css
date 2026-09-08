@@ -148,6 +148,35 @@ body {
     font-weight: 700;
     letter-spacing: -0.02em;
   }
+
+  ::selection {
+    background-color: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+  }
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--muted));
+  border-left: 2px solid hsl(var(--border));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--foreground));
+  border: 2px solid hsl(var(--border));
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary));
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--foreground)) hsl(var(--muted));
 }
 
 @media print {

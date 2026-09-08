@@ -124,8 +124,8 @@ export function OrdersClient({ orders: initialOrders }: OrdersClientProps) {
     <div className="space-y-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-2xl font-bold">Pesanan</h2>
-          <p className="text-sm text-muted-foreground">Kelola semua pesanan</p>
+          <h2 className="font-display text-3xl font-black uppercase tracking-tighter leading-none">Pesanan</h2>
+          <p className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Kelola semua pesanan</p>
         </div>
         <Button variant="outline" size="sm" onClick={() => refetch()}>
           <RefreshCw className="mr-2 h-4 w-4" /> Segarkan

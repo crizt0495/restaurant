@@ -104,8 +104,8 @@ export function RolesClient({ roles, permissions, rolePermissions }: RolesClient
   return (
     <div className="space-y-4">
       <div>
-        <h2 className="text-2xl font-bold">Peran & Izin</h2>
-        <p className="text-sm text-muted-foreground">Kelola hak akses per role</p>
+        <h2 className="font-display text-3xl font-black uppercase tracking-tighter leading-none">Peran & Izin</h2>
+        <p className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Kelola hak akses per role</p>
       </div>
 
       <Tabs defaultValue={roles[0]}>
@@ -138,7 +138,7 @@ export function RolesClient({ roles, permissions, rolePermissions }: RolesClient
                       {perms.map((pm) => (
                         <label
                           key={pm.key}
-                          className="flex items-center gap-2 rounded-md border px-3 py-2 text-sm cursor-pointer hover:bg-muted/50"
+                          className="flex items-center gap-2 border-2 border-foreground bg-card px-3 py-2 text-sm cursor-pointer shadow-[3px_3px_0_0_hsl(var(--foreground))] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[4px_4px_0_0_hsl(var(--foreground))] transition-all duration-150"
                         >
                           <Checkbox
                             checked={isPermissionEnabled(role, pm.key)}

@@ -64,23 +64,29 @@ export default async function SettingsPage() {
   if (!user) redirect("/login")
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold">Pengaturan</h2>
-        <p className="text-sm text-muted-foreground">Pengaturan sistem</p>
+    <div className="space-y-6 animate-brutal-slide-up">
+      <div className="flex items-end justify-between">
+        <div>
+          <div className="mb-1 flex items-center gap-2">
+            <span className="bg-primary px-2 py-0.5 text-[10px] font-black font-mono text-primary-foreground">CONFIG</span>
+            <span className="h-[3px] w-14 bg-foreground" />
+          </div>
+          <h2 className="font-display text-3xl font-black uppercase tracking-tighter leading-none">Pengaturan</h2>
+          <p className="mt-1.5 text-sm font-bold uppercase tracking-wider text-muted-foreground">Pengaturan sistem</p>
+        </div>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {settingsLinks.map((link) => (
           <Link key={link.href} href={link.href}>
-            <Card className="transition-colors hover:bg-muted/50 cursor-pointer">
+            <Card className="transition-all duration-150 hover:-translate-x-1 hover:-translate-y-1 hover:shadow-[6px_6px_0_0_hsl(var(--primary))] cursor-pointer">
               <CardContent className="flex items-center gap-4 py-6">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-                  <link.icon className="h-5 w-5 text-primary" />
+                <div className="flex h-10 w-10 items-center justify-center border-2 border-foreground bg-primary text-primary-foreground shadow-[2px_2px_0_0_hsl(var(--foreground))]">
+                  <link.icon className="h-5 w-5" strokeWidth={2.5} />
                 </div>
                 <div>
-                  <p className="font-medium">{link.title}</p>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="font-black uppercase tracking-wide">{link.title}</p>
+                  <p className="text-sm font-bold text-muted-foreground">
                     {link.description}
                   </p>
                 </div>

@@ -41,10 +41,16 @@ export function SimpleReport({ title, description, dateFrom, dateTo, columns, ro
   }
 
   return (
-    <div className="space-y-6">
-      <div className="print:mb-0">
-        <h2 className="text-2xl font-bold">{title}</h2>
-        <p className="text-sm text-muted-foreground">{description}</p>
+    <div className="space-y-6 animate-brutal-slide-up">
+      <div className="print:mb-0 flex items-end justify-between">
+        <div>
+          <div className="mb-1 flex items-center gap-2">
+            <span className="bg-primary px-2 py-0.5 text-[10px] font-black font-mono text-primary-foreground">REPORT</span>
+            <span className="h-[3px] w-14 bg-foreground" />
+          </div>
+          <h2 className="font-display text-3xl font-black uppercase tracking-tighter leading-none">{title}</h2>
+          <p className="mt-1.5 text-sm font-bold uppercase tracking-wider text-muted-foreground">{description}</p>
+        </div>
       </div>
 
       <div className="no-print flex flex-wrap items-end gap-4">
@@ -59,10 +65,10 @@ export function SimpleReport({ title, description, dateFrom, dateTo, columns, ro
         <Button onClick={handleFilter}>Filter</Button>
         <div className="ml-auto flex gap-2">
           <Button variant="outline" onClick={exportCSV} disabled={rows.length === 0}>
-            <Download className="h-4 w-4 mr-1" /> CSV
+            <Download className="h-4 w-4 mr-1" strokeWidth={3} /> CSV
           </Button>
           <Button variant="outline" onClick={() => window.print()}>
-            <Printer className="h-4 w-4 mr-1" /> Print
+            <Printer className="h-4 w-4 mr-1" strokeWidth={3} /> Print
           </Button>
         </div>
       </div>
@@ -70,10 +76,10 @@ export function SimpleReport({ title, description, dateFrom, dateTo, columns, ro
       {summary && summary.length > 0 && (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {summary.map((s) => (
-            <Card key={s.label}>
+            <Card key={s.label} className="hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[7px_7px_0_0_hsl(var(--foreground))]">
               <CardContent className="p-4">
-                <p className="text-sm text-muted-foreground">{s.label}</p>
-                <p className="mt-1 text-xl font-bold">{s.value}</p>
+                <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{s.label}</p>
+                <p className="mt-1 font-display text-2xl font-black leading-none">{s.value}</p>
               </CardContent>
             </Card>
           ))}
@@ -81,14 +87,14 @@ export function SimpleReport({ title, description, dateFrom, dateTo, columns, ro
       )}
 
       <Card>
-        <CardHeader>
-          <CardTitle className="text-sm flex items-center gap-2">
-            <FileText className="h-4 w-4" /> Detail ({rows.length})
+        <CardHeader className="bg-foreground text-background">
+          <CardTitle className="flex items-center gap-2">
+            <FileText className="h-4 w-4" strokeWidth={3} /> Detail ({rows.length})
           </CardTitle>
         </CardHeader>
         <CardContent>
           {rows.length === 0 ? (
-            <p className="py-8 text-center text-sm text-muted-foreground">Tidak ada data</p>
+            <p className="py-8 text-center text-sm font-bold uppercase tracking-wider text-muted-foreground">Tidak ada data</p>
           ) : (
             <div className="overflow-x-auto">
               <Table>

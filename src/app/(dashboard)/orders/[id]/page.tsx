@@ -5,7 +5,6 @@ import { formatCurrency, formatDateTime, translateStatus } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Separator } from "@/components/ui/separator"
 import Link from "next/link"
 import { ArrowLeft, Printer } from "lucide-react"
 import { CancelOrderButton } from "@/components/orders/cancel-order-button"
@@ -48,12 +47,12 @@ export default async function OrderDetailPage({
           </Button>
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="text-xl font-bold">{order.order_number}</h2>
+              <h2 className="font-display text-2xl font-black uppercase tracking-tighter">{order.order_number}</h2>
               <Badge variant={order.status === "COMPLETED" ? "success" : order.status === "CANCELLED" ? "destructive" : "warning"}>
                 {translateStatus(order.status)}
               </Badge>
             </div>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm font-bold uppercase tracking-wider text-muted-foreground">
               {formatDateTime(order.created_at)} · {order.order_type === "DINE_IN" ? "Makan di Tempat" : order.order_type === "TAKE_AWAY" ? "Bawa Pulang" : order.order_type === "DELIVERY" ? "Antar" : order.order_type === "PICK_UP" ? "Ambil" : order.order_type}
               {order.table ? ` · ${order.table.name || order.table.number}` : ""}
             </p>
@@ -72,21 +71,21 @@ export default async function OrderDetailPage({
 
       <div className="grid gap-4 lg:grid-cols-3">
         <Card className="lg:col-span-2">
-          <CardHeader>
-            <CardTitle className="text-sm">Item</CardTitle>
+          <CardHeader className="bg-foreground text-background">
+            <CardTitle>Item</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
             {order.items?.map((item: any) => (
-              <div key={item.id} className="flex items-center justify-between border-b pb-2 last:border-0">
+              <div key={item.id} className="flex items-center justify-between border-b-2 border-foreground pb-2 last:border-0">
                 <div>
-                  <p className="text-sm font-medium">
+                  <p className="text-sm font-black uppercase tracking-wide">
                     {item.quantity}x {item.product_name}
                     {item.variant_name && <span className="text-muted-foreground"> · {item.variant_name}</span>}
                   </p>
                   {item.modifiers?.map((m: any, i: number) => (
                     <p key={i} className="text-xs text-muted-foreground">+ {m.option_name} ({formatCurrency(m.price)})</p>
                   ))}
-                  {item.notes && <p className="text-xs text-amber-600">📝 {item.notes}</p>}
+                  {item.notes && <p className="text-xs font-bold text-warning">📝 {item.notes}</p>}
                 </div>
                 <p className="text-sm font-semibold">{formatCurrency(item.total)}</p>
               </div>
@@ -95,39 +94,39 @@ export default async function OrderDetailPage({
         </Card>
 
         <Card>
-          <CardHeader>
-            <CardTitle className="text-sm">Ringkasan</CardTitle>
+          <CardHeader className="bg-foreground text-background">
+            <CardTitle>Ringkasan</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-1 text-sm">
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Subtotal</span>
-              <span>{formatCurrency(order.subtotal)}</span>
+          <CardContent className="space-y-1">
+            <div className="flex justify-between text-sm">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Subtotal</span>
+              <span className="font-mono font-bold">{formatCurrency(order.subtotal)}</span>
             </div>
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Biaya Layanan</span>
-              <span>{formatCurrency(order.service_charge)}</span>
+            <div className="flex justify-between text-sm">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Biaya Layanan</span>
+              <span className="font-mono font-bold">{formatCurrency(order.service_charge)}</span>
             </div>
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Pajak</span>
-              <span>{formatCurrency(order.tax_amount)}</span>
+            <div className="flex justify-between text-sm">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Pajak</span>
+              <span className="font-mono font-bold">{formatCurrency(order.tax_amount)}</span>
             </div>
-            <Separator />
-            <div className="flex justify-between text-base font-bold">
+            <div className="border-t-[3px] border-foreground my-1" />
+            <div className="flex justify-between text-base font-black uppercase tracking-wide">
               <span>Total</span>
-              <span>{formatCurrency(order.total)}</span>
+              <span className="font-mono font-black">{formatCurrency(order.total)}</span>
             </div>
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Dibayar</span>
-              <span>{formatCurrency(order.paid_amount)}</span>
+            <div className="flex justify-between text-sm">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Dibayar</span>
+              <span className="font-mono font-bold">{formatCurrency(order.paid_amount)}</span>
             </div>
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Kembalian</span>
-              <span>{formatCurrency(order.change_amount)}</span>
+            <div className="flex justify-between text-sm">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Kembalian</span>
+              <span className="font-mono font-bold">{formatCurrency(order.change_amount)}</span>
             </div>
-            <Separator />
+            <div className="border-t-[3px] border-foreground my-1" />
             {order.payments?.map((p: any) => (
-              <div key={p.id} className="flex justify-between text-xs">
-                <span className="text-muted-foreground">{p.method}</span>
+              <div key={p.id} className="flex justify-between text-[10px] font-mono font-bold">
+                <span className="text-muted-foreground uppercase">{p.method}</span>
                 <span>{formatCurrency(p.amount)}</span>
               </div>
             ))}

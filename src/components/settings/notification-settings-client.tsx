@@ -69,8 +69,8 @@ export function NotificationSettingsClient({ initial }: { initial?: Partial<Noti
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold">Pengaturan Notifikasi</h2>
-        <p className="text-sm text-muted-foreground">Atur notifikasi apa yang ingin diterima</p>
+        <h2 className="font-display text-3xl font-black uppercase tracking-tighter leading-none">Pengaturan Notifikasi</h2>
+        <p className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Atur notifikasi apa yang ingin diterima</p>
       </div>
 
       <Card>
@@ -82,7 +82,7 @@ export function NotificationSettingsClient({ initial }: { initial?: Partial<Noti
         <Separator />
         <CardContent className="grid gap-3 pt-4 sm:grid-cols-2">
           {ITEMS.map((item) => (
-            <div key={item.key} className="flex items-center justify-between rounded-lg border p-3">
+            <div key={item.key} className="flex items-center justify-between border-2 border-foreground bg-card p-3 shadow-[3px_3px_0_0_hsl(var(--foreground))]">
               <div>
                 <p className="text-sm font-medium">{item.label}</p>
                 <p className="text-xs text-muted-foreground">{item.description}</p>

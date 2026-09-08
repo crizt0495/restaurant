@@ -170,8 +170,8 @@ export function CustomersClient({ customers, canCreate, canEdit }: CustomersClie
     <div className="space-y-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-2xl font-bold">Pelanggan</h2>
-          <p className="text-sm text-muted-foreground">Kelola data customer &amp; loyalty</p>
+          <h2 className="font-display text-3xl font-black uppercase tracking-tighter leading-none">Pelanggan</h2>
+          <p className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Kelola data customer &amp; loyalty</p>
         </div>
         {canCreate && (
           <Button size="sm" onClick={openCreate}>
@@ -198,7 +198,7 @@ export function CustomersClient({ customers, canCreate, canEdit }: CustomersClie
           </CardContent>
         </Card>
       ) : (
-        <div className="overflow-x-auto rounded-lg border">
+        <div className="overflow-x-auto border-3 border-foreground shadow-[5px_5px_0_0_hsl(var(--foreground))]">
           <Table>
             <TableHeader>
               <TableRow>
@@ -331,9 +331,9 @@ export function CustomersClient({ customers, canCreate, canEdit }: CustomersClie
           </DialogHeader>
           {rewardCustomer && (
             <div className="space-y-4">
-              <div className="rounded-lg bg-muted p-4">
+              <div className="border-2 border-foreground bg-muted p-4 shadow-[3px_3px_0_0_hsl(var(--foreground))]">
                 <p className="text-sm text-muted-foreground">Poin tersedia</p>
-                <p className="text-2xl font-bold">{Number(rewardCustomer.points || 0).toLocaleString("id-ID")}</p>
+                <p className="font-display text-3xl font-black uppercase tracking-tighter leading-none">{Number(rewardCustomer.points || 0).toLocaleString("id-ID")}</p>
                 <p className="text-sm text-muted-foreground mt-1">{rewardCustomer.name}</p>
               </div>
               <div className="grid gap-2">

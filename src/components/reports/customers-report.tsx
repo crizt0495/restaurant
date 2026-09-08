@@ -37,27 +37,27 @@ export function CustomersReport({ customers, totalSpent, memberCount }: Customer
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold">Laporan Pelanggan</h2>
-        <p className="text-sm text-muted-foreground">Performa pelanggan dan loyalitas</p>
+        <h2 className="font-display text-3xl font-black uppercase tracking-tighter leading-none">Laporan Pelanggan</h2>
+        <p className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Performa pelanggan dan loyalitas</p>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-3">
         <Card>
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">Total Pelanggan</p>
-            <p className="text-2xl font-bold">{formatNumber(customers.length)}</p>
+            <p className="font-display text-3xl font-black uppercase tracking-tighter leading-none">{formatNumber(customers.length)}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">Anggota</p>
-            <p className="text-2xl font-bold">{formatNumber(memberCount)}</p>
+            <p className="font-display text-3xl font-black uppercase tracking-tighter leading-none">{formatNumber(memberCount)}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground">Total Pendapatan dari Pelanggan</p>
-            <p className="text-2xl font-bold">{formatCurrency(totalSpent)}</p>
+            <p className="font-display text-3xl font-black uppercase tracking-tighter leading-none">{formatCurrency(totalSpent)}</p>
           </CardContent>
         </Card>
       </div>

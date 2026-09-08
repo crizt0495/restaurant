@@ -66,8 +66,8 @@ export function AuditLogsClient({ logs: initial }: { logs: AuditLog[] }) {
   return (
     <div className="space-y-4">
       <div>
-        <h2 className="text-2xl font-bold">Log Audit</h2>
-        <p className="text-sm text-muted-foreground">Catatan aktivitas sistem</p>
+        <h2 className="font-display text-3xl font-black uppercase tracking-tighter leading-none">Log Audit</h2>
+        <p className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Catatan aktivitas sistem</p>
       </div>
 
       <div className="flex flex-col gap-3 sm:flex-row">
@@ -83,7 +83,7 @@ export function AuditLogsClient({ logs: initial }: { logs: AuditLog[] }) {
         <select
           value={actionFilter}
           onChange={(e) => setActionFilter(e.target.value)}
-          className="h-9 rounded-md border bg-background px-3 text-sm"
+          className="h-9 border-2 border-foreground bg-background px-3 text-sm shadow-[2px_2px_0_0_hsl(var(--foreground))]"
           aria-label="Filter aksi"
         >
           <option value="">Semua Aksi</option>
@@ -101,7 +101,7 @@ export function AuditLogsClient({ logs: initial }: { logs: AuditLog[] }) {
           </CardContent>
         </Card>
       ) : (
-        <div className="overflow-x-auto rounded-lg border">
+        <div className="overflow-x-auto border-3 border-foreground shadow-[5px_5px_0_0_hsl(var(--foreground))]">
           <Table>
             <TableHeader>
               <TableRow>
