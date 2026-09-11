@@ -57,8 +57,8 @@ begin
       coalesce(sum(case when status in ('CANCELLED','REFUNDED') then 1 else 0 end), 0) as cancelled,
       coalesce(sum(
         case when status not in ('CANCELLED','REFUNDED')
-        then oi.quantity * coalesce(
-          (select p.cost_price from products p where p.id = oi.product_id limit 1), 0
+        then quantity * coalesce(
+          (select p.cost_price from products p where p.id = product_id limit 1), 0
         ) end
       ), 0) as cogs
     from today_orders
