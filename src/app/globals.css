@@ -3,80 +3,71 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: 40 33% 97%;
-  --foreground: 240 10% 7%;
+  --background: 0 0% 100%;
+  --foreground: 222 47% 11%;
   --card: 0 0% 100%;
-  --card-foreground: 240 10% 7%;
+  --card-foreground: 222 47% 11%;
   --popover: 0 0% 100%;
-  --popover-foreground: 240 10% 7%;
-  --primary: 262 83% 58%;
+  --popover-foreground: 222 47% 11%;
+  --primary: 243 75% 59%;
   --primary-foreground: 0 0% 100%;
-  --secondary: 160 51% 32%;
+  --secondary: 220 14% 47%;
   --secondary-foreground: 0 0% 100%;
-  --muted: 40 15% 93%;
-  --muted-foreground: 240 5% 40%;
-  --accent: 14 91% 57%;
+  --muted: 220 14% 96%;
+  --muted-foreground: 220 9% 46%;
+  --accent: 190 90% 39%;
   --accent-foreground: 0 0% 100%;
-  --destructive: 0 84% 60%;
+  --destructive: 0 72% 51%;
   --destructive-foreground: 0 0% 100%;
   --success: 152 60% 40%;
   --success-foreground: 0 0% 100%;
-  --warning: 38 92% 50%;
-  --warning-foreground: 240 10% 7%;
-  --info: 210 100% 48%;
+  --warning: 38 92% 45%;
+  --warning-foreground: 0 0% 100%;
+  --info: 213 100% 50%;
   --info-foreground: 0 0% 100%;
-  --border: 240 10% 12%;
-  --input: 0 0% 100%;
-  --ring: 262 83% 58%;
-  --radius: 0rem;
-  --brutal-shadow: 5px 5px 0 0;
-  --brutal-shadow-sm: 3px 3px 0 0;
-  --brutal-shadow-lg: 8px 8px 0 0;
-  --brutal-shadow-xl: 12px 12px 0 0;
-  --brutal-ink: 240 10% 12%;
-  --brutal-yellow: 48 96% 53%;
-  --brutal-pink: 330 81% 60%;
-  --brutal-blue: 210 100% 48%;
-  --brutal-green: 152 60% 40%;
-  --brutal-orange: 14 91% 57%;
-  --brutal-purple: 262 83% 58%;
-  --brutal-lime: 84 60% 42%;
+  --border: 220 14% 90%;
+  --input: 220 14% 90%;
+  --ring: 243 75% 59%;
+  --radius: 0.5rem;
+  --shadow-color: 222 47% 11% / 0.08;
+  --shadow-color-sm: 222 47% 11% / 0.06;
+  --shadow: 0 1px 2px 0 hsl(var(--shadow-color-sm)), 0 4px 16px 0 hsl(var(--shadow-color));
+  --shadow-sm: 0 1px 3px 0 hsl(var(--shadow-color-sm)), 0 1px 2px 0 hsl(var(--shadow-color-sm));
+  --shadow-lg: 0 10px 30px -5px hsl(var(--shadow-color)), 0 4px 10px -6px hsl(var(--shadow-color-sm));
+  --shadow-lg-hover: 0 16px 40px -8px hsl(var(--shadow-color)), 0 6px 14px -8px hsl(var(--shadow-color-sm));
   --font-sans: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-space-mono), ui-monospace, monospace;
   --font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
 }
 
 .dark {
-  --background: 245 15% 9%;
-  --foreground: 40 20% 95%;
-  --card: 245 12% 13%;
-  --card-foreground: 40 20% 95%;
-  --popover: 245 12% 13%;
-  --popover-foreground: 40 20% 95%;
-  --primary: 262 83% 65%;
-  --primary-foreground: 245 15% 9%;
-  --secondary: 160 51% 42%;
-  --secondary-foreground: 245 15% 9%;
-  --muted: 245 12% 18%;
-  --muted-foreground: 240 5% 65%;
-  --accent: 14 91% 62%;
-  --accent-foreground: 245 15% 9%;
-  --destructive: 0 84% 65%;
+  --background: 224 28% 9%;
+  --foreground: 210 30% 96%;
+  --card: 224 26% 12%;
+  --card-foreground: 210 30% 96%;
+  --popover: 224 26% 12%;
+  --popover-foreground: 210 30% 96%;
+  --primary: 243 82% 66%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 220 12% 40%;
+  --secondary-foreground: 0 0% 100%;
+  --muted: 224 22% 18%;
+  --muted-foreground: 220 12% 68%;
+  --accent: 190 70% 42%;
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 70% 55%;
   --destructive-foreground: 0 0% 100%;
-  --success: 152 60% 50%;
-  --success-foreground: 245 15% 9%;
-  --warning: 38 92% 58%;
-  --warning-foreground: 245 15% 9%;
-  --info: 210 100% 55%;
+  --success: 152 60% 44%;
+  --success-foreground: 0 0% 100%;
+  --warning: 38 92% 52%;
+  --warning-foreground: 0 0% 8%;
+  --info: 213 100% 56%;
   --info-foreground: 0 0% 100%;
-  --border: 240 8% 25%;
-  --input: 245 12% 13%;
-  --ring: 262 83% 65%;
-  --brutal-shadow: 5px 5px 0 0 hsl(262 83% 65%);
-  --brutal-shadow-sm: 3px 3px 0 0 hsl(262 83% 65%);
-  --brutal-shadow-lg: 8px 8px 0 0 hsl(262 83% 65%);
-  --brutal-shadow-xl: 12px 12px 0 0 hsl(262 83% 65%);
-  --brutal-ink: 40 20% 95%;
+  --border: 224 22% 22%;
+  --input: 224 22% 20%;
+  --ring: 243 82% 66%;
+  --shadow-color: 220 20% 3% / 0.5;
+  --shadow-color-sm: 220 20% 3% / 0.3;
 }
 
 @theme inline {
@@ -106,24 +97,17 @@
   --color-input: hsl(var(--input));
   --color-ring: hsl(var(--ring));
   --color-chart-1: hsl(var(--primary));
-  --color-chart-2: hsl(var(--secondary));
-  --color-chart-3: hsl(var(--accent));
-  --color-chart-4: hsl(var(--destructive));
-  --color-chart-5: hsl(var(--info));
-  --font-sans: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-space-mono), ui-monospace, monospace;
-  --font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
-  --radius-sm: 0rem;
-  --radius-md: 0rem;
-  --radius-lg: 0rem;
-  --radius-xl: 0rem;
-  --color-brutal-yellow: hsl(var(--brutal-yellow));
-  --color-brutal-pink: hsl(var(--brutal-pink));
-  --color-brutal-blue: hsl(var(--brutal-blue));
-  --color-brutal-green: hsl(var(--brutal-green));
-  --color-brutal-orange: hsl(var(--brutal-orange));
-  --color-brutal-purple: hsl(var(--brutal-purple));
-  --color-brutal-lime: hsl(var(--brutal-lime));
+  --color-chart-2: hsl(var(--accent));
+  --color-chart-3: hsl(var(--success));
+  --color-chart-4: hsl(var(--warning));
+  --color-chart-5: hsl(var(--destructive));
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --font-display: var(--font-display);
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.625rem;
+  --radius-xl: 0.75rem;
 }
 
 * {
@@ -134,6 +118,8 @@ body {
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
   font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 @layer base {
@@ -145,49 +131,34 @@ body {
   }
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
-    font-weight: 700;
+    font-weight: 650;
     letter-spacing: -0.02em;
   }
-
   ::selection {
-    background-color: hsl(var(--primary));
-    color: hsl(var(--primary-foreground));
+    background-color: hsl(var(--primary) / 0.16);
+    color: hsl(var(--foreground));
   }
 }
 
+/* Scrollbar halus premium */
 ::-webkit-scrollbar {
-  width: 12px;
-  height: 12px;
+  width: 10px;
+  height: 10px;
 }
-
 ::-webkit-scrollbar-track {
   background: hsl(var(--muted));
-  border-left: 2px solid hsl(var(--border));
 }
-
 ::-webkit-scrollbar-thumb {
-  background: hsl(var(--foreground));
-  border: 2px solid hsl(var(--border));
+  background: hsl(var(--secondary) / 0.4);
+  border: 2px solid hsl(var(--muted));
+  border-radius: 9999px;
 }
-
 ::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--primary));
+  background: hsl(var(--secondary));
 }
-
 * {
   scrollbar-width: thin;
-  scrollbar-color: hsl(var(--foreground)) hsl(var(--muted));
-}
-
-@media print {
-  aside, header, nav, .no-print { display: none !important; }
-  main { padding: 0 !important; }
-  body { background: #fff; }
-  .receipt-print {
-    max-width: 100% !important;
-    box-shadow: none !important;
-    border: none !important;
-  }
+  scrollbar-color: hsl(var(--secondary) / 0.5) hsl(var(--muted));
 }
 
 @layer utilities {
@@ -195,293 +166,176 @@ body {
     font-family: var(--font-mono), ui-monospace, monospace;
   }
 
-  .brutal {
-    border: 3px solid hsl(var(--brutal-ink));
-    box-shadow: var(--brutal-shadow);
+  /* --- Modern minimal premium primitives (nama untuk kompatibilitas, isi premium) --- */
+  .brutal-card {
+    background-color: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .brutal-card-lg {
+    background-color: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow);
   }
 
   .brutal-sm {
-    border: 2px solid hsl(var(--brutal-ink));
-    box-shadow: var(--brutal-shadow-sm);
+    border-radius: var(--radius-md);
+  }
+
+  .brutal {
+    border-radius: var(--radius-md);
   }
 
   .brutal-lg {
-    border: 3px solid hsl(var(--brutal-ink));
-    box-shadow: var(--brutal-shadow-lg);
+    border-radius: var(--radius-lg);
   }
 
-  .brutal-xl {
-    border: 3px solid hsl(var(--brutal-ink));
-    box-shadow: var(--brutal-shadow-xl);
+  .brutal-hover {
+    transition: transform 140ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 140ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .brutal-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+  .brutal-hover:active {
+    transform: translateY(0);
   }
 
-  .brutal-flat {
-    border: 3px solid hsl(var(--brutal-ink));
-    box-shadow: none;
+  .brutal-active:active {
+    transform: translateY(1px);
   }
 
   .brutal-shadow {
-    box-shadow: var(--brutal-shadow);
+    box-shadow: var(--shadow);
   }
-
   .brutal-shadow-sm {
-    box-shadow: var(--brutal-shadow-sm);
+    box-shadow: var(--shadow-sm);
   }
-
   .brutal-shadow-lg {
-    box-shadow: var(--brutal-shadow-lg);
+    box-shadow: var(--shadow-lg);
   }
 
-  .brutal-shadow-xl {
-    box-shadow: var(--brutal-shadow-xl);
+  .brutal-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.25rem 0.625rem;
+    border-radius: 9999px;
+    background: hsl(var(--primary) / 0.08);
+    color: hsl(var(--primary));
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    border: 1px solid hsl(var(--primary) / 0.15);
+  }
+
+  .brutal-badge {
+    border-radius: 9999px;
   }
 
   .brutal-primary {
     background-color: hsl(var(--primary));
     color: hsl(var(--primary-foreground));
-    border: 3px solid hsl(var(--brutal-ink));
-    box-shadow: var(--brutal-shadow);
-  }
-
-  .brutal-secondary {
-    background-color: hsl(var(--secondary));
-    color: hsl(var(--secondary-foreground));
-    border: 3px solid hsl(var(--brutal-ink));
-    box-shadow: var(--brutal-shadow);
+    border-radius: var(--radius-md);
   }
 
   .brutal-accent {
-    background-color: hsl(var(--accent));
-    color: hsl(var(--accent-foreground));
-    border: 3px solid hsl(var(--brutal-ink));
-    box-shadow: var(--brutal-shadow);
-  }
-
-  .brutal-destructive {
-    background-color: hsl(var(--destructive));
-    color: hsl(var(--destructive-foreground));
-    border: 3px solid hsl(var(--brutal-ink));
-    box-shadow: var(--brutal-shadow);
-  }
-
-  .brutal-success {
-    background-color: hsl(var(--success));
-    color: hsl(var(--success-foreground));
-    border: 3px solid hsl(var(--brutal-ink));
-    box-shadow: var(--brutal-shadow);
-  }
-
-  .brutal-hover {
-    transition: transform 100ms ease, box-shadow 100ms ease;
-  }
-
-  .brutal-hover:hover {
-    transform: translate(-2px, -2px);
-    box-shadow: 7px 7px 0 0 hsl(var(--brutal-ink));
-  }
-
-  .brutal-active:active {
-    transform: translate(3px, 3px);
-    box-shadow: 0 0 0 0 hsl(var(--brutal-ink));
-  }
-
-  .brutal-tag {
-    border: 2px solid hsl(var(--brutal-ink));
-    box-shadow: 2px 2px 0 0 hsl(var(--brutal-ink));
-    font-family: var(--font-mono), ui-monospace, monospace;
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  .brutal-input {
-    border: 3px solid hsl(var(--brutal-ink)) !important;
-    box-shadow: 4px 4px 0 0 hsl(var(--brutal-ink));
-    font-family: var(--font-sans);
-    font-weight: 500;
-  }
-
-  .brutal-input:focus {
-    box-shadow: 4px 4px 0 0 hsl(var(--primary));
-    border-color: hsl(var(--primary)) !important;
-    outline: none;
-  }
-
-  .brutal-table {
-    border: 3px solid hsl(var(--brutal-ink));
-  }
-
-  .brutal-table th {
-    background-color: hsl(var(--brutal-ink));
-    color: hsl(0 0% 100%);
-    font-family: var(--font-mono), ui-monospace, monospace;
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    padding: 0.75rem 1rem;
-    text-align: left;
-  }
-
-  .brutal-table td {
-    padding: 0.75rem 1rem;
-    border-top: 2px solid hsl(var(--brutal-ink));
-    font-weight: 500;
-  }
-
-  .brutal-table tr:hover td {
-    background-color: hsl(var(--primary) / 0.06);
-  }
-
-  .brutal-card {
-    background-color: hsl(var(--card));
-    border: 3px solid hsl(var(--brutal-ink));
-    box-shadow: var(--brutal-shadow);
-    padding: 1.5rem;
-  }
-
-  .brutal-card-lg {
-    background-color: hsl(var(--card));
-    border: 3px solid hsl(var(--brutal-ink));
-    box-shadow: var(--brutal-shadow-lg);
-    padding: 2rem;
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
+    color: hsl(var(--primary-foreground));
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow);
   }
 
   .brutal-section {
-    background-color: hsl(var(--card));
-    border: 3px solid hsl(var(--brutal-ink));
-    box-shadow: var(--brutal-shadow);
+    border-radius: var(--radius-lg);
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    box-shadow: var(--shadow-sm);
   }
 
-  .brutal-badge {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.25rem 0.75rem;
-    border: 2px solid hsl(var(--brutal-ink));
-    box-shadow: 2px 2px 0 0 hsl(var(--brutal-ink));
-    font-family: var(--font-mono), ui-monospace, monospace;
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    line-height: 1;
+  .brutal-stripe, .brutal-dots, .brutal-grid {
+    background: transparent;
   }
 
-  .brutal-divider {
-    border: none;
-    border-top: 3px solid hsl(var(--brutal-ink));
-    margin: 1.5rem 0;
-  }
-
-  .brutal-stripe {
-    background-image: repeating-linear-gradient(
-      -45deg,
-      transparent,
-      transparent 10px,
-      hsl(var(--brutal-ink) / 0.04) 10px,
-      hsl(var(--brutal-ink) / 0.04) 20px
-    );
-  }
-
-  .brutal-dots {
-    background-image: radial-gradient(
-      circle,
-      hsl(var(--brutal-ink) / 0.08) 1px,
-      transparent 1px
-    );
-    background-size: 16px 16px;
-  }
-
-  .brutal-grid {
-    background-image:
-      linear-gradient(hsl(var(--brutal-ink) / 0.05) 1px, transparent 1px),
-      linear-gradient(90deg, hsl(var(--brutal-ink) / 0.05) 1px, transparent 1px);
-    background-size: 20px 20px;
-  }
-
-  .neo-gradient {
-    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%);
-    border: 3px solid hsl(var(--brutal-ink));
-    box-shadow: var(--brutal-shadow-lg);
-  }
-
-  .neo-gradient-subtle {
-    background: linear-gradient(135deg, hsl(var(--card)) 0%, hsl(var(--muted)) 100%);
-    border: 3px solid hsl(var(--brutal-ink));
-    box-shadow: var(--brutal-shadow);
-  }
-
-  .neo-glow {
-    box-shadow: 0 0 0 3px hsl(var(--primary)), var(--brutal-shadow);
-  }
-
-  .neo-glow-accent {
-    box-shadow: 0 0 0 3px hsl(var(--accent)), var(--brutal-shadow);
-  }
-
-  .neo-offset {
-    position: relative;
-  }
-
-  .neo-offset::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border: 3px solid hsl(var(--brutal-ink));
-    transform: translate(4px, 4px);
-    z-index: -1;
-    background: hsl(var(--primary) / 0.15);
-  }
-
-  .neo-offset-accent::before {
-    background: hsl(var(--accent) / 0.15);
-  }
-
-  .animate-brutal-bounce {
-    animation: brutal-bounce 0.5s ease-in-out;
-  }
-
-  @keyframes brutal-bounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-4px); }
-  }
-
+  /* --- Entri animasi halus premium --- */
   .animate-brutal-pop {
-    animation: brutal-pop 0.3s ease-out;
+    animation: premium-pop 240ms cubic-bezier(0.2, 0.8, 0.2, 1);
   }
-
-  @keyframes brutal-pop {
-    0% { transform: scale(0.95); opacity: 0.8; }
-    50% { transform: scale(1.02); }
+  @keyframes premium-pop {
+    0% { transform: scale(0.96); opacity: 0.6; }
     100% { transform: scale(1); opacity: 1; }
   }
 
-  .animate-brutal-slide-up {
-    animation: brutal-slide-up 0.4s ease-out;
+  .animate-brutal-bounce, .animate-float, .animate-brutal-slide-up {
+    animation: premium-rise 320ms cubic-bezier(0.2, 0.8, 0.2, 1);
   }
-
-  @keyframes brutal-slide-up {
-    0% { transform: translateY(20px); opacity: 0; }
+  @keyframes premium-rise {
+    0% { transform: translateY(10px); opacity: 0; }
     100% { transform: translateY(0); opacity: 1; }
   }
 
+  .animate-brutal-slide-in {
+    animation: premium-rise 320ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .animate-brutal-bounce-in {
+    animation: premium-rise 340ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .animate-brutal-slide-up {
+    animation: premium-rise 340ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
   .animate-brutal-shake {
-    animation: brutal-shake 0.5s ease-in-out;
+    animation: premium-shake 380ms ease-in-out;
   }
-
-  @keyframes brutal-shake {
+  @keyframes premium-shake {
     0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-3px); }
-    75% { transform: translateX(3px); }
+    30% { transform: translateX(-4px); }
+    60% { transform: translateX(4px); }
   }
 
-  .animate-float {
-    animation: float 3s ease-in-out infinite;
+  .animate-brutal-wiggle {
+    animation: premium-wiggle 500ms ease-in-out;
+  }
+  @keyframes premium-wiggle {
+    0%, 100% { transform: rotate(0); }
+    30% { transform: rotate(-3deg); }
+    60% { transform: rotate(3deg); }
   }
 
-  @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-6px); }
+  .animate-brutal-tilt {
+    animation: premium-tilt 560ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  @keyframes premium-tilt {
+    0% { transform: rotate(0) scale(1); }
+    40% { transform: rotate(-3deg) scale(1.02); }
+    100% { transform: rotate(0) scale(1); }
+  }
+}
+
+/* =====================================================
+   Backward-compat: transform any leftover hard-shift
+   shadow utilities into lightweight premium shadows.
+   (Kept as classes so existing call sites still work.)
+   ===================================================== */
+.shadow-\[5px_5px_0_0_hsl\(var\(--brutal-shadow\)\)\],
+.shadow-\[4px_4px_0_0_hsl\(var\(--brutal-ink\)\)\],
+.brutal-offset::before {
+  box-shadow: none;
+}
+
+@media print {
+  aside, header, nav, .no-print { display: none !important; }
+  main { padding: 0 !important; }
+  body { background: #fff; color: #000; }
+  .receipt-print, .brutal-card, .brutal-card-lg {
+    max-width: 100% !important;
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
   }
 }
