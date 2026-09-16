@@ -3,26 +3,26 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const badgeVariants = cva(
-  "inline-flex items-center justify-center text-[10px] font-black uppercase tracking-widest border-2 transition-all duration-150",
+  "inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors",
   {
     variants: {
       variant: {
         default:
-          "bg-primary text-primary-foreground border-foreground shadow-[3px_3px_0_0_hsl(var(--foreground))]",
+          "bg-primary/10 text-primary border border-primary/15",
         secondary:
-          "bg-secondary text-secondary-foreground border-foreground shadow-[3px_3px_0_0_hsl(var(--foreground))]",
+          "bg-secondary text-secondary-foreground border border-border",
         destructive:
-          "bg-destructive text-destructive-foreground border-foreground shadow-[3px_3px_0_0_hsl(var(--foreground))]",
+          "bg-destructive/10 text-destructive border border-destructive/15",
         outline:
-          "bg-background text-foreground border-foreground shadow-[3px_3px_0_0_hsl(var(--foreground))]",
+          "bg-transparent text-muted-foreground border border-border",
         success:
-          "bg-success text-success-foreground border-foreground shadow-[3px_3px_0_0_hsl(var(--foreground))]",
+          "bg-success/10 text-success border border-success/15",
         warning:
-          "bg-warning text-warning-foreground border-foreground shadow-[3px_3px_0_0_hsl(var(--foreground))]",
+          "bg-warning/10 text-warning border border-warning/15",
         info:
-          "bg-info text-info-foreground border-foreground shadow-[3px_3px_0_0_hsl(var(--foreground))]",
+          "bg-info/10 text-info border border-info/15",
         neutral:
-          "bg-muted text-muted-foreground border-foreground shadow-[3px_3px_0_0_hsl(var(--foreground))]",
+          "bg-muted text-muted-foreground border border-border",
       },
     },
     defaultVariants: {
@@ -37,7 +37,7 @@ export interface BadgeProps
 
 function Badge({ className, variant, ...props }: BadgeProps) {
   return (
-    <div className={cn(badgeVariants({ variant }), "px-2.5 py-1", className)} {...props} />
+    <div className={cn(badgeVariants({ variant }), className)} {...props} />
   )
 }
 
