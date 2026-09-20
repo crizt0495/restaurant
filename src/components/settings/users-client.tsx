@@ -193,7 +193,7 @@ export function UsersClient({ users, branches, roles, canCreate, canEdit }: User
           </CardContent>
         </Card>
       ) : (
-        <div className="overflow-x-auto border-3 border-foreground shadow-[5px_5px_0_0_hsl(var(--foreground))]">
+        <div className="overflow-x-auto">
           <Table>
             <TableHeader>
               <TableRow>

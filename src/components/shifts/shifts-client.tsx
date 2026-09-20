@@ -134,7 +134,7 @@ export function ShiftsClient({ shifts: initialShifts, canOpen, canClose }: Shift
       </div>
 
       {openShifts.length > 0 && (
-        <Card className="border-warning bg-warning/10 shadow-[5px_5px_0_0_hsl(var(--warning))]">
+        <Card className="border-warning bg-warning/10">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-base">
               <Clock className="h-4 w-4 text-warning" />
@@ -171,7 +171,7 @@ export function ShiftsClient({ shifts: initialShifts, canOpen, canClose }: Shift
           </CardContent>
         </Card>
       ) : (
-        <div className="overflow-x-auto border-3 border-foreground shadow-[5px_5px_0_0_hsl(var(--foreground))]">
+        <div className="overflow-x-auto">
           <Table>
             <TableHeader>
               <TableRow>

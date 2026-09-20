@@ -7,14 +7,14 @@ import { PwaRegistration } from "@/components/pwa-registration"
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
-  variable: "--font-sans",
+  variable: "--font-space-grotesk",
   display: "swap",
 })
 
 const spaceMono = Space_Mono({
   subsets: ["latin"],
   weight: ["400", "700"],
-  variable: "--font-mono",
+  variable: "--font-space-mono",
   display: "swap",
 })
 

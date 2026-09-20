@@ -164,7 +164,7 @@ export function KitchenDisplay({ orders: initialOrders }: { orders: KitchenOrder
 
       <div className="grid gap-4 md:grid-cols-3">
         {columns.map((col) => (
-          <div key={col.status} className={`brutal-card ${col.color}`}>
+          <div key={col.status} className={`border-3 p-4 shadow-[4px_4px_0_0_hsl(var(--foreground))] ${col.color}`}>
             <div className="mb-3 flex items-center justify-between">
               <span className="text-xs font-black uppercase tracking-wider">{col.label}</span>
             </div>

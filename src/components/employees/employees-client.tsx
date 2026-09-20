@@ -236,7 +236,7 @@ export function EmployeesClient({ employees, branches, shifts, canCreate, canEdi
               </CardContent>
             </Card>
           ) : (
-            <div className="overflow-x-auto border-3 border-foreground shadow-[5px_5px_0_0_hsl(var(--foreground))]">
+            <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -286,7 +286,7 @@ export function EmployeesClient({ employees, branches, shifts, canCreate, canEdi
               </CardContent>
             </Card>
           ) : (
-            <div className="overflow-x-auto border-3 border-foreground shadow-[5px_5px_0_0_hsl(var(--foreground))]">
+            <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
                   <TableRow>

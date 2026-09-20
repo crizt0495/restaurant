@@ -30,12 +30,12 @@ const STATUS_STYLE: Record<string, { variant: "success" | "warning" | "info" | "
 }
 
 const STATUS_COLOR: Record<string, string> = {
-  AVAILABLE: "border-success bg-success/10 shadow-[3px_3px_0_0_hsl(var(--success))]",
-  OCCUPIED: "border-warning bg-warning/10 shadow-[3px_3px_0_0_hsl(var(--warning))]",
-  RESERVED: "border-info bg-info/10 shadow-[3px_3px_0_0_hsl(var(--info))]",
-  WAITING_PAYMENT: "border-accent bg-accent/10 shadow-[3px_3px_0_0_hsl(var(--accent))]",
-  CLEANING: "border-info bg-info/10 shadow-[3px_3px_0_0_hsl(var(--info))]",
-  OUT_OF_SERVICE: "border-destructive bg-destructive/10 shadow-[3px_3px_0_0_hsl(var(--destructive))]",
+  AVAILABLE: "border-success bg-success/10",
+  OCCUPIED: "border-warning bg-warning/10",
+  RESERVED: "border-info bg-info/10",
+  WAITING_PAYMENT: "border-accent bg-accent/10",
+  CLEANING: "border-info bg-info/10",
+  OUT_OF_SERVICE: "border-destructive bg-destructive/10",
 }
 
 export function TablesClient({ tables: initialTables }: { tables: TableItem[] }) {
@@ -118,7 +118,7 @@ export function TablesClient({ tables: initialTables }: { tables: TableItem[] })
                       {table.area?.name || "Tanpa area"} · Kap. {table.capacity}
                     </p>
                   </div>
-                  <Badge variant={style.variant} className="brutal-tag">{style.label}</Badge>
+                  <Badge variant={style.variant}>{style.label}</Badge>
                 </div>
 
                 {activeOrder ? (
