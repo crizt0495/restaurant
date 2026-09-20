@@ -33,7 +33,7 @@ export default async function DashboardLayout({
           {children}
         </main>
       </div>
-      <MobileNav />
+      <MobileNav permissions={user.permissions} isSuperAdmin={user.is_super_admin} />
     </div>
   )
 }

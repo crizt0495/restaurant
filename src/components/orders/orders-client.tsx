@@ -220,7 +220,7 @@ export function OrdersClient({ orders: initialOrders }: OrdersClientProps) {
           </DialogHeader>
           <p className="text-sm">
             Apakah anda yakin mengubah status order <b>{confirmAction?.order?.order_number}</b> menjadi{" "}
-            <b>{confirmAction?.action}</b>?
+            <b>{confirmAction?.action ? translateStatus(confirmAction.action) : ""}</b>?
           </p>
           <DialogFooter>
             <Button variant="outline" onClick={() => setConfirmAction(null)}>Batal</Button>

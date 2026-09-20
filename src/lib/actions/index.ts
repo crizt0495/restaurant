@@ -1770,18 +1770,20 @@ export async function closeCashierShift(actualCash: number, notes?: string) {
     new_data: { expected: expectedCash, actual: actualCash, difference },
   })
 
-  // Notify owner about shortage/overage
+  // Notify owner about shortage/overage (per-user rows so each staff can mark as read)
   const varianceType = difference > 0 ? "OVER" : difference < 0 ? "SHORT" : "MATCH"
-  await supabase.from("notifications").insert({
-    organization_id: user.organization_id,
-    type: "warning",
-    title: "Cashier Closing Shift",
-    message:
-      varianceType === "MATCH"
-        ? `Shift ${shift.id.slice(0, 8)} ditutup, kas cocok (${expectedCash})`
-        : `Shift ${shift.id.slice(0, 8)} ditutup dengan selisih ${varianceType} ${Math.abs(difference)}`,
-    data: { shift_id: shift.id, difference },
-  })
+  if (user.organization_id) {
+    await supabase.rpc("notify_staff", {
+      p_org: user.organization_id,
+      p_type: "warning",
+      p_title: "Cashier Closing Shift",
+      p_message:
+        varianceType === "MATCH"
+          ? `Shift ${shift.id.slice(0, 8)} ditutup, kas cocok (${expectedCash})`
+          : `Shift ${shift.id.slice(0, 8)} ditutup dengan selisih ${varianceType} ${Math.abs(difference)}`,
+      p_data: { shift_id: shift.id, difference },
+    })
+  }
 
   revalidatePath("/shifts")
   return { success: true }
@@ -1852,13 +1854,15 @@ export async function refundOrder(
     new_data: { amount, reason },
   })
 
-  await supabase.from("notifications").insert({
-    organization_id: order.organization_id,
-    type: "payment",
-    title: "Refund",
-    message: `Refund ${amount} untuk order ${order.id.slice(0, 8)} oleh ${user.full_name}`,
-    data: { order_id: order.id, amount },
-  })
+  if (order.organization_id) {
+    await supabase.rpc("notify_staff", {
+      p_org: order.organization_id,
+      p_type: "payment",
+      p_title: "Refund",
+      p_message: `Refund ${amount} untuk order ${order.id.slice(0, 8)} oleh ${user.full_name}`,
+      p_data: { order_id: order.id, amount },
+    })
+  }
 
   revalidatePath("/orders")
   revalidatePath("/pos")

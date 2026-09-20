@@ -16,6 +16,15 @@ values
   ('00000000-0000-0000-0000-000000000003', '00000000-0000-0000-0000-000000000001', 'Branch Selatan', 'SOUTH', 'Jl. Raya Cilandak No. 45, Jakarta Selatan', '021-555-5678', 'Jakarta Selatan', true),
   ('00000000-0000-0000-0000-000000000004', '00000000-0000-0000-0000-000000000001', 'Branch Utara', 'NORTH', 'Jl. Kelapa Gading No. 78, Jakarta Utara', '021-555-9012', 'Jakarta Utara', true);
 
+-- Attach demo users to Main Branch (branch rows only exist after this
+-- seed runs; migration assignments could not resolve them yet).
+-- SUPER_ADMIN still reads across ALL branches via role-based RLS; the
+-- concrete branch is required for create_order_atomic / POS order writes.
+update profiles
+set branch_id = '00000000-0000-0000-0000-000000000002'
+where username in ('admin','owner','manager','cashier','waiter','kitchen','inventory','accounting')
+  and branch_id is null;
+
 -- =====================================================
 -- PERMISSIONS
 -- =====================================================
@@ -68,14 +77,16 @@ insert into permissions (id, key, name, description, module) values
   ('10000000-0000-0000-0000-000000000045', 'suppliers.view', 'View Suppliers', 'View suppliers', 'Suppliers'),
   ('10000000-0000-0000-0000-000000000046', 'suppliers.create', 'Create Suppliers', 'Create suppliers', 'Suppliers'),
   ('10000000-0000-0000-0000-000000000047', 'suppliers.edit', 'Edit Suppliers', 'Edit suppliers', 'Suppliers'),
-  ('10000000-0000-0000-0000-000000000048', 'suppliers.delete', 'Delete Suppliers', 'Delete suppliers', 'Suppliers');
+  ('10000000-0000-0000-0000-000000000048', 'suppliers.delete', 'Delete Suppliers', 'Delete suppliers', 'Suppliers')
+on conflict (key) do nothing;
 
 -- =====================================================
 -- ROLE PERMISSIONS
 -- =====================================================
 -- SUPER_ADMIN has all (represented below)
 insert into role_permissions (role, permission_id)
-select 'SUPER_ADMIN', id from permissions;
+select 'SUPER_ADMIN', id from permissions
+on conflict (role, permission_id) do nothing;
 
 -- OWNER
 insert into role_permissions (role, permission_id)
@@ -94,7 +105,8 @@ where key in ('dashboard.view','sales.view','sales.create','sales.edit','sales.d
   'reservations.view','reservations.create',
   'promotions.view','promotions.create',
   'shifts.view','shifts.open','shifts.close','audit.view',
-  'suppliers.view','suppliers.create','suppliers.edit','suppliers.delete');
+  'suppliers.view','suppliers.create','suppliers.edit','suppliers.delete')
+on conflict (role, permission_id) do nothing;
 
 -- MANAGER
 insert into role_permissions (role, permission_id)
@@ -109,7 +121,8 @@ where key in ('dashboard.view','sales.view','sales.create','sales.edit',
   'expenses.view','expenses.create',
   'employees.view','employees.create','reservations.view','reservations.create',
   'shifts.view','shifts.open','shifts.close',
-  'suppliers.view','suppliers.create','suppliers.edit');
+  'suppliers.view','suppliers.create','suppliers.edit')
+on conflict (role, permission_id) do nothing;
 
 -- CASHIER
 insert into role_permissions (role, permission_id)
@@ -117,30 +130,35 @@ select 'CASHIER', id from permissions
 where key in ('dashboard.view','sales.view','sales.create','sales.edit',
   'orders.view','orders.create','orders.edit',
   'customers.view','customers.create',
-  'shifts.view','shifts.open','shifts.close');
+  'shifts.view','shifts.open','shifts.close')
+on conflict (role, permission_id) do nothing;
 
 -- KITCHEN
 insert into role_permissions (role, permission_id)
 select 'KITCHEN', id from permissions
-where key in ('dashboard.view','orders.view','orders.edit','customers.view');
+where key in ('dashboard.view','orders.view','orders.edit','customers.view')
+on conflict (role, permission_id) do nothing;
 
 -- WAITER
 insert into role_permissions (role, permission_id)
 select 'WAITER', id from permissions
 where key in ('dashboard.view','orders.view','orders.create','orders.edit',
-  'customers.view','customers.create','reservations.view','reservations.create');
+  'customers.view','customers.create','reservations.view','reservations.create')
+on conflict (role, permission_id) do nothing;
 
 -- INVENTORY
 insert into role_permissions (role, permission_id)
 select 'INVENTORY', id from permissions
 where key in ('inventory.view','inventory.create','inventory.edit','inventory.adjust',
   'purchases.view','purchases.create',
-  'suppliers.view','suppliers.create');
+  'suppliers.view','suppliers.create')
+on conflict (role, permission_id) do nothing;
 
 -- ACCOUNTING
 insert into role_permissions (role, permission_id)
 select 'ACCOUNTING', id from permissions
-where key in ('dashboard.view','reports.view','reports.export','expenses.view','audit.view');
+where key in ('dashboard.view','reports.view','reports.export','expenses.view','audit.view')
+on conflict (role, permission_id) do nothing;
 
 -- =====================================================
 -- CATEGORIES

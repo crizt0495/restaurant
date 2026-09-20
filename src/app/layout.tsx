@@ -38,14 +38,14 @@ export default function RootLayout({
     <html lang="id" suppressHydrationWarning className={`dark ${spaceGrotesk.variable} ${spaceMono.variable}`}>
       <head>
         <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#7c3aed" />
+        <meta name="theme-color" content="#4f46e5" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
       </head>
       <body className="min-h-full flex flex-col antialiased">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           {children}
           <Toaster position="top-right" toastOptions={{
-            className: "border-3 border-foreground shadow-[5px_5px_0_0_hsl(var(--foreground))] font-bold !rounded-none",
+            className: "border-3 border-foreground shadow-[5px_5px_0_0_hsl(var(--foreground))] font-bold rounded-none!",
           }} />
           <PwaRegistration />
         </ThemeProvider>

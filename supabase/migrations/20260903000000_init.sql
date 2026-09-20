@@ -409,18 +409,6 @@ create table if not exists recipes (
 
 create index if not exists idx_recipes_product on recipes(product_id);
 
-create table if not exists recipe_items (
-  id uuid primary key default uuid_generate_v4(),
-  recipe_id uuid not null references recipes(id) on delete cascade,
-  inventory_item_id uuid not null references inventory_items(id) on delete cascade,
-  quantity numeric(14,2) not null default 1,
-  unit text,
-  created_at timestamptz default now()
-);
-
-create index if not exists idx_ri_recipe on recipe_items(recipe_id);
-create index if not exists idx_ri_inv on recipe_items(inventory_item_id);
-
 -- =====================================================
 -- WAREHOUSES & INVENTORY
 -- =====================================================
@@ -459,6 +447,18 @@ create table if not exists inventory_items (
 
 create index if not exists idx_inv_org on inventory_items(organization_id);
 create index if not exists idx_inv_sku on inventory_items(sku);
+
+create table if not exists recipe_items (
+  id uuid primary key default uuid_generate_v4(),
+  recipe_id uuid not null references recipes(id) on delete cascade,
+  inventory_item_id uuid not null references inventory_items(id) on delete cascade,
+  quantity numeric(14,2) not null default 1,
+  unit text,
+  created_at timestamptz default now()
+);
+
+create index if not exists idx_ri_recipe on recipe_items(recipe_id);
+create index if not exists idx_ri_inv on recipe_items(inventory_item_id);
 
 create table if not exists inventory_item_warehouses (
   id uuid primary key default uuid_generate_v4(),
@@ -967,11 +967,11 @@ stable
 security definer
 set search_path = public
 as $$
-  select p.organization_id::uuid
-  from (
-    select pr.branch_id from profiles pr where pr.user_id = auth.uid()
-    limit 1
-  ) p
+  select b.organization_id
+  from profiles pr
+  join branches b on b.id = pr.branch_id
+  where pr.user_id = auth.uid()
+  limit 1
 $$;
 
 -- Current user's profile

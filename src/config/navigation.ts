@@ -46,7 +46,7 @@ export const dashboardNav: NavSection[] = [
       { title: "Pesanan", href: "/orders", icon: ClipboardList, permission: "orders.view" },
       { title: "Meja", href: "/tables", icon: Grid3X3, permission: "orders.view" },
       { title: "Dapur", href: "/kitchen", icon: ChefHat, permission: "orders.view" },
-      { title: "Reservasi", href: "/reservations", icon: CalendarDays },
+      { title: "Reservasi", href: "/reservations", icon: CalendarDays, permission: "reservations.view" },
     ],
   },
   {
@@ -56,11 +56,11 @@ export const dashboardNav: NavSection[] = [
       { title: "Resep", href: "/recipes", icon: BookOpen, permission: "products.view" },
       { title: "Inventaris", href: "/inventory", icon: Boxes, permission: "inventory.view" },
       { title: "Pembelian", href: "/purchases", icon: ShoppingBag, permission: "purchases.view" },
-      { title: "Pemasok", href: "/suppliers", icon: Truck },
-      { title: "Pelanggan", href: "/customers", icon: Users },
-      { title: "Promosi", href: "/promotions", icon: Percent },
-      { title: "Karyawan", href: "/employees", icon: UserRound },
-      { title: "Pengeluaran", href: "/expenses", icon: Wallet },
+      { title: "Pemasok", href: "/suppliers", icon: Truck, permission: "suppliers.view" },
+      { title: "Pelanggan", href: "/customers", icon: Users, permission: "customers.view" },
+      { title: "Promosi", href: "/promotions", icon: Percent, permission: "promotions.view" },
+      { title: "Karyawan", href: "/employees", icon: UserRound, permission: "employees.view" },
+      { title: "Pengeluaran", href: "/expenses", icon: Wallet, permission: "expenses.view" },
       { title: "Shift", href: "/shifts", icon: Clock, permission: "shifts.view" },
       { title: "Log Audit", href: "/audit-logs", icon: FileText, permission: "audit.view" },
     ],
@@ -86,10 +86,10 @@ export const dashboardNav: NavSection[] = [
 ]
 
 export const bottomNav: NavItem[] = [
-  { title: "Beranda", href: "/dashboard", icon: LayoutDashboard },
-  { title: "POS", href: "/pos", icon: ShoppingCart },
-  { title: "Pesanan", href: "/orders", icon: ClipboardList },
-  { title: "Dapur", href: "/kitchen", icon: ChefHat },
+  { title: "Beranda", href: "/dashboard", icon: LayoutDashboard, permission: "dashboard.view" },
+  { title: "POS", href: "/pos", icon: ShoppingCart, permission: "orders.create" },
+  { title: "Pesanan", href: "/orders", icon: ClipboardList, permission: "orders.view" },
+  { title: "Dapur", href: "/kitchen", icon: ChefHat, permission: "orders.view" },
   { title: "Lainnya", href: "/settings", icon: Settings },
 ]
 

@@ -5,8 +5,19 @@ import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { bottomNav, type NavItem } from "@/config/navigation"
 
-export function MobileNav() {
+interface MobileNavProps {
+  permissions: string[]
+  isSuperAdmin: boolean
+}
+
+export function MobileNav({ permissions, isSuperAdmin }: MobileNavProps) {
   const pathname = usePathname()
+
+  const canView = (item: NavItem) => {
+    if (isSuperAdmin) return true
+    if (!item.permission) return true
+    return permissions.includes("*") || permissions.includes(item.permission)
+  }
 
   const isActive = (item: NavItem) =>
     item.href === "/dashboard"
@@ -16,7 +27,7 @@ export function MobileNav() {
   return (
     <nav className="fixed inset-x-0 bottom-0 z-40 border-t-[3px] border-foreground bg-background lg:hidden">
       <div className="flex items-stretch justify-around">
-        {bottomNav.map((item) => {
+        {bottomNav.filter(canView).map((item) => {
           const Icon = item.icon
           const active = isActive(item)
           return (

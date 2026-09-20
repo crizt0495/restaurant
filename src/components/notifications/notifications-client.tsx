@@ -148,7 +148,7 @@ export function NotificationsClient({ notifications: initial, unread: initialUnr
                   <div className="flex items-center gap-2">
                     <span className="text-sm font-medium">{n.title}</span>
                     {!n.is_read && (
-                      <span className="h-2 w-2 rounded-full bg-blue-500" />
+                      <span className="h-2 w-2 rounded-full bg-info" />
                     )}
                   </div>
                   <p className="text-sm text-muted-foreground">{n.message}</p>

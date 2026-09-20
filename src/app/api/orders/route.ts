@@ -136,13 +136,13 @@ export async function POST(req: Request) {
       .eq("id", tableId)
   }
 
-  // Notify staff
-  await admin.from("notifications").insert({
-    organization_id: branch.organization_id,
-    type: "new_order",
-    title: "Order Baru (QR Menu)",
-    message: `Order ${order.order_number} dari meja dikirim ke dapur`,
-    data: { order_id: order.id },
+  // Notify staff (one row per active staff member so each user can mark as read)
+  await admin.rpc("notify_staff", {
+    p_org: branch.organization_id,
+    p_type: "new_order",
+    p_title: "Order Baru (QR Menu)",
+    p_message: `Order ${order.order_number} dari meja dikirim ke dapur`,
+    p_data: { order_id: order.id },
   })
 
   return NextResponse.json({ success: true, order_id: order.id, order_number: order.order_number })

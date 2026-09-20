@@ -10,58 +10,81 @@ import {
   CreditCard,
   Receipt as ReceiptIcon,
   BellRing,
+  type LucideIcon,
 } from "lucide-react"
 
 export const dynamic = "force-dynamic"
 
-const settingsLinks = [
+interface SettingsLink {
+  title: string
+  description: string
+  href: string
+  icon: LucideIcon
+  permission?: string
+  superAdminOnly?: boolean
+}
+
+const settingsLinks: SettingsLink[] = [
   {
     title: "Pengguna",
     description: "Kelola pengguna dan akun",
     href: "/settings/users",
     icon: Users,
+    permission: "users.view",
   },
   {
     title: "Peran & Izin",
     description: "Kelola peran dan hak akses",
     href: "/settings/roles",
     icon: Shield,
+    superAdminOnly: true,
   },
   {
     title: "Cabang",
     description: "Kelola cabang",
     href: "/settings/branches",
     icon: Building2,
+    permission: "branches.manage",
   },
   {
     title: "Restoran",
     description: "Profil restoran dan pengaturan umum",
     href: "/settings/restaurant",
     icon: Store,
+    permission: "settings.manage",
   },
   {
     title: "Metode Pembayaran",
     description: "Kelola metode pembayaran",
     href: "/settings/payment",
     icon: CreditCard,
+    permission: "settings.manage",
   },
   {
     title: "Struk",
     description: "Format dan tampilan struk",
     href: "/settings/receipt",
     icon: ReceiptIcon,
+    permission: "settings.manage",
   },
   {
     title: "Notifikasi",
     description: "Preferensi notifikasi sistem",
     href: "/settings/notifications",
     icon: BellRing,
+    permission: "settings.manage",
   },
 ]
 
 export default async function SettingsPage() {
   const user = await getCurrentUser()
   if (!user) redirect("/login")
+
+  const visibleLinks = settingsLinks.filter((link) => {
+    if (link.superAdminOnly) return user.is_super_admin
+    if (!link.permission) return true
+    return user.is_super_admin || user.permissions.includes("*") || user.permissions.includes(link.permission)
+  })
 
   return (
     <div className="space-y-6 animate-brutal-slide-up">
@@ -77,7 +100,7 @@ export default async function SettingsPage() {
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {settingsLinks.map((link) => (
+        {visibleLinks.map((link) => (
           <Link key={link.href} href={link.href}>
             <Card className="transition-all duration-150 hover:-translate-x-1 hover:-translate-y-1 hover:shadow-[6px_6px_0_0_hsl(var(--primary))] cursor-pointer">
               <CardContent className="flex items-center gap-4 py-6">

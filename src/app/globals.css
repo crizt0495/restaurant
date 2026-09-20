@@ -101,6 +101,13 @@
   --color-chart-3: hsl(var(--success));
   --color-chart-4: hsl(var(--warning));
   --color-chart-5: hsl(var(--destructive));
+  --color-primary-hover: hsl(var(--primary) / 0.9);
+  --color-primary-active: hsl(var(--primary) / 0.82);
+  --color-secondary-hover: hsl(var(--secondary) / 0.88);
+  --color-secondary-active: hsl(var(--secondary) / 0.75);
+  --color-secondary-border: hsl(var(--secondary) / 0.3);
+  --shadow-elev-1: var(--shadow-sm);
+  --shadow-elev-hover-1: var(--shadow-lg);
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
   --font-display: var(--font-display);

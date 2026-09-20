@@ -28,7 +28,7 @@ export default async function LoginPage({
         <div className="h-20 w-20 bg-accent border-3 border-foreground shadow-[10px_10px_0_0_hsl(var(--foreground))] animate-float" style={{ animationDelay: "1s" }} />
       </div>
       <div className="absolute left-24 bottom-24 hidden lg:block">
-        <div className="h-12 w-12 bg-brutal-yellow border-3 border-foreground shadow-[6px_6px_0_0_hsl(var(--foreground))] animate-float" style={{ animationDelay: "0.5s" }} />
+        <div className="h-12 w-12 bg-warning border-3 border-foreground shadow-[6px_6px_0_0_hsl(var(--foreground))] animate-float" style={{ animationDelay: "0.5s" }} />
       </div>
 
       <div className="w-full max-w-md relative">
@@ -67,7 +67,7 @@ export default async function LoginPage({
           <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Demo Access</p>
         </div>
         <p className="text-xs font-bold">Username: <span className="font-mono font-black bg-foreground text-background px-1">admin</span></p>
-        <p className="text-xs font-bold">Password: <span className="font-mono font-black bg-foreground text-background px-1">admin123</span></p>
+        <p className="text-xs font-bold">Password: <span className="font-mono font-black bg-foreground text-background px-1">admin123!</span></p>
       </div>
     </div>
   )

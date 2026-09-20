@@ -81,13 +81,16 @@ begin
 
   with today_orders as (
     select
-      o.id, o.total, o.status, o.created_at, o.branch_id,
-      oi.product_id, oi.quantity, oi.unit_price
+      o.id, o.total, o.status, o.created_at, o.branch_id
     from orders o
-    left join order_items oi on oi.order_id = o.id
     where (v_branch_filter is null or o.branch_id = v_branch_filter::uuid)
       and o.created_at >= v_today_start
       and o.created_at < v_today_end
+  ),
+  today_items as (
+    select oi.order_id, oi.product_id, oi.quantity, oi.unit_price
+    from order_items oi
+    where oi.order_id in (select id from today_orders)
   ),
   today_stats as (
     select
@@ -95,14 +98,13 @@ begin
       count(case when status not in ('CANCELLED','REFUNDED') then 1 end) as order_count,
       coalesce(sum(case when status in ('NEW','CONFIRMED','PREPARING') then 1 else 0 end), 0) as pending,
       coalesce(sum(case when status in ('CANCELLED','REFUNDED') then 1 else 0 end), 0) as cancelled,
-      coalesce(sum(
-        case when status not in ('CANCELLED','REFUNDED')
-        then oi.quantity * coalesce(
-          (select p.cost_price from products p where p.id = oi.product_id limit 1), 0
-        ) end
+      coalesce((
+        select sum(ti.quantity * coalesce((select p.cost_price from products p where p.id = ti.product_id limit 1), 0))
+        from today_items ti
+        join today_orders to2 on to2.id = ti.order_id
+        where to2.status not in ('CANCELLED','REFUNDED')
       ), 0) as cogs
     from today_orders
-    where product_id is not null
   ),
   customer_stats as (
     select count(*)::int as total_customers
@@ -117,31 +119,34 @@ begin
       and i.quantity < i.minimum_stock
   ),
   seven_day_trend as (
-    select
-      to_char(d.day, 'Dy') as label,
-      coalesce(sum(o.total), 0) as value
+    select coalesce(jsonb_agg(t.label || '|' || t.value order by t.day), '[]'::jsonb) as data
     from (
-      select generate_series(
-        date_trunc('day', now()) - interval '6 days',
-        date_trunc('day', now()),
-        '1 day'
-      ) as day
-    ) d
-    left join orders o on date_trunc('day', o.created_at) = d.day
-      and (v_branch_filter is null or o.branch_id = v_branch_filter::uuid)
-      and o.status not in ('CANCELLED','REFUNDED')
-    group by d.day
-    order by d.day
+      select d.day,
+        to_char(d.day, 'Dy') as label,
+        coalesce(sum(o.total), 0) as value
+      from (
+        select generate_series(
+          date_trunc('day', now()) - interval '6 days',
+          date_trunc('day', now()),
+          '1 day'
+        ) as day
+      ) d
+      left join orders o on date_trunc('day', o.created_at) = d.day
+        and (v_branch_filter is null or o.branch_id = v_branch_filter::uuid)
+        and o.status not in ('CANCELLED','REFUNDED')
+      group by d.day
+    ) t
   ),
   product_sales as (
     select
-      oi.product_id,
-      sum(oi.quantity)::int as qty,
-      sum(oi.quantity * oi.unit_price) as revenue
-    from today_orders oi
-    where oi.product_id is not null
-      and oi.status not in ('CANCELLED','REFUNDED')
-    group by oi.product_id
+      ti.product_id,
+      sum(ti.quantity)::int as qty,
+      sum(ti.quantity * ti.unit_price) as revenue
+    from today_items ti
+    join today_orders to2 on to2.id = ti.order_id
+    where ti.product_id is not null
+      and to2.status not in ('CANCELLED','REFUNDED')
+    group by ti.product_id
     order by revenue desc
     limit 5
   ),
@@ -155,27 +160,29 @@ begin
     join products p on p.id = ps.product_id
   ),
   today_payments as (
-    select
-      p.method,
-      sum(p.amount) as amount
-    from payments p
-    join orders o on o.id = p.order_id
-    where (v_branch_filter is null or o.branch_id = v_branch_filter::uuid)
-      and p.status = 'SUCCESS'
-      and p.payment_date >= v_today_start
-      and p.payment_date < v_today_end
-    group by p.method
+    select coalesce(jsonb_agg(jsonb_build_object('method', q.method, 'amount', q.amount)), '[]'::jsonb) as data
+    from (
+      select p.method, sum(p.amount) as amount
+      from payments p
+      join orders o on o.id = p.order_id
+      where (v_branch_filter is null or o.branch_id = v_branch_filter::uuid)
+        and p.status = 'SUCCESS'
+        and p.payment_date >= v_today_start
+        and p.payment_date < v_today_end
+      group by p.method
+    ) q
   ),
   today_hourly as (
-    select
-      extract(hour from o.created_at)::int as hour,
-      count(*)::int as cnt
-    from orders o
-    where (v_branch_filter is null or o.branch_id = v_branch_filter::uuid)
-      and o.created_at >= v_today_start
-      and o.created_at < v_today_end
-      and o.status not in ('CANCELLED','REFUNDED')
-    group by extract(hour from o.created_at)
+    select coalesce(jsonb_agg(jsonb_build_object('label', h.hour || ':00', 'value', h.cnt)), '[]'::jsonb) as data
+    from (
+      select extract(hour from o.created_at)::int as hour, count(*)::int as cnt
+      from orders o
+      where (v_branch_filter is null or o.branch_id = v_branch_filter::uuid)
+        and o.created_at >= v_today_start
+        and o.created_at < v_today_end
+        and o.status not in ('CANCELLED','REFUNDED')
+      group by extract(hour from o.created_at)
+    ) h
   )
   select jsonb_build_object(
     'todaySales',        coalesce(ts.sales, 0),
@@ -187,19 +194,16 @@ begin
     'lowStockItems',     coalesce(ls.low_count, 0),
     'pendingOrders',     coalesce(ts.pending, 0),
     'cancelledOrders',   coalesce(ts.cancelled, 0),
-    'salesTrend',        coalesce(jsonb_agg(sdt.label || '|' || sdt.value), '[]'),
+    'salesTrend',        (select data from seven_day_trend),
     'topProducts',       coalesce((select jsonb_agg(data) from top_products), '[]'),
-    'paymentMethods',    coalesce(jsonb_agg(jsonb_build_object('method', tp.method, 'amount', tp.amount)), '[]'),
-    'busyHours',         coalesce(jsonb_agg(jsonb_build_object('label', th.hour || ':00', 'value', th.cnt)), '[]')
+    'paymentMethods',    (select data from today_payments),
+    'busyHours',         (select data from today_hourly)
   )
   into v_result
   from today_stats ts
   cross join customer_stats cs
   cross join low_stock ls
-  left join seven_day_trend sdt on true
   left join top_products on true
-  left join today_payments tp on true
-  left join today_hourly th on true
   group by ts.sales, ts.order_count, ts.pending, ts.cancelled, ts.cogs,
            cs.total_customers, ls.low_count;
 

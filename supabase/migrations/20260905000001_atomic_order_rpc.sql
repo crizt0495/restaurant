@@ -204,18 +204,29 @@ begin
     update restaurant_tables set status = 'OCCUPIED', updated_at = now() where id = nullif(p_table_id,'')::uuid;
   end if;
 
-  -- Notifications
+  -- Notifications (one row per active staff member of the org, so each
+  -- user can mark their own copy as read; broadcast rows cannot be updated)
   insert into notifications (organization_id, user_id, type, title, message, data)
-  values (v_org, null, 'new_order', 'New Order',
+  select v_org, pr.id, 'new_order', 'New Order',
     'Order ' || v_order_number || ' masuk dengan total ' || to_char(coalesce(p_total,0), 'FM999G999G999G999'),
-    jsonb_build_object('order_id', v_order_id));
+    jsonb_build_object('order_id', v_order_id)
+  from profiles pr
+  join branches b on b.id = pr.branch_id
+  where b.organization_id = v_org
+    and pr.is_active = true
+    and pr.deleted_at is null;
 
   -- Owner notification for large transactions
   if coalesce(p_total, 0) >= 1000000 then
     insert into notifications (organization_id, user_id, type, title, message, data)
-    values (v_org, null, 'payment', 'Transaksi Besar',
+    select v_org, pr.id, 'payment', 'Transaksi Besar',
       'Transaksi ' || v_order_number || ' senilai ' || to_char(coalesce(p_total,0), 'FM999G999G999G999'),
-      jsonb_build_object('order_id', v_order_id));
+      jsonb_build_object('order_id', v_order_id)
+    from profiles pr
+    join branches b on b.id = pr.branch_id
+    where b.organization_id = v_org
+      and pr.is_active = true
+      and pr.deleted_at is null;
   end if;
 
   -- Audit log
@@ -280,3 +291,45 @@ $$;
 revoke all on function public.create_order_atomic(text, text, text, numeric, numeric, numeric, numeric, numeric, numeric, numeric, text, jsonb, jsonb) from anon;
 revoke all on function public.create_order_atomic(text, text, text, numeric, numeric, numeric, numeric, numeric, numeric, numeric, text, jsonb, jsonb) from public;
 grant execute on function public.create_order_atomic(text, text, text, numeric, numeric, numeric, numeric, numeric, numeric, numeric, text, jsonb, jsonb) to authenticated;
+
+-- =====================================================
+-- NOTIFY STAFF (per-user notifications)
+-- Broadcast notifications (user_id = NULL) can never be
+-- marked as read by the UI (update policy is per-user),
+-- so send one row per active staff member of the org.
+-- =====================================================
+create or replace function public.notify_staff(
+  p_org uuid,
+  p_type text,
+  p_title text,
+  p_message text default null,
+  p_data jsonb default null
+)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_profile record;
+begin
+  if p_org is null then
+    return;
+  end if;
+
+  for v_profile in
+    select pr.id
+    from profiles pr
+    join branches b on b.id = pr.branch_id
+    where b.organization_id = p_org
+      and pr.is_active = true
+      and pr.deleted_at is null
+  loop
+    perform public.create_notification(p_org, v_profile.id, p_type, p_title, p_message, p_data);
+  end loop;
+end;
+$$;
+
+revoke all on function public.notify_staff(uuid, text, text, text, jsonb) from anon;
+revoke all on function public.notify_staff(uuid, text, text, text, jsonb) from public;
+grant execute on function public.notify_staff(uuid, text, text, text, jsonb) to authenticated;

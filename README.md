@@ -23,7 +23,7 @@ A production-ready Restaurant Management System built with **Next.js 16 (App Rou
 - **Settings** — restaurant, users, roles, branches, payment, **receipt format, notification preferences**.
 - **QR menu** — unauthenticated `/menu/{branch}/{table}` self-ordering (validated server-side).
 - **Atomic order creation** via Postgres `create_order_atomic` RPC with row-level locking (no race conditions on stock).
-- **Auth & Authorization** — Username + Password login, role + permission matrix (42 permissions), multi-branch scoping, Row-Level Security, audit logging, account inactive check.
+- **Auth & Authorization** — Username + Password login, role + permission matrix (48 permissions), multi-branch scoping, Row-Level Security, audit logging, account inactive check.
 - **Dark mode**, **PWA-ready** (manifest + service worker).
 - **Global search** (⌘K) across orders/products/customers/suppliers.
 - **Loading skeletons** on dashboard, **paginated** lists, **debounced** search.
@@ -57,6 +57,25 @@ Or apply manually:
 - `supabase/seed.sql` — demo org, branches, products, inventory, tables, permissions, role grants.
 
 The `get_auth_email_by_username(username)` RPC is created by the init migration and is used by the username login flow (SECURITY DEFINER).
+
+#### Local development (Docker + Supabase CLI)
+
+```bash
+supabase start                     # boots Postgres, Auth, Storage, etc. locally
+supabase status -o env             # prints the local keys
+```
+
+Copy the values into `.env.local`:
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:54321
+NEXT_PUBLIC_SUPABASE_ANON_KEY=<anon key from `supabase status -o env`>
+SUPABASE_SERVICE_ROLE_KEY=<service_role key from `supabase status -o env`>
+```
+
+`supabase start` applies all migrations and the seed automatically, so demo accounts and data are ready immediately. To start over run `supabase db reset`.
+
+> Demo accounts are created by migration `20260905000004_seed_demo_users.sql` (already part of the stack). The `/api/seed` route below is only needed for older databases.
 
 ### 2. Environment variables
 
@@ -172,7 +191,7 @@ public/                Static assets (manifest, sw)
 
 ## Key Business Logic (DB Functions)
 
-- `create_order_atomic(text, uuid, uuid, numeric, numeric, numeric, numeric, numeric, numeric, numeric, text, jsonb, jsonb)` — full transactional POS order: writes order, items, modifiers, payments, deducts stock from recipes (with row-level lock), updates table, sends notifications, writes audit log. All or nothing.
+- `create_order_atomic(text, text, text, numeric, numeric, numeric, numeric, numeric, numeric, numeric, text, jsonb, jsonb)` — full transactional POS order: writes order, items, modifiers, payments, deducts stock from recipes (with row-level lock), updates table, sends notifications, writes audit log. All or nothing.
 - `get_auth_email_by_username(p_username text)` — username → auth email mapper for login.
 - `current_org_id()`, `current_profile()`, `current_branch_id()` — RLS-friendly helpers.
 - `create_notification`, `log_audit` — convenience writers.
