@@ -30,39 +30,39 @@ export function UserMenu({ user }: UserMenuProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className="group flex w-full items-center gap-2.5 border-2 border-foreground bg-background p-1.5 transition-all hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0_0_hsl(var(--primary))]">
-          <Avatar className="h-8 w-8">
+        <button className="group flex w-full items-center gap-2.5 rounded-xl p-1.5 text-left transition-colors hover:bg-muted">
+          <Avatar className="h-8 w-8 ring-0">
             <AvatarImage src={user?.avatar_url} alt={name} />
-            <AvatarFallback>{initials}</AvatarFallback>
+            <AvatarFallback className="text-xs">{initials}</AvatarFallback>
           </Avatar>
-          <div className="hidden text-left sm:block flex-1 min-w-0">
-            <p className="text-xs font-black uppercase leading-none truncate">{name}</p>
-            <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground truncate">{user?.role}</p>
+          <div className="hidden min-w-0 flex-1 sm:block">
+            <p className="truncate text-[13px] font-semibold leading-none">{name}</p>
+            <p className="mt-0.5 truncate text-[11px] text-muted-foreground">{user?.role}</p>
           </div>
-          <ChevronUp className="h-4 w-4 hidden sm:block transition-transform group-data-[state=open]:rotate-180" strokeWidth={3} />
+          <ChevronUp className="hidden h-4 w-4 text-muted-foreground transition-transform group-data-[state=open]:rotate-180 sm:block" />
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-64">
         <DropdownMenuLabel>
           <div className="flex flex-col gap-0.5">
-            <span className="font-black uppercase tracking-wide">{name}</span>
-            <span className="text-[10px] font-mono font-bold text-muted-foreground">@{user?.username}</span>
+            <span className="font-semibold">{name}</span>
+            <span className="font-mono text-xs text-muted-foreground">@{user?.username}</span>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <Link href="/settings">
-            <Settings className="mr-2 h-4 w-4" strokeWidth={3} /> Pengaturan
+            <Settings className="mr-2 h-4 w-4" /> Pengaturan
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link href="/settings/users">
-            <User className="mr-2 h-4 w-4" strokeWidth={3} /> Akun
+            <User className="mr-2 h-4 w-4" /> Akun
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => signOut()} className="text-destructive focus:bg-destructive focus:text-destructive-foreground">
-          <LogOut className="mr-2 h-4 w-4" strokeWidth={3} /> Keluar
+        <DropdownMenuItem onClick={() => signOut()} className="text-destructive focus:bg-destructive/10 focus:text-destructive">
+          <LogOut className="mr-2 h-4 w-4" /> Keluar
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

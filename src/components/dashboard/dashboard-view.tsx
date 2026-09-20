@@ -4,23 +4,36 @@ import * as React from "react"
 import { createClient } from "@/lib/supabase/client"
 import { formatCurrency } from "@/lib/utils"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { DollarSign, ShoppingBag, TrendingUp, Users, AlertTriangle, Clock, XCircle, ArrowUpRight } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
+import {
+  DollarSign,
+  ShoppingBag,
+  TrendingUp,
+  Users,
+  AlertTriangle,
+  Clock,
+  XCircle,
+  ArrowUpRight,
+  Utensils,
+  Wallet,
+} from "lucide-react"
 import type { DashboardData } from "@/lib/helpers"
 import Link from "next/link"
+import { cn } from "@/lib/utils"
 
 interface DashboardViewProps {
   initialData: DashboardData
 }
 
 const statStyles = [
-  { color: "bg-success", icon: "text-success-foreground", tag: "EDGE" },
-  { color: "bg-info", icon: "text-info-foreground", tag: "FLOW" },
-  { color: "bg-primary", icon: "text-primary-foreground", tag: "GROW" },
-  { color: "bg-warning", icon: "text-warning-foreground", tag: "MEAN" },
-  { color: "bg-secondary", icon: "text-secondary-foreground", tag: "PEOPLE" },
-  { color: "bg-accent", icon: "text-accent-foreground", tag: "STOCK" },
-  { color: "bg-accent", icon: "text-accent-foreground", tag: "WAIT" },
-  { color: "bg-destructive", icon: "text-destructive-foreground", tag: "VOID" },
+  { chip: "bg-primary/10 text-primary", tag: "Penjualan" },
+  { chip: "bg-info/10 text-info", tag: "Pesanan" },
+  { chip: "bg-success/10 text-success", tag: "Laba" },
+  { chip: "bg-accent/10 text-accent", tag: "Rata-rata" },
+  { chip: "bg-secondary/60 text-secondary-foreground", tag: "Pelanggan" },
+  { chip: "bg-warning/10 text-warning", tag: "Stok" },
+  { chip: "bg-info/10 text-info", tag: "Tertunda" },
+  { chip: "bg-destructive/10 text-destructive", tag: "Dibatalkan" },
 ]
 
 export function DashboardView({ initialData }: DashboardViewProps) {
@@ -85,99 +98,124 @@ export function DashboardView({ initialData }: DashboardViewProps) {
   ]
 
   const maxTrend = Math.max(...data.salesTrend.map((d) => d.value), 1)
+  const maxBusy = Math.max(...data.busyHours.map((x) => Number(x.value)), 1)
+  const maxPayment = Math.max(...data.paymentMethods.map((p) => Number(p.amount)), 1)
 
   return (
     <div className="space-y-6 animate-brutal-slide-up">
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-        {stats.map((stat) => {
+      {/* Stat cards */}
+      <div className="grid grid-cols-2 gap-3 md:grid-cols-4 lg:grid-cols-8">
+        {stats.map((stat, idx) => {
           const style = statStyles[stat.idx]
+          const Icon = stat.icon
           return (
-            <Card key={stat.title} className="hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[7px_7px_0_0_hsl(var(--foreground))]">
+            <Card
+              key={stat.title}
+              className={cn(
+                "card-hover",
+                idx > 3 && "max-lg:col-span-1"
+              )}
+            >
               <CardContent className="p-4">
-                <div className="flex items-center gap-2 mb-3">
-                  <div className={`flex h-9 w-9 items-center justify-center border-2 border-foreground shadow-[2px_2px_0_0_hsl(var(--foreground))] ${style.color}`}>
-                    <stat.icon className={`h-4 w-4 ${style.icon}`} strokeWidth={3} />
+                <div className="mb-3 flex items-center justify-between">
+                  <div className={cn("flex h-9 w-9 items-center justify-center rounded-lg", style.chip)}>
+                    <Icon className="h-4 w-4" strokeWidth={2.25} />
                   </div>
-                  <span className="ml-auto px-1.5 py-0.5 bg-foreground text-background text-[8px] font-black font-mono">
-                    {style.tag}
-                  </span>
-                  {live && <span className="h-2 w-2 bg-success animate-pulse" />}
+                  {idx === 0 && (
+                    <span className="relative flex h-2 w-2">
+                      {live && (
+                        <>
+                          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-success opacity-60" />
+                          <span className="relative inline-flex h-2 w-2 rounded-full bg-success" />
+                        </>
+                      )}
+                    </span>
+                  )}
                 </div>
-                <p className="text-[10px] font-black uppercase tracking-wider text-muted-foreground">{stat.title}</p>
-                <p className="font-display mt-1 text-xl font-black leading-none">{stat.value}</p>
+                <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">{stat.title}</p>
+                <p className="tabular mt-1 font-display text-lg font-bold leading-none md:text-xl">{stat.value}</p>
               </CardContent>
             </Card>
           )
         })}
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-2">
-        <Card>
-          <CardHeader className="bg-foreground text-background">
-            <CardTitle className="flex items-center gap-2">
-              <span className="bg-primary text-primary-foreground px-2 py-1 text-xs font-black">7H</span>
-              <span>Penjualan 7 Hari</span>
-            </CardTitle>
+      <div className="grid gap-4 lg:grid-cols-5">
+        {/* 7-day sales */}
+        <Card className="lg:col-span-3">
+          <CardHeader className="flex-row items-center justify-between space-y-0 pb-4">
+            <CardTitle className="text-base">Penjualan 7 Hari</CardTitle>
+            <Badge variant="default">7H</Badge>
           </CardHeader>
           <CardContent>
-            <div className="flex h-48 items-end gap-2">
-              {data.salesTrend.length === 0 ? (
-                <p className="py-8 w-full text-center text-xs font-black uppercase tracking-widest text-muted-foreground">
-                  Belum ada data
-                </p>
-              ) : (
-                data.salesTrend.map((d, i) => (
-                  <div key={i} className="flex flex-1 flex-col items-center gap-1">
-                    <div
-                      className="w-full bg-primary border-2 border-foreground transition-all hover:bg-accent cursor-pointer"
-                      style={{ height: `${(d.value / maxTrend) * 100}%`, minHeight: "4px" }}
-                    />
-                    <span className="text-[10px] font-mono font-black">{d.label}</span>
+            {data.salesTrend.length === 0 ? (
+              <EmptyState label="Belum ada data penjualan" />
+            ) : (
+              <div className="flex h-52 items-end gap-2">
+                {data.salesTrend.map((d, i) => (
+                  <div key={i} className="group flex flex-1 flex-col items-center gap-2">
+                    <span className="font-mono text-[10px] font-semibold text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100">
+                      {formatCurrency(d.value)}
+                    </span>
+                    <div className="relative w-full flex-1 overflow-hidden rounded-t-lg bg-muted/50">
+                      <div
+                        className="absolute bottom-0 w-full rounded-t-lg bg-gradient-to-t from-primary/70 to-accent/80 transition-all duration-500 group-hover:from-primary group-hover:to-accent"
+                        style={{ height: `${(d.value / maxTrend) * 100}%`, minHeight: "6px" }}
+                      />
+                    </div>
+                    <span className="font-mono text-[10px] font-semibold text-muted-foreground">{d.label}</span>
                   </div>
-                ))
-              )}
-            </div>
+                ))}
+              </div>
+            )}
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="bg-foreground text-background">
-            <CardTitle className="flex items-center gap-2">
-              <span className="bg-accent text-accent-foreground px-2 py-1 text-xs font-black">GO</span>
-              <span>Aksi Cepat</span>
-            </CardTitle>
+        {/* Quick actions */}
+        <Card className="lg:col-span-2">
+          <CardHeader className="flex-row items-center justify-between space-y-0 pb-4">
+            <CardTitle className="text-base">Aksi Cepat</CardTitle>
+            <Badge variant="default">GO</Badge>
           </CardHeader>
           <CardContent className="grid gap-3 sm:grid-cols-2">
-            <QuickAction href="/pos" label="Buka POS" icon={ShoppingBag} color="bg-primary text-primary-foreground" />
-            <QuickAction href="/orders" label="Pesanan" icon={Clock} color="bg-info text-info-foreground" />
-            <QuickAction href="/kitchen" label="Dapur" icon={TrendingUp} color="bg-accent text-accent-foreground" />
-            <QuickAction href="/inventory" label="Inventaris" icon={AlertTriangle} color="bg-warning text-warning-foreground" />
+            <QuickAction href="/pos" label="Buka POS" icon={ShoppingBag} chip="bg-primary text-primary-foreground" />
+            <QuickAction href="/orders" label="Pesanan" icon={Clock} chip="bg-info text-info-foreground" />
+            <QuickAction href="/kitchen" label="Dapur" icon={Utensils} chip="bg-accent text-accent-foreground" />
+            <QuickAction href="/inventory" label="Inventaris" icon={AlertTriangle} chip="bg-warning text-warning-foreground" />
           </CardContent>
         </Card>
       </div>
 
       <div className="grid gap-4 lg:grid-cols-3">
+        {/* Top products */}
         <Card>
-          <CardHeader className="bg-foreground text-background">
-            <CardTitle className="flex items-center gap-2">
-              <span className="bg-primary text-primary-foreground px-2 py-1 text-xs font-black">#1</span>
-              Produk Terlaris
-            </CardTitle>
+          <CardHeader className="flex-row items-center justify-between space-y-0 pb-4">
+            <CardTitle className="text-base">Produk Terlaris</CardTitle>
+            <Badge variant="neutral">#1</Badge>
           </CardHeader>
-          <CardContent>
+          <CardContent className="pt-0">
             {data.topProducts.length === 0 ? (
-              <p className="py-8 text-center text-xs font-black uppercase tracking-widest text-muted-foreground">Belum ada data</p>
+              <EmptyState label="Belum ada data" />
             ) : (
-              <ul className="space-y-2">
+              <ul className="space-y-1">
                 {data.topProducts.map((p, i) => (
-                  <li key={i} className="flex items-center justify-between gap-2 text-sm border-b-2 border-foreground last:border-0 pb-2">
-                    <span className="flex items-center gap-2">
-                      <span className="flex h-6 w-6 items-center justify-center bg-foreground text-background text-[10px] font-black">
+                  <li key={i} className="flex items-center justify-between gap-2 rounded-lg px-2 py-2 transition-colors hover:bg-muted/50">
+                    <span className="flex min-w-0 items-center gap-3">
+                      <span
+                        className={cn(
+                          "flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-xs font-bold",
+                          i === 0
+                            ? "bg-gradient-brand text-primary-foreground"
+                            : "bg-muted text-muted-foreground"
+                        )}
+                      >
                         {i + 1}
                       </span>
-                      <span className="font-black uppercase truncate">{p.name}</span>
+                      <span className="truncate text-sm font-medium">{p.name}</span>
                     </span>
-                    <span className="font-mono text-xs font-black text-muted-foreground whitespace-nowrap bg-muted px-1.5 py-0.5 border-2 border-foreground">{formatCurrency(p.revenue)}</span>
+                    <span className="tabular shrink-0 font-mono text-xs font-semibold text-muted-foreground">
+                      {formatCurrency(p.revenue)}
+                    </span>
                   </li>
                 ))}
               </ul>
@@ -185,53 +223,57 @@ export function DashboardView({ initialData }: DashboardViewProps) {
           </CardContent>
         </Card>
 
+        {/* Payment methods */}
         <Card>
-          <CardHeader className="bg-foreground text-background">
-            <CardTitle className="flex items-center gap-2">
-              <span className="bg-success text-success-foreground px-2 py-1 text-xs font-black">$$</span>
-              Metode Pembayaran
-            </CardTitle>
+          <CardHeader className="flex-row items-center justify-between space-y-0 pb-4">
+            <CardTitle className="text-base">Metode Pembayaran</CardTitle>
+            <Badge variant="success">$$</Badge>
           </CardHeader>
-          <CardContent>
+          <CardContent className="pt-0">
             {data.paymentMethods.length === 0 ? (
-              <p className="py-8 text-center text-xs font-black uppercase tracking-widest text-muted-foreground">Belum ada data</p>
+              <EmptyState label="Belum ada data" />
             ) : (
-              <ul className="space-y-2">
+              <ul className="space-y-3">
                 {data.paymentMethods.map((p, i) => (
-                  <li key={i} className="flex items-center justify-between gap-2 border-b-2 border-foreground last:border-0 pb-2">
-                    <span className="text-xs font-black uppercase tracking-wider">{String(p.method).replace(/_/g, " ")}</span>
-                    <span className="font-mono text-sm font-black bg-success text-success-foreground px-2 py-0.5 border-2 border-foreground shadow-[2px_2px_0_0_hsl(var(--foreground))]">{formatCurrency(Number(p.amount))}</span>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="bg-foreground text-background">
-            <CardTitle className="flex items-center gap-2">
-              <span className="bg-warning text-warning-foreground px-2 py-1 text-xs font-black">⌚</span>
-              Jam Ramai
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            {data.busyHours.length === 0 ? (
-              <p className="py-8 text-center text-xs font-black uppercase tracking-widest text-muted-foreground">Belum ada data</p>
-            ) : (
-              <ul className="space-y-2">
-                {data.busyHours.map((h, i) => (
-                  <li key={i} className="flex items-center gap-2">
-                    <span className="w-12 text-xs font-mono font-black text-muted-foreground">{String(h.label)}</span>
-                    <div className="h-5 flex-1 overflow-hidden border-2 border-foreground bg-muted shadow-[2px_2px_0_0_hsl(var(--foreground))]">
+                  <li key={i}>
+                    <div className="mb-1 flex items-center justify-between gap-2">
+                      <span className="text-sm capitalize">{String(p.method).replace(/_/g, " ")}</span>
+                      <span className="tabular font-mono text-sm font-semibold">{formatCurrency(Number(p.amount))}</span>
+                    </div>
+                    <div className="h-1.5 overflow-hidden rounded-full bg-muted">
                       <div
-                        className="h-full bg-primary"
-                        style={{
-                          width: `${Math.min(100, (Number(h.value) / Math.max(...data.busyHours.map((x) => Number(x.value)), 1)) * 100)}%`,
-                        }}
+                        className="h-full rounded-full bg-gradient-brand"
+                        style={{ width: `${(Number(p.amount) / maxPayment) * 100}%` }}
                       />
                     </div>
-                    <span className="w-8 text-right text-[10px] font-mono font-black text-muted-foreground">{String(h.value)}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Busy hours */}
+        <Card>
+          <CardHeader className="flex-row items-center justify-between space-y-0 pb-4">
+            <CardTitle className="text-base">Jam Ramai</CardTitle>
+            <Badge variant="warning">⌚</Badge>
+          </CardHeader>
+          <CardContent className="pt-0">
+            {data.busyHours.length === 0 ? (
+              <EmptyState label="Belum ada data" />
+            ) : (
+              <ul className="space-y-2.5">
+                {data.busyHours.map((h, i) => (
+                  <li key={i} className="flex items-center gap-3">
+                    <span className="w-10 shrink-0 font-mono text-xs font-semibold text-muted-foreground">{String(h.label)}</span>
+                    <div className="h-2 flex-1 overflow-hidden rounded-full bg-muted">
+                      <div
+                        className="h-full rounded-full bg-gradient-to-r from-accent to-primary"
+                        style={{ width: `${(Number(h.value) / maxBusy) * 100}%` }}
+                      />
+                    </div>
+                    <span className="tabular w-7 shrink-0 text-right font-mono text-xs font-semibold text-muted-foreground">{String(h.value)}</span>
                   </li>
                 ))}
               </ul>
@@ -247,24 +289,33 @@ function QuickAction({
   href,
   label,
   icon: Icon,
-  color,
+  chip,
 }: {
   href: string
   label: string
   icon: React.ComponentType<{ className?: string; strokeWidth?: number }>
-  color: string
+  chip: string
 }) {
   return (
     <Link
       href={href}
-      className="group flex items-center gap-3 border-3 border-foreground bg-card p-4 shadow-[4px_4px_0_0_hsl(var(--foreground))] transition-all duration-150 hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0_0_hsl(var(--foreground))] hover:bg-foreground hover:text-background"
+      className="group flex items-center gap-3 rounded-xl border border-border bg-card p-3.5 shadow-sm transition-all duration-150 hover:-translate-y-0.5 hover:shadow-md"
     >
-      <div className={`flex h-10 w-10 items-center justify-center border-2 border-foreground shadow-[2px_2px_0_0_hsl(var(--foreground))] ${color}`}>
-        <Icon className="h-5 w-5" strokeWidth={3} />
+      <div className={cn("flex h-10 w-10 shrink-0 items-center justify-center rounded-lg", chip)}>
+        <Icon className="h-5 w-5" strokeWidth={2.25} />
       </div>
-      <span className="text-sm font-black uppercase tracking-wide">{label}</span>
-      <ArrowUpRight className="h-4 w-4 ml-auto opacity-50 group-hover:opacity-100 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5" strokeWidth={3} />
+      <span className="flex-1 text-sm font-semibold">{label}</span>
+      <ArrowUpRight className="h-4 w-4 text-muted-foreground transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-foreground" />
     </Link>
+  )
+}
+
+function EmptyState({ label }: { label: string }) {
+  return (
+    <div className="flex h-40 flex-col items-center justify-center gap-2 text-center">
+      <Wallet className="h-8 w-8 text-muted-foreground/40" />
+      <p className="text-sm text-muted-foreground">{label}</p>
+    </div>
   )
 }
 

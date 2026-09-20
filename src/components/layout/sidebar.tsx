@@ -29,69 +29,70 @@ export function Sidebar({ user, permissions, isSuperAdmin }: SidebarProps) {
   }
 
   return (
-    <aside className="fixed inset-y-0 left-0 z-40 hidden w-72 flex-col border-r-[3px] border-foreground bg-background lg:flex">
-      <div className="flex h-20 items-center gap-3 border-b-[3px] border-foreground px-5 bg-foreground text-background">
+    <aside className="fixed inset-y-0 left-0 z-40 hidden w-72 flex-col border-r border-border bg-card/70 backdrop-blur-xl lg:flex">
+      <div className="flex h-16 items-center gap-3 border-b border-border px-5">
         <div className="relative">
-          <div className="flex h-11 w-11 items-center justify-center bg-primary text-primary-foreground border-2 border-foreground shadow-[3px_3px_0_0_hsl(var(--accent))]">
-            <UtensilsCrossed className="h-5 w-5" strokeWidth={2.5} />
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-brand text-primary-foreground shadow-lg">
+            <UtensilsCrossed className="h-5 w-5" strokeWidth={2.25} />
           </div>
-          <span className="absolute -right-1 -top-1 h-3 w-3 bg-accent border-2 border-foreground" />
         </div>
         <div className="flex-1">
-          <span className="block font-display text-xl font-black uppercase tracking-tighter leading-none">Resto</span>
-          <span className="block text-[10px] font-black uppercase tracking-[0.2em] text-primary">Manager v2</span>
+          <span className="block font-display text-lg font-bold tracking-tight leading-none">
+            Resto<span className="text-primary">RMS</span>
+          </span>
+          <span className="block text-[11px] font-medium tracking-wide text-muted-foreground">
+            Manajemen Restoran
+          </span>
         </div>
       </div>
 
-      <nav className="flex-1 space-y-4 overflow-y-auto p-4 brutal-dots">
-        {dashboardNav.map((section, sIdx) => {
+      <nav className="flex-1 space-y-5 overflow-y-auto px-3 py-4 brutal-dots">
+        {dashboardNav.map((section) => {
           const items = section.items.filter(canView)
           if (items.length === 0) return null
           return (
-            <div key={section.title} className="space-y-1.5">
-              <div className="flex items-center gap-2 px-2 pt-2">
-                <span className="text-[10px] font-black uppercase tracking-[0.25em] text-muted-foreground">
+            <div key={section.title} className="space-y-0.5">
+              <div className="px-3 pb-1.5 pt-1">
+                <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
                   {section.title}
                 </span>
-                <div className="h-[3px] flex-1 bg-foreground" />
-                <span className="text-[10px] font-mono font-black text-muted-foreground">
-                  {String(sIdx + 1).padStart(2, "0")}
-                </span>
               </div>
-              {items.map((item) => {
-                const Icon = item.icon
-                const active = pathname.startsWith(item.href)
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={cn(
-                      "group relative flex items-center gap-3 px-3 py-2.5 text-sm font-black uppercase tracking-wide border-2 transition-all duration-150",
-                      active
-                        ? "bg-foreground text-background border-foreground shadow-[3px_3px_0_0_hsl(var(--primary))] translate-x-[-1px] translate-y-[-1px]"
-                        : "border-transparent text-foreground hover:bg-muted hover:border-foreground hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0_0_hsl(var(--foreground))]"
-                    )}
-                  >
-                    <Icon
+              <div className="space-y-0.5">
+                {items.map((item) => {
+                  const Icon = item.icon
+                  const active = pathname.startsWith(item.href)
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
                       className={cn(
-                        "h-4 w-4 transition-transform group-hover:scale-110",
-                        active && "text-primary"
+                        "group relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-150",
+                        active
+                          ? "bg-primary/10 text-primary"
+                          : "text-muted-foreground hover:bg-muted hover:text-foreground"
                       )}
-                      strokeWidth={2.5}
-                    />
-                    <span className="flex-1">{item.title}</span>
-                    {active && (
-                      <span className="h-2 w-2 bg-primary animate-brutal-bounce" />
-                    )}
-                  </Link>
-                )
-              })}
+                    >
+                      <Icon
+                        className={cn(
+                          "h-[18px] w-[18px] transition-transform duration-150 group-hover:scale-110",
+                          active && "text-primary"
+                        )}
+                        strokeWidth={active ? 2.5 : 2}
+                      />
+                      <span className="flex-1 text-[13px]">{item.title}</span>
+                      {active && (
+                        <span className="h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_0_3px_hsl(var(--primary)/0.15)]" />
+                      )}
+                    </Link>
+                  )
+                })}
+              </div>
             </div>
           )
         })}
       </nav>
 
-      <div className="border-t-[3px] border-foreground p-3 bg-muted">
+      <div className="border-t border-border p-3">
         <div className="flex items-center justify-between gap-2">
           <UserMenu user={user} />
           <ThemeToggle />

@@ -195,8 +195,8 @@ export function ProductsClient({ products, categories, canCreate, canEdit, canDe
     <div className="space-y-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="font-display text-3xl font-black uppercase tracking-tighter leading-none">Produk</h2>
-          <p className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Kelola menu produk</p>
+          <h2 className="font-display text-2xl font-bold tracking-tight md:text-3xl leading-none">Produk</h2>
+          <p className="mt-1.5 text-sm font-medium text-muted-foreground">Kelola menu produk</p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" size="sm" onClick={() => setCategoryDialog(true)}>

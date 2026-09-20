@@ -34,32 +34,34 @@ export function Pagination({ totalItems, itemsPerPage, currentPage, onPageChange
   }, [currentPage, totalPages])
 
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-1 py-4 text-sm">
-      <span className="font-black uppercase tracking-widest text-[10px] text-muted-foreground">
-        Menampilkan {from}–{to} dari {totalItems}
+    <div className="flex flex-col items-center justify-between gap-3 px-1 py-4 text-sm sm:flex-row">
+      <span className="text-sm text-muted-foreground">
+        Menampilkan <span className="font-semibold text-foreground">{from}–{to}</span> dari{" "}
+        <span className="font-semibold text-foreground">{totalItems}</span>
       </span>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1.5">
         <Button
           variant="outline"
           size="icon"
-          className="h-10 w-10"
+          className="h-9 w-9"
           disabled={currentPage <= 1}
           onClick={() => onPageChange(currentPage - 1)}
           aria-label="Halaman sebelumnya"
         >
-          <ChevronLeft className="h-4 w-4" strokeWidth={3} />
+          <ChevronLeft className="h-4 w-4" />
         </Button>
         {getPages.map((p, i) =>
           typeof p === "string" ? (
-            <span key={`ellipsis-${i}`} className="px-1 font-black text-xs">…</span>
+            <span key={`ellipsis-${i}`} className="px-1 text-sm text-muted-foreground">…</span>
           ) : (
             <Button
               key={p}
               variant={p === currentPage ? "default" : "outline"}
               size="icon"
-              className={cn("h-10 w-10", p === currentPage && "bg-foreground text-background border-foreground")}
+              className={cn("h-9 w-9", p === currentPage && "font-semibold")}
               onClick={() => onPageChange(p)}
               aria-label={`Halaman ${p}`}
+              aria-current={p === currentPage ? "page" : undefined}
             >
               {p}
             </Button>
@@ -68,12 +70,12 @@ export function Pagination({ totalItems, itemsPerPage, currentPage, onPageChange
         <Button
           variant="outline"
           size="icon"
-          className="h-10 w-10"
+          className="h-9 w-9"
           disabled={currentPage >= totalPages}
           onClick={() => onPageChange(currentPage + 1)}
           aria-label="Halaman berikutnya"
         >
-          <ChevronRight className="h-4 w-4" strokeWidth={3} />
+          <ChevronRight className="h-4 w-4" />
         </Button>
       </div>
     </div>

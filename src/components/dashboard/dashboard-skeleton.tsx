@@ -8,7 +8,7 @@ export function DashboardSkeleton() {
         {Array.from({ length: 8 }).map((_, i) => (
           <Card key={i}>
             <CardContent className="p-4">
-              <Skeleton className="mb-3 h-8 w-8 border-2" />
+              <Skeleton className="mb-3 h-8 w-8 rounded-lg" />
               <Skeleton className="mb-1 h-3 w-20" />
               <Skeleton className="h-5 w-24" />
             </CardContent>
@@ -18,23 +18,23 @@ export function DashboardSkeleton() {
       <div className="grid gap-4 lg:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm">7 Hari Penjualan</CardTitle>
+            <CardTitle className="text-base">7 Hari Penjualan</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex h-48 items-end gap-2">
               {Array.from({ length: 7 }).map((_, i) => (
-                <Skeleton key={i} className="flex-1 border-2" style={{ height: `${20 + (i * 9) % 60}%` }} />
+                <Skeleton key={i} className="flex-1 rounded-t-lg" style={{ height: `${20 + (i * 9) % 60}%` }} />
               ))}
             </div>
           </CardContent>
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm">Aksi Cepat</CardTitle>
+            <CardTitle className="text-base">Aksi Cepat</CardTitle>
           </CardHeader>
           <CardContent className="grid gap-3 sm:grid-cols-2">
             {Array.from({ length: 4 }).map((_, i) => (
-              <Skeleton key={i} className="h-18 w-full border-3" />
+              <Skeleton key={i} className="h-18 w-full" />
             ))}
           </CardContent>
         </Card>

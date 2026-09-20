@@ -1,13 +1,13 @@
 import type { Metadata } from "next"
-import { Space_Grotesk, Space_Mono } from "next/font/google"
+import { Plus_Jakarta_Sans, Space_Mono } from "next/font/google"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "react-hot-toast"
 import { PwaRegistration } from "@/components/pwa-registration"
 
-const spaceGrotesk = Space_Grotesk({
+const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  variable: "--font-space-grotesk",
+  variable: "--font-plus-jakarta",
   display: "swap",
 })
 
@@ -35,18 +35,31 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="id" suppressHydrationWarning className={`dark ${spaceGrotesk.variable} ${spaceMono.variable}`}>
+    <html lang="id" suppressHydrationWarning className={`dark ${plusJakarta.variable} ${spaceMono.variable}`}>
       <head>
         <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#4f46e5" />
+        <meta name="theme-color" content="#e64a19" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
       </head>
       <body className="min-h-full flex flex-col antialiased">
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange>
           {children}
-          <Toaster position="top-right" toastOptions={{
-            className: "border-3 border-foreground shadow-[5px_5px_0_0_hsl(var(--foreground))] font-bold rounded-none!",
-          }} />
+          <Toaster
+            position="top-right"
+            gutter={10}
+            toastOptions={{
+              className:
+                "!bg-card !text-card-foreground !border !border-border !shadow-lg !text-sm !font-medium",
+              style: {
+                borderRadius: "0.75rem",
+                padding: "0.75rem 1rem",
+              },
+              success: { iconTheme: { primary: "hsl(var(--success))", secondary: "hsl(var(--success-foreground))" } },
+              error: {
+                iconTheme: { primary: "hsl(var(--destructive))", secondary: "hsl(var(--destructive-foreground))" },
+              },
+            }}
+          />
           <PwaRegistration />
         </ThemeProvider>
       </body>

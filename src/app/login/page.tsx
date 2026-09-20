@@ -1,4 +1,4 @@
-import { Metadata } from "next"
+import type { Metadata } from "next"
 import { LoginForm } from "@/components/login-form"
 import { UtensilsCrossed } from "lucide-react"
 import { ThemeToggle } from "@/components/theme-toggle"
@@ -15,60 +15,53 @@ export default async function LoginPage({
   const { redirect: redirectParam } = await searchParams
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center p-4 bg-background brutal-dots">
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-background p-4 brutal-dots">
+      {/* Glow dekoratif */}
+      <div className="pointer-events-none absolute -top-32 left-1/2 h-72 w-[36rem] -translate-x-1/2 rounded-full bg-primary/15 blur-[80px]" />
+      <div className="pointer-events-none absolute -bottom-40 -right-20 h-64 w-64 rounded-full bg-accent/10 blur-[70px]" />
+
       <div className="absolute right-4 top-4 z-10">
         <ThemeToggle />
       </div>
 
-      {/* Decorative accent blocks */}
-      <div className="absolute left-6 top-10 hidden lg:block">
-        <div className="h-16 w-16 bg-primary border-3 border-foreground shadow-[8px_8px_0_0_hsl(var(--foreground))] animate-float" />
-      </div>
-      <div className="absolute right-10 bottom-16 hidden lg:block">
-        <div className="h-20 w-20 bg-accent border-3 border-foreground shadow-[10px_10px_0_0_hsl(var(--foreground))] animate-float" style={{ animationDelay: "1s" }} />
-      </div>
-      <div className="absolute left-24 bottom-24 hidden lg:block">
-        <div className="h-12 w-12 bg-warning border-3 border-foreground shadow-[6px_6px_0_0_hsl(var(--foreground))] animate-float" style={{ animationDelay: "0.5s" }} />
-      </div>
-
-      <div className="w-full max-w-md relative">
+      <div className="relative w-full max-w-md">
         <div className="mb-8 flex flex-col items-center text-center">
           <div className="relative mb-6">
-            <div className="brutal-primary flex h-20 w-20 items-center justify-center shadow-[6px_6px_0_0_hsl(var(--foreground))] relative z-10">
-              <UtensilsCrossed className="h-9 w-9" strokeWidth={2.5} />
+            <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-brand text-primary-foreground shadow-2xl">
+              <UtensilsCrossed className="h-9 w-9" strokeWidth={2.25} />
             </div>
-            <div className="absolute inset-0 translate-x-2 translate-y-2 border-3 border-foreground bg-primary/30" />
-            <div className="absolute -top-2 -right-2 brutal-accent px-3 py-1 text-[10px] font-black uppercase tracking-wider shadow-[3px_3px_0_0_hsl(var(--foreground))] z-20 animate-brutal-bounce">
+            <div className="absolute -inset-2 rounded-3xl bg-gradient-brand opacity-20 blur-lg -z-10" />
+            <span className="absolute -right-3 -top-3 rounded-full bg-accent px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-accent-foreground shadow-lg animate-float">
               RMS v2
-            </div>
+            </span>
           </div>
-          <h1 className="font-display text-4xl font-black uppercase tracking-tighter leading-none">Resto</h1>
-          <h1 className="font-display text-4xl font-black uppercase tracking-tighter leading-none -mt-1">Manager</h1>
-          <p className="mt-3 text-sm font-black text-muted-foreground uppercase tracking-widest">
+          <h1 className="font-display text-4xl font-bold tracking-tight leading-none">
+            Resto<span className="text-primary">RMS</span>
+          </h1>
+          <p className="mt-3 text-sm text-muted-foreground">
             Sistem Manajemen Restoran
           </p>
         </div>
 
-        <div className="relative">
-          <div className="absolute -inset-1 border-3 border-foreground bg-primary/20 translate-x-2 translate-y-2" />
-          <div className="relative brutal-card bg-card">
-            <LoginForm redirect={redirectParam} />
-          </div>
+        <div className="glass-strong rounded-2xl border border-border p-6 shadow-2xl sm:p-8">
+          <LoginForm redirect={redirectParam} />
         </div>
 
-        <p className="mt-4 text-center text-xs font-black text-muted-foreground uppercase tracking-wider">
-          &copy; {new Date().getFullYear()} RMS - Restaurant Management System
+        <div className="mt-4 flex items-center justify-center gap-3 rounded-xl border border-border/70 bg-card/60 px-4 py-3">
+          <span className="relative flex h-2 w-2">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-success opacity-60" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-success" />
+          </span>
+          <p className="text-xs text-muted-foreground">
+            Demo · <span className="font-mono font-semibold text-foreground">admin</span> /{" "}
+            <span className="font-mono font-semibold text-foreground">admin123!</span>
+          </p>
+        </div>
+
+        <p className="mt-4 text-center text-xs text-muted-foreground">
+          © {new Date().getFullYear()} RMS — Restaurant Management System
         </p>
       </div>
-
-      <div className="absolute bottom-8 left-8 brutal-card p-3 max-w-xs hidden lg:block">
-        <div className="flex items-center gap-2 mb-1">
-          <span className="h-2 w-2 bg-success animate-pulse" />
-          <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Demo Access</p>
-        </div>
-        <p className="text-xs font-bold">Username: <span className="font-mono font-black bg-foreground text-background px-1">admin</span></p>
-        <p className="text-xs font-bold">Password: <span className="font-mono font-black bg-foreground text-background px-1">admin123!</span></p>
-      </div>
-    </div>
+    </main>
   )
 }

@@ -2,9 +2,10 @@
 
 import * as React from "react"
 import { formatCurrency } from "@/lib/utils"
-import { UtensilsCrossed, Plus, Minus, ShoppingCart, CheckCircle2 } from "lucide-react"
+import { UtensilsCrossed, Plus, Minus, ShoppingCart, CheckCircle2, AlertTriangle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { cn } from "@/lib/utils"
 
 interface MenuProduct {
   id: string
@@ -63,6 +64,7 @@ export function PublicMenu({ branchId, tableId, branchName, tableName, orgName, 
     )
 
   const total = cart.reduce((sum, c) => sum + c.product.selling_price * c.qty, 0)
+  const totalItems = cart.reduce((s, c) => s + c.qty, 0)
 
   const placeOrder = async () => {
     setSubmitting(true)
@@ -97,21 +99,23 @@ export function PublicMenu({ branchId, tableId, branchName, tableName, orgName, 
   }
 
   return (
-    <div className="mx-auto min-h-screen max-w-lg bg-background brutal-dots pb-24">
-      <header className="sticky top-0 z-10 border-b-3 border-foreground bg-background/95 backdrop-blur shadow-[0_4px_0_0_hsl(var(--accent))]">
+    <div className="mx-auto min-h-screen max-w-lg bg-background pb-28">
+      <header className="glass sticky top-0 z-10 border-b border-border">
         <div className="flex items-center justify-between p-4">
-          <div className="flex items-center gap-2">
-            <div className="flex h-10 w-10 items-center justify-center border-3 border-foreground bg-primary shadow-[3px_3px_0_0_hsl(var(--foreground))]">
-              <UtensilsCrossed className="h-5 w-5 text-primary-foreground" strokeWidth={3} />
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-brand text-primary-foreground shadow-md">
+              <UtensilsCrossed className="h-5 w-5" strokeWidth={2.25} />
             </div>
             <div>
-              <h1 className="text-sm font-black uppercase tracking-wide">{orgName}</h1>
-              <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider">{branchName}</p>
+              <h1 className="text-sm font-bold tracking-tight leading-none">{orgName}</h1>
+              <p className="mt-0.5 text-xs text-muted-foreground">{branchName}</p>
             </div>
           </div>
-          <Badge variant="secondary">Meja {tableName}</Badge>
+          <Badge variant="secondary" className="gap-1.5 py-1">
+            <UtensilsCrossed className="h-3 w-3" /> Meja {tableName}
+          </Badge>
         </div>
-        <div className="flex gap-2 overflow-x-auto px-4 pb-3">
+        <div className="flex gap-2 overflow-x-auto px-4 pb-3 [scrollbar-width:none]">
           <Button size="sm" variant={!activeCat ? "default" : "outline"} onClick={() => setActiveCat("")}>
             Semua
           </Button>
@@ -124,61 +128,74 @@ export function PublicMenu({ branchId, tableId, branchName, tableName, orgName, 
       </header>
 
       <main className="space-y-3 p-4">
-        {filtered.map((product) => (
-          <div key={product.id} className="flex gap-3 border-3 border-foreground bg-card p-3 shadow-[4px_4px_0_0_hsl(var(--foreground))] transition-all duration-150 hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[5px_5px_0_0_hsl(var(--foreground))]">
-            {product.image_url ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={product.image_url} alt={product.name} className="h-20 w-20 border-2 border-foreground object-cover shadow-[2px_2px_0_0_hsl(var(--foreground))]" />
-            ) : (
-              <div className="flex h-20 w-20 shrink-0 items-center justify-center border-2 border-foreground bg-muted shadow-[2px_2px_0_0_hsl(var(--foreground))]">
-                <UtensilsCrossed className="h-6 w-6 text-muted-foreground" strokeWidth={3} />
-              </div>
-            )}
-            <div className="flex flex-1 flex-col">
-              <div className="flex items-start justify-between">
-                <div>
-                  <p className="font-black uppercase tracking-wide">{product.name}</p>
-                  {product.description && (
-                    <p className="mt-0.5 line-clamp-2 text-xs font-bold text-muted-foreground">{product.description}</p>
-                  )}
-                </div>
-                {product.is_favorite && <Badge variant="success" className="text-[10px]">Populer</Badge>}
-              </div>
-              <div className="mt-auto flex items-center justify-between pt-2">
-                <span className="text-sm font-black text-primary">{formatCurrency(product.selling_price)}</span>
-                {cart.find((c) => c.product.id === product.id) ? (
-                  <div className="flex items-center gap-2">
-                    <Button size="icon" variant="outline" className="h-7 w-7" onClick={() => remove(product.id)}>
-                      <Minus className="h-3 w-3" strokeWidth={3} />
-                    </Button>
-                    <span className="w-5 text-center text-sm font-black">
-                      {cart.find((c) => c.product.id === product.id)?.qty}
-                    </span>
-                    <Button size="icon" variant="outline" className="h-7 w-7" onClick={() => add(product)}>
-                      <Plus className="h-3 w-3" strokeWidth={3} />
-                    </Button>
-                  </div>
-                ) : (
-                  <Button size="sm" onClick={() => add(product)}>
-                    <Plus className="mr-1 h-3 w-3" strokeWidth={3} /> Tambah
-                  </Button>
-                )}
-              </div>
-            </div>
+        {filtered.length === 0 ? (
+          <div className="flex flex-col items-center justify-center gap-2 py-20 text-center text-muted-foreground">
+            <UtensilsCrossed className="h-10 w-10 text-muted-foreground/40" />
+            <p className="text-sm">Menu kosong</p>
           </div>
-        ))}
+        ) : (
+          filtered.map((product) => {
+            const inCart = cart.find((c) => c.product.id === product.id)
+            return (
+              <div
+                key={product.id}
+                className="flex gap-3 rounded-2xl border border-border bg-card p-3 shadow-sm transition-all duration-150 hover:border-primary/30 hover:shadow-md"
+              >
+                {product.image_url ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={product.image_url} alt={product.name} className="h-20 w-20 shrink-0 rounded-xl object-cover" />
+                ) : (
+                  <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-xl bg-muted">
+                    <UtensilsCrossed className="h-7 w-7 text-muted-foreground/50" strokeWidth={2} />
+                  </div>
+                )}
+                <div className="flex flex-1 flex-col">
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <p className="text-sm font-semibold tracking-tight">{product.name}</p>
+                      {product.description && (
+                        <p className="mt-0.5 line-clamp-2 text-xs text-muted-foreground">{product.description}</p>
+                      )}
+                    </div>
+                    {product.is_favorite && (
+                      <Badge variant="success" className="shrink-0 text-[10px]">Populer</Badge>
+                    )}
+                  </div>
+                  <div className="mt-auto flex items-center justify-between pt-2">
+                    <span className="tabular font-mono text-sm font-bold text-primary">{formatCurrency(product.selling_price)}</span>
+                    {inCart ? (
+                      <div className="flex items-center gap-2 rounded-lg border border-border bg-background/60 p-0.5">
+                        <Button size="icon" variant="ghost" className="h-7 w-7 text-primary hover:bg-primary/10" onClick={() => remove(product.id)}>
+                          <Minus className="h-3.5 w-3.5" />
+                        </Button>
+                        <span className="tabular w-5 text-center text-sm font-bold">{inCart.qty}</span>
+                        <Button size="icon" variant="ghost" className="h-7 w-7 text-primary hover:bg-primary/10" onClick={() => add(product)}>
+                          <Plus className="h-3.5 w-3.5" />
+                        </Button>
+                      </div>
+                    ) : (
+                      <Button size="sm" onClick={() => add(product)}>
+                        <Plus className="mr-1 h-3.5 w-3.5" /> Tambah
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )
+          })
+        )}
       </main>
 
       {cart.length > 0 && (
-        <div className="fixed inset-x-0 bottom-0 border-t-3 border-foreground bg-background p-4 shadow-[0_-4px_0_0_hsl(var(--primary))]">
-          <div className="mx-auto flex max-w-lg items-center justify-between">
+        <div className="glass-strong fixed inset-x-0 bottom-0 z-20 border-t border-border p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
+          <div className="mx-auto flex max-w-lg items-center justify-between gap-3">
             <div>
-              <p className="flex items-center gap-1 text-xs font-bold text-muted-foreground uppercase tracking-wider">
-                <ShoppingCart className="h-3 w-3" strokeWidth={3} /> {cart.reduce((s, c) => s + c.qty, 0)} item
+              <p className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+                <ShoppingCart className="h-3.5 w-3.5" /> {totalItems} item
               </p>
-              <p className="font-black text-lg">{formatCurrency(total)}</p>
+              <p className="tabular mt-0.5 font-mono text-lg font-bold">{formatCurrency(total)}</p>
             </div>
-            <Button size="lg" onClick={placeOrder} disabled={submitting}>
+            <Button size="lg" className="bg-gradient-brand shadow-lg hover:shadow-xl" onClick={placeOrder} disabled={submitting}>
               {submitting ? "Mengirim..." : "Kirim ke Dapur"}
             </Button>
           </div>
@@ -186,12 +203,18 @@ export function PublicMenu({ branchId, tableId, branchName, tableName, orgName, 
       )}
 
       {(placed || orderInfo) && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/80 backdrop-blur-sm p-4">
-          <div className="w-full max-w-sm border-3 border-foreground bg-card p-6 text-center shadow-[8px_8px_0_0_hsl(var(--foreground))] animate-brutal-pop">
-            <CheckCircle2 className={`mx-auto mb-3 h-12 w-12 ${placed ? "text-success" : "text-warning"}`} strokeWidth={3} />
-            <h2 className="text-lg font-black uppercase tracking-wide">{placed ? "Pesanan Terkirim!" : "Perhatian"}</h2>
-            <p className="mt-1 text-sm font-bold text-muted-foreground">{orderInfo}</p>
-            <Button className="mt-4 w-full" onClick={() => { setPlaced(false); setOrderInfo(""); }}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/55 p-4 backdrop-blur-sm">
+          <div className="w-full max-w-sm rounded-2xl border border-border bg-card p-6 text-center shadow-2xl animate-brutal-pop">
+            <div className={cn("mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full", placed ? "bg-success/10" : "bg-warning/10")}>
+              {placed ? (
+                <CheckCircle2 className="h-7 w-7 text-success" strokeWidth={2.25} />
+              ) : (
+                <AlertTriangle className="h-7 w-7 text-warning" strokeWidth={2.25} />
+              )}
+            </div>
+            <h2 className="text-lg font-bold tracking-tight">{placed ? "Pesanan Terkirim!" : "Perhatian"}</h2>
+            <p className="mt-2 text-sm text-muted-foreground">{orderInfo}</p>
+            <Button className="mt-5 w-full" onClick={() => { setPlaced(false); setOrderInfo("") }}>
               Tutup
             </Button>
           </div>

@@ -28,15 +28,16 @@ import {
   Plus,
   Minus,
   Utensils,
-  Check,
   Banknote,
   Smartphone,
   CreditCard,
   Landmark,
   UserPlus,
   X,
+  ReceiptText,
 } from "lucide-react"
 import toast from "react-hot-toast"
+import { cn } from "@/lib/utils"
 
 interface CartItem {
   product_id: string
@@ -353,34 +354,26 @@ export function POS({ user, categories, products, tables, customers: initialCust
   return (
     <div className="flex h-[calc(100vh-8rem)] flex-col gap-4 lg:flex-row">
       {/* LEFT: categories */}
-      <div className="flex shrink-0 gap-2 overflow-x-auto pb-1 lg:w-40 lg:flex-col lg:overflow-visible">
-        <Button
-          variant={!activeCategory ? "default" : "outline"}
-          className="shrink-0 justify-start"
-          onClick={() => setActiveCategory("")}
-        >
-          Semua
-        </Button>
+      <div className="flex shrink-0 gap-2 overflow-x-auto pb-1 lg:w-44 lg:flex-col lg:overflow-visible">
+        <CategoryButton label="Semua" active={!activeCategory} onClick={() => setActiveCategory("")} />
         {categories.map((cat) => (
-          <Button
+          <CategoryButton
             key={cat.id}
-            variant={activeCategory === cat.id ? "default" : "outline"}
-            className="shrink-0 justify-start"
+            label={cat.name}
+            active={activeCategory === cat.id}
             onClick={() => setActiveCategory(cat.id)}
-          >
-            {cat.name}
-          </Button>
+          />
         ))}
       </div>
 
       {/* CENTER: products */}
       <div className="flex flex-1 flex-col gap-3 overflow-hidden">
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" strokeWidth={3} />
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             id="pos-search"
             placeholder="Cari produk, SKU, atau barcode... (F2)"
-            className="pl-11"
+            className="pl-10"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             autoFocus
@@ -388,122 +381,135 @@ export function POS({ user, categories, products, tables, customers: initialCust
         </div>
 
         <ScrollArea className="flex-1">
-          <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-4">
-            {filteredProducts.map((product) => (
-              <button
-                key={product.id}
-                onClick={() => addToCart(product)}
-                className="group flex flex-col bg-card border-3 border-foreground p-3 text-left shadow-[4px_4px_0_0_hsl(var(--foreground))] transition-all duration-150 hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0_0_hsl(var(--foreground))]"
-              >
-                <div className="mb-2 flex h-20 items-center justify-center bg-muted border-2 border-border">
-                  {product.image_url ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={product.image_url} alt={product.name} className="h-full w-full object-cover" />
-                  ) : (
-                    <Utensils className="h-6 w-6 text-muted-foreground" strokeWidth={2} />
-                  )}
-                </div>
-                <p className="font-display truncate text-xs font-black uppercase tracking-wide">{product.name}</p>
-                <p className="font-mono mt-1 text-sm font-black text-primary">
-                  {formatCurrency(product.selling_price)}
-                </p>
-                {product.is_favorite && <Badge variant="success" className="mt-1 w-fit text-[9px]">FAVORIT</Badge>}
-              </button>
-            ))}
-          </div>
+          {filteredProducts.length === 0 ? (
+            <div className="flex h-full flex-col items-center justify-center gap-2 text-center text-muted-foreground">
+              <Utensils className="h-10 w-10 text-muted-foreground/40" />
+              <p className="text-sm">Produk tidak ditemukan</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-4">
+              {filteredProducts.map((product) => (
+                <button
+                  key={product.id}
+                  onClick={() => addToCart(product)}
+                  className="group flex flex-col overflow-hidden rounded-xl border border-border bg-card text-left shadow-sm transition-all duration-150 hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-md active:translate-y-0"
+                >
+                  <div className="relative mb-2 flex h-24 items-center justify-center bg-muted/60">
+                    {product.image_url ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={product.image_url} alt={product.name} className="h-full w-full object-cover" />
+                    ) : (
+                      <Utensils className="h-7 w-7 text-muted-foreground/50" strokeWidth={2} />
+                    )}
+                    {product.is_favorite && (
+                      <Badge variant="success" className="absolute right-1.5 top-1.5 text-[9px]">
+                        FAVORIT
+                      </Badge>
+                    )}
+                  </div>
+                  <div className="px-2.5 pb-2.5">
+                    <p className="line-clamp-1 text-[13px] font-semibold">{product.name}</p>
+                    <p className="tabular mt-1 font-mono text-sm font-bold text-primary">
+                      {formatCurrency(product.selling_price)}
+                    </p>
+                  </div>
+                </button>
+              ))}
+            </div>
+          )}
         </ScrollArea>
       </div>
 
       {/* RIGHT: cart */}
-      <div className="flex w-full flex-col border-3 border-foreground bg-background lg:w-80">
-        <div className="border-b-[3px] border-foreground p-3 bg-foreground text-background">
-          <div className="flex flex-wrap items-center gap-1">
+      <div className="flex w-full flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-lg lg:w-[22rem]">
+        <div className="border-b border-border p-3">
+          <div className="mb-2 flex flex-wrap gap-1 rounded-xl bg-muted p-1">
             {ORDER_TYPES.map((type) => (
-              <Button
+              <button
                 key={type}
-                size="sm"
-                variant={orderType === type ? "secondary" : "ghost"}
-                className={`${orderType === type ? "bg-primary text-primary-foreground" : "text-background hover:text-foreground hover:bg-muted"}`}
+                type="button"
                 onClick={() => setOrderType(type)}
+                className={cn(
+                  "flex-1 rounded-lg px-2 py-1.5 text-[11px] font-semibold uppercase tracking-wide transition-all",
+                  orderType === type
+                    ? "bg-card text-primary shadow-sm"
+                    : "text-muted-foreground hover:text-foreground"
+                )}
               >
                 {type.replace("_", " ")}
-              </Button>
+              </button>
             ))}
           </div>
 
           {orderType === "DINE_IN" && (
-            <div className="mt-2">
-              <Select value={selectedTable} onValueChange={setSelectedTable}>
-                <SelectTrigger className="w-full h-9 bg-background text-foreground border-2 border-border">
-                  <SelectValue placeholder="Pilih meja" />
-                </SelectTrigger>
-                <SelectContent>
-                  {tables.map((t) => (
-                    <SelectItem key={t.id} value={t.id}>
-                      {t.name || t.number} (Cap.{t.capacity})
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+            <Select value={selectedTable} onValueChange={setSelectedTable}>
+              <SelectTrigger className="h-9 w-full">
+                <SelectValue placeholder="Pilih meja" />
+              </SelectTrigger>
+              <SelectContent>
+                {tables.map((t) => (
+                  <SelectItem key={t.id} value={t.id}>
+                    {t.name || t.number} (Cap.{t.capacity})
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           )}
 
-          <div className="mt-2">
-            <div className="flex gap-1">
-              <Select value={customerId} onValueChange={setCustomerId}>
-                <SelectTrigger className="w-full h-9 bg-background text-foreground border-2 border-border">
-                  <SelectValue placeholder="Pilih pelanggan" />
-                </SelectTrigger>
-                <SelectContent>
-                  {customers.map((c) => (
-                    <SelectItem key={c.id} value={c.id}>
-                      {c.name} {c.is_member ? `(${c.member_level})` : ""}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <Button variant="outline" size="icon" className="h-9 w-9 shrink-0 border-2 border-foreground" onClick={() => setNewCustomerOpen(true)} aria-label="Tambah customer baru">
-                <UserPlus className="h-4 w-4" strokeWidth={3} />
-              </Button>
-            </div>
+          <div className="mt-2 flex gap-1.5">
+            <Select value={customerId} onValueChange={setCustomerId}>
+              <SelectTrigger className="h-9 w-full">
+                <SelectValue placeholder="Pilih pelanggan" />
+              </SelectTrigger>
+              <SelectContent>
+                {customers.map((c) => (
+                  <SelectItem key={c.id} value={c.id}>
+                    {c.name} {c.is_member ? `(${c.member_level})` : ""}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Button variant="outline" size="icon" className="h-9 w-9 shrink-0" onClick={() => setNewCustomerOpen(true)} aria-label="Tambah customer baru">
+              <UserPlus className="h-4 w-4" />
+            </Button>
           </div>
         </div>
 
-        <ScrollArea className="flex-1 p-3">
+        <ScrollArea className="flex-1">
           {cart.length === 0 ? (
-            <div className="flex h-full flex-col items-center justify-center text-center text-muted-foreground">
-              <ShoppingCart className="mb-2 h-10 w-10" strokeWidth={2} />
-              <p className="text-xs font-bold uppercase tracking-wider">Keranjang kosong</p>
+            <div className="flex h-full flex-col items-center justify-center gap-2 text-center text-muted-foreground">
+              <ShoppingCart className="mb-1 h-10 w-10 text-muted-foreground/40" />
+              <p className="text-xs font-medium">Keranjang kosong</p>
             </div>
           ) : (
-            <div className="space-y-2">
+            <div className="space-y-2 p-3">
               {cart.map((item, i) => (
-                <div key={i} className="border-2 border-border p-2 bg-background">
-                  <div className="flex items-center justify-between">
-                    <p className="truncate text-xs font-bold uppercase">{item.product_name}</p>
-                    <Button size="icon" variant="ghost" className="h-6 w-6 text-destructive hover:bg-destructive hover:text-destructive-foreground" onClick={() => removeFromCart(i)}>
-                      <Trash2 className="h-3 w-3" strokeWidth={3} />
+                <div key={i} className="animate-brutal-pop rounded-xl border border-border bg-background/60 p-2.5">
+                  <div className="flex items-center justify-between gap-2">
+                    <p className="truncate text-[13px] font-semibold">{item.product_name}</p>
+                    <Button size="icon-sm" variant="ghost" className="h-6 w-6 text-destructive hover:bg-destructive/10 hover:text-destructive" onClick={() => removeFromCart(i)}>
+                      <Trash2 className="h-3 w-3" />
                     </Button>
                   </div>
-                  {item.variant_name && <p className="text-[10px] font-bold text-muted-foreground">{item.variant_name}</p>}
-                  <div className="mt-1 flex items-center justify-between">
+                  {item.variant_name && <p className="text-[11px] text-muted-foreground">{item.variant_name}</p>}
+                  <div className="mt-1.5 flex items-center justify-between">
                     <div className="flex items-center gap-1">
-                      <Button size="icon" variant="outline" className="h-6 w-6 border-2 border-border" onClick={() => changeQty(i, -1)}>
-                        <Minus className="h-3 w-3" strokeWidth={3} />
+                      <Button size="icon-sm" variant="outline" className="h-6 w-6" onClick={() => changeQty(i, -1)}>
+                        <Minus className="h-3 w-3" />
                       </Button>
-                      <span className="w-6 text-center text-xs font-black">{item.quantity}</span>
-                      <Button size="icon" variant="outline" className="h-6 w-6 border-2 border-border" onClick={() => changeQty(i, 1)}>
-                        <Plus className="h-3 w-3" strokeWidth={3} />
+                      <span className="tabular w-6 text-center text-xs font-semibold">{item.quantity}</span>
+                      <Button size="icon-sm" variant="outline" className="h-6 w-6" onClick={() => changeQty(i, 1)}>
+                        <Plus className="h-3 w-3" />
                       </Button>
                     </div>
-                    <p className="text-xs font-black font-mono">{formatCurrency(item.unit_price * item.quantity)}</p>
+                    <p className="tabular font-mono text-[13px] font-bold">{formatCurrency(item.unit_price * item.quantity)}</p>
                   </div>
-                  <div className="mt-1 flex items-center gap-1">
-                    <span className="text-[10px] font-bold text-muted-foreground uppercase">Diskon</span>
+                  <div className="mt-1.5 flex items-center gap-1.5">
+                    <span className="text-[11px] text-muted-foreground">Diskon</span>
                     <Input
                       type="number"
                       min={0}
-                      className="h-6 w-20 px-1 text-xs"
+                      className="h-6 w-20 px-1.5 text-xs"
                       value={item.discount}
                       onChange={(e) => setItemDiscount(i, Number(e.target.value))}
                     />
@@ -514,15 +520,12 @@ export function POS({ user, categories, products, tables, customers: initialCust
           )}
         </ScrollArea>
 
-        <div className="border-t-[3px] border-foreground p-3">
-          <div className="space-y-2 text-sm">
+        <div className="border-t border-border p-3">
+          <div className="space-y-1.5 text-sm">
             <div className="flex items-center justify-between gap-2">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Diskon</span>
+              <span className="text-xs text-muted-foreground">Diskon</span>
               <div className="flex items-center gap-1">
-                <Select
-                  value={discountType}
-                  onValueChange={(v) => setDiscountType(v as typeof discountType)}
-                >
+                <Select value={discountType} onValueChange={(v) => setDiscountType(v as typeof discountType)}>
                   <SelectTrigger className="h-7 w-24 text-xs"><SelectValue /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="none">Tanpa</SelectItem>
@@ -534,52 +537,37 @@ export function POS({ user, categories, products, tables, customers: initialCust
                   <Input
                     type="number"
                     min={0}
-                    className="h-7 w-16 px-1 text-xs"
+                    className="h-7 w-16 px-1.5 text-xs"
                     value={discountValue}
                     onChange={(e) => setDiscountValue(Number(e.target.value))}
                   />
                 )}
               </div>
             </div>
-            <div className="flex justify-between">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Subtotal</span>
-              <span className="font-mono text-xs font-bold">{formatCurrency(subtotal)}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Diskon Item</span>
-              <span className="font-mono text-xs font-bold">-{formatCurrency(itemDiscount)}</span>
-            </div>
-            {globalDiscount > 0 && (
-              <div className="flex justify-between">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Diskon Global</span>
-                <span className="font-mono text-xs font-bold">-{formatCurrency(globalDiscount)}</span>
-              </div>
-            )}
-            <div className="flex justify-between">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Biaya Layanan</span>
-              <span className="font-mono text-xs font-bold">{formatCurrency(serviceCharge)}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Pajak</span>
-              <span className="font-mono text-xs font-bold">{formatCurrency(taxAmount)}</span>
-            </div>
-            <div className="flex justify-between border-t-[3px] border-foreground pt-2 mt-2">
-              <span className="text-sm font-black uppercase">TOTAL</span>
-              <span className="font-mono text-lg font-black">{formatCurrency(total)}</span>
+            <Row label="Subtotal" value={formatCurrency(subtotal)} />
+            {itemDiscount > 0 && <Row label="Diskon Item" value={`-${formatCurrency(itemDiscount)}`} muted />}
+            {globalDiscount > 0 && <Row label="Diskon Global" value={`-${formatCurrency(globalDiscount)}`} muted />}
+            <Row label={`Biaya Layanan ${serviceChargePercent}%`} value={formatCurrency(serviceCharge)} />
+            <Row label={`Pajak ${taxPercent}%`} value={formatCurrency(taxAmount)} />
+            <div className="mt-1 flex items-center justify-between border-t border-border pt-2">
+              <span className="text-sm font-bold">TOTAL</span>
+              <span className="tabular font-mono text-lg font-bold text-primary">{formatCurrency(total)}</span>
             </div>
           </div>
 
-          {error && <p className="mt-2 text-xs font-bold text-destructive bg-destructive/10 border-2 border-destructive px-2 py-1">{error}</p>}
+          {error && (
+            <p className="mt-2 rounded-lg border border-destructive/25 bg-destructive/10 px-2.5 py-1.5 text-xs font-medium text-destructive">{error}</p>
+          )}
 
           <Button
-            className="mt-3 w-full h-12 uppercase tracking-wider font-black"
+            className="mt-3 h-12 w-full bg-gradient-brand text-base font-bold shadow-lg hover:shadow-xl"
             size="lg"
             onClick={openPaymentDialog}
             disabled={cart.length === 0}
           >
-            <Check className="mr-2 h-4 w-4" strokeWidth={3} /> BAYAR ({formatCurrency(total)})
+            <ReceiptText className="mr-1 h-4 w-4" /> Bayar · {formatCurrency(total)}
           </Button>
-          <p className="mt-2 text-center text-[10px] font-bold text-muted-foreground font-mono">
+          <p className="mt-2 text-center font-mono text-[10px] font-medium text-muted-foreground">
             F2 CARI · F4 TAMBAH · F8 BAYAR · ESC TUTUP
           </p>
         </div>
@@ -594,7 +582,7 @@ export function POS({ user, categories, products, tables, customers: initialCust
           <div className="space-y-4">
             {selectedProduct?.variants?.length > 0 && (
               <div>
-                <p className="mb-2 text-xs font-black uppercase tracking-wider text-muted-foreground">Varian</p>
+                <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Varian</p>
                 <div className="flex flex-wrap gap-2">
                   {selectedProduct.variants.map((v: any) => (
                     <Button
@@ -612,13 +600,13 @@ export function POS({ user, categories, products, tables, customers: initialCust
 
             {selectedProduct?.modifiers?.length > 0 && (
               <div>
-                <p className="mb-2 text-xs font-black uppercase tracking-wider text-muted-foreground">Modifier</p>
+                <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Modifier</p>
                 {selectedProduct.modifiers.map((pm: any) => {
                   const mod = pm.modifier
                   return (
                     <div key={mod?.id} className="mb-2">
-                      <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">{mod?.name}</p>
-                      <div className="flex flex-wrap gap-1.5 mt-1">
+                      <p className="mb-1 text-[11px] font-medium text-muted-foreground">{mod?.name}</p>
+                      <div className="flex flex-wrap gap-1.5">
                         {mod?.options?.map((opt: any) => {
                           const modName = mod.name
                           const optName = opt.name
@@ -661,21 +649,21 @@ export function POS({ user, categories, products, tables, customers: initialCust
               </div>
             )}
 
-            <div className="flex items-center justify-between">
-              <p className="text-xs font-black uppercase tracking-wider">Qty</p>
+            <div className="flex items-center justify-between rounded-xl border border-border bg-muted/40 px-3 py-2.5">
+              <p className="text-sm font-medium">Qty</p>
               <div className="flex items-center gap-2">
-                <Button size="icon" variant="outline" className="border-2 border-border" onClick={() => setQuantity((q) => Math.max(1, q - 1))}>
-                  <Minus className="h-4 w-4" strokeWidth={3} />
+                <Button size="icon" variant="outline" className="h-8 w-8" onClick={() => setQuantity((q) => Math.max(1, q - 1))}>
+                  <Minus className="h-4 w-4" />
                 </Button>
-                <span className="w-10 text-center font-black">{quantity}</span>
-                <Button size="icon" variant="outline" className="border-2 border-border" onClick={() => setQuantity((q) => q + 1)}>
-                  <Plus className="h-4 w-4" strokeWidth={3} />
+                <span className="tabular w-10 text-center text-base font-bold">{quantity}</span>
+                <Button size="icon" variant="outline" className="h-8 w-8" onClick={() => setQuantity((q) => q + 1)}>
+                  <Plus className="h-4 w-4" />
                 </Button>
               </div>
             </div>
 
             <div>
-              <p className="mb-2 text-xs font-black uppercase tracking-wider">Catatan</p>
+              <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Catatan</p>
               <Input
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
@@ -686,10 +674,10 @@ export function POS({ user, categories, products, tables, customers: initialCust
 
           <DialogFooter>
             <Button variant="outline" onClick={() => setSelectedProduct(null)}>
-              BATAL
+              Batal
             </Button>
             <Button onClick={confirmAddToCart}>
-              <ShoppingCart className="mr-2 h-4 w-4" strokeWidth={3} /> TAMBAH
+              <ShoppingCart className="mr-1 h-4 w-4" /> Tambah
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -704,74 +692,79 @@ export function POS({ user, categories, products, tables, customers: initialCust
             <DialogTitle>Pembayaran</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
-            <div className="bg-foreground text-background p-4 text-center border-3 border-foreground shadow-[5px_5px_0_0_hsl(var(--foreground))]">
-              <p className="text-xs font-bold uppercase tracking-wider opacity-70">Total Tagihan</p>
-              <p className="font-mono text-3xl font-black mt-1">{formatCurrency(total)}</p>
+            <div className="rounded-xl border border-primary/20 bg-gradient-to-br from-primary/15 to-accent/10 p-4 text-center">
+              <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Total Tagihan</p>
+              <p className="tabular mt-1 font-mono text-3xl font-bold text-primary">{formatCurrency(total)}</p>
             </div>
 
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <p className="text-xs font-black uppercase tracking-wider">Metode Pembayaran (Split)</p>
+                <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Metode Pembayaran (Split)</p>
                 <Button variant="outline" size="sm" onClick={addPaymentLine}>
-                  <Plus className="mr-1 h-3 w-3" strokeWidth={3} /> TAMBAH
+                  <Plus className="mr-1 h-3 w-3" /> Tambah
                 </Button>
               </div>
-              {payments.map((p, i) => (
-                <div key={i} className="flex items-center gap-2">
-                  <Select
-                    value={p.method}
-                    onValueChange={(v) =>
-                      setPayments((prev) => prev.map((x, j) => (j === i ? { ...x, method: v } : x)))
-                    }
-                  >
-                    <SelectTrigger className="w-[45%] h-9 text-xs"><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                      {PAYMENT_METHODS.map((m) => (
-                        <SelectItem key={m.key} value={m.key}>
-                          <span className="flex items-center gap-1">
-                            <m.icon className="h-3 w-3" strokeWidth={3} /> {m.label}
-                          </span>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <Input
-                    type="number"
-                    min={0}
-                    className="h-9 flex-1 text-xs"
-                    value={p.amount}
-                    onChange={(e) =>
-                      setPayments((prev) =>
-                        prev.map((x, j) => (j === i ? { ...x, amount: Number(e.target.value) } : x))
-                      )
-                    }
-                  />
-                  {payments.length > 1 && (
-                    <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive border-2 border-destructive hover:bg-destructive hover:text-destructive-foreground" onClick={() => removePaymentLine(i)} aria-label="Hapus metode">
-                      <X className="h-3 w-3" strokeWidth={3} />
-                    </Button>
-                  )}
-                </div>
-              ))}
-              <div className="flex justify-between border-t-2 border-border pt-2 mt-2">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Total Dibayar</span>
-                <span className="font-mono text-sm font-black">{formatCurrency(totalPaid)}</span>
+              {payments.map((p, i) => {
+                return (
+                  <div key={i} className="flex items-center gap-2">
+                    <Select
+                      value={p.method}
+                      onValueChange={(v) =>
+                        setPayments((prev) => prev.map((x, j) => (j === i ? { ...x, method: v } : x)))
+                      }
+                    >
+                      <SelectTrigger className="w-[45%] h-9 text-xs"><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        {PAYMENT_METHODS.map((m) => (
+                          <SelectItem key={m.key} value={m.key}>
+                            <span className="flex items-center gap-1.5">
+                              <m.icon className="h-3.5 w-3.5 text-muted-foreground" /> {m.label}
+                            </span>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <Input
+                      type="number"
+                      min={0}
+                      className="h-9 flex-1 text-xs"
+                      value={p.amount}
+                      onChange={(e) =>
+                        setPayments((prev) =>
+                          prev.map((x, j) => (j === i ? { ...x, amount: Number(e.target.value) } : x))
+                        )
+                      }
+                    />
+                    {payments.length > 1 && (
+                      <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:bg-destructive/10 hover:text-destructive" onClick={() => removePaymentLine(i)} aria-label="Hapus metode">
+                        <X className="h-3.5 w-3.5" />
+                      </Button>
+                    )}
+                  </div>
+                )
+              })}
+              <div className="mt-2 flex justify-between border-t border-border pt-2">
+                <span className="text-xs text-muted-foreground">Total Dibayar</span>
+                <span className="tabular font-mono text-sm font-bold">{formatCurrency(totalPaid)}</span>
               </div>
               {payments.some((p) => p.method === "CASH") && totalPaid >= total && (
-                <div className="bg-success text-success-foreground p-2 text-center border-2 border-foreground">
-                  <p className="text-xs font-bold uppercase tracking-wider">Kembalian</p>
-                  <p className="font-mono text-lg font-black">{formatCurrency(totalPaid - total)}</p>
+                <div className="rounded-xl border border-success/25 bg-success/10 p-3 text-center">
+                  <div className="flex items-center justify-center gap-2">
+                    <Banknote className="h-4 w-4 text-success" />
+                    <p className="text-xs font-medium uppercase tracking-wider text-success">Kembalian</p>
+                  </div>
+                  <p className="tabular mt-0.5 font-mono text-lg font-bold text-success">{formatCurrency(totalPaid - total)}</p>
                 </div>
               )}
             </div>
           </div>
-          {error && <p className="text-xs font-bold text-destructive bg-destructive/10 border-2 border-destructive px-2 py-1">{error}</p>}
+          {error && <p className="rounded-lg border border-destructive/25 bg-destructive/10 px-2.5 py-1.5 text-xs font-medium text-destructive">{error}</p>}
           <DialogFooter>
             <Button variant="outline" disabled={processing} onClick={() => setShowPayment(false)}>
-              BATAL
+              Batal
             </Button>
-            <Button onClick={handlePayment} disabled={processing} className="uppercase tracking-wider font-black">
-              {processing ? "MEMPROSES..." : "KONFIRMASI PEMBAYARAN"}
+            <Button onClick={handlePayment} disabled={processing}>
+              {processing ? "Memproses..." : "Konfirmasi Pembayaran"}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -783,24 +776,60 @@ export function POS({ user, categories, products, tables, customers: initialCust
           <DialogHeader>
             <DialogTitle>Tambah Pelanggan Cepat</DialogTitle>
           </DialogHeader>
-          <div className="grid gap-3">
-            <div className="grid gap-2">
-              <span className="text-xs font-black uppercase tracking-wider">Nama</span>
+          <div className="grid gap-4">
+            <div className="grid gap-1.5">
+              <span className="text-xs font-medium text-muted-foreground">Nama</span>
               <Input value={newCustomerName} onChange={(e) => setNewCustomerName(e.target.value)} placeholder="Nama pelanggan" />
             </div>
-            <div className="grid gap-2">
-              <span className="text-xs font-black uppercase tracking-wider">Telepon</span>
+            <div className="grid gap-1.5">
+              <span className="text-xs font-medium text-muted-foreground">Telepon</span>
               <Input value={newCustomerPhone} onChange={(e) => setNewCustomerPhone(e.target.value)} placeholder="opsional" />
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setNewCustomerOpen(false)}>BATAL</Button>
+            <Button variant="outline" onClick={() => setNewCustomerOpen(false)}>Batal</Button>
             <Button onClick={handleQuickAddCustomer} disabled={newCustomerSaving}>
-              {newCustomerSaving ? "MENYIMPAN..." : "SIMPAN"}
+              {newCustomerSaving ? "Menyimpan..." : "Simpan"}
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
+    </div>
+  )
+}
+
+function CategoryButton({
+  label,
+  active,
+  onClick,
+}: {
+  label: string
+  active: boolean
+  onClick: () => void
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn(
+        "shrink-0 rounded-lg border px-3 py-2 text-left text-sm font-medium transition-all duration-150",
+        active
+          ? "border-primary/30 bg-primary/10 text-primary shadow-sm"
+          : "border-border bg-card text-muted-foreground hover:border-primary/30 hover:text-foreground"
+      )}
+    >
+      {label}
+    </button>
+  )
+}
+
+function Row({ label, value, muted }: { label: string; value: string; muted?: boolean }) {
+  return (
+    <div className="flex justify-between">
+      <span className="text-xs text-muted-foreground">{label}</span>
+      <span className={cn("tabular font-mono text-xs font-semibold", muted ? "text-muted-foreground" : "text-foreground")}>
+        {value}
+      </span>
     </div>
   )
 }

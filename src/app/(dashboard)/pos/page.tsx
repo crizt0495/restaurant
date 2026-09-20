@@ -12,12 +12,12 @@ export default async function POSPage() {
       .from("products")
       .select("*, variants:product_variants(*), modifiers:product_modifiers(modifier:modifiers(*, options:modifier_options(*)))")
       .eq("is_active", true)
-      .eq("deleted_at", null)
+      .is("deleted_at", null)
       .order("name"),
     supabase
       .from("customers")
       .select("id, name, phone, member_level, points, is_member")
-      .eq("deleted_at", null)
+      .is("deleted_at", null)
       .order("name")
       .limit(200),
     supabase

@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -44,12 +45,9 @@ export function SimpleReport({ title, description, dateFrom, dateTo, columns, ro
     <div className="space-y-6 animate-brutal-slide-up">
       <div className="print:mb-0 flex items-end justify-between">
         <div>
-          <div className="mb-1 flex items-center gap-2">
-            <span className="bg-primary px-2 py-0.5 text-[10px] font-black font-mono text-primary-foreground">REPORT</span>
-            <span className="h-[3px] w-14 bg-foreground" />
-          </div>
-          <h2 className="font-display text-3xl font-black uppercase tracking-tighter leading-none">{title}</h2>
-          <p className="mt-1.5 text-sm font-bold uppercase tracking-wider text-muted-foreground">{description}</p>
+          <Badge variant="default" className="mb-2 font-mono">REPORT</Badge>
+          <h2 className="font-display text-2xl font-bold tracking-tight md:text-3xl leading-none">{title}</h2>
+          <p className="mt-1.5 text-sm text-muted-foreground">{description}</p>
         </div>
       </div>
 
@@ -76,10 +74,10 @@ export function SimpleReport({ title, description, dateFrom, dateTo, columns, ro
       {summary && summary.length > 0 && (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {summary.map((s) => (
-            <Card key={s.label} className="hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[7px_7px_0_0_hsl(var(--foreground))]">
+            <Card key={s.label} className="card-hover">
               <CardContent className="p-4">
-                <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{s.label}</p>
-                <p className="mt-1 font-display text-2xl font-black leading-none">{s.value}</p>
+                <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">{s.label}</p>
+                <p className="tabular mt-1 font-display text-2xl font-bold leading-none">{s.value}</p>
               </CardContent>
             </Card>
           ))}
@@ -87,14 +85,14 @@ export function SimpleReport({ title, description, dateFrom, dateTo, columns, ro
       )}
 
       <Card>
-        <CardHeader className="bg-foreground text-background">
-          <CardTitle className="flex items-center gap-2">
-            <FileText className="h-4 w-4" strokeWidth={3} /> Detail ({rows.length})
+        <CardHeader className="flex-row items-center justify-between border-b border-border bg-muted/40 py-3.5">
+          <CardTitle className="flex items-center gap-2 text-base">
+            <FileText className="h-4 w-4 text-primary" /> Detail ({rows.length})
           </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-5">
           {rows.length === 0 ? (
-            <p className="py-8 text-center text-sm font-bold uppercase tracking-wider text-muted-foreground">Tidak ada data</p>
+            <p className="py-8 text-center text-sm text-muted-foreground">Tidak ada data</p>
           ) : (
             <div className="overflow-x-auto">
               <Table>

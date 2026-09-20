@@ -56,7 +56,7 @@ export function PaymentMethodsClient({
   return (
     <div className="space-y-4">
       <div>
-        <h2 className="font-display text-3xl font-black uppercase tracking-tighter leading-none">Metode Pembayaran</h2>
+        <h2 className="font-display text-2xl font-bold tracking-tight md:text-3xl leading-none">Metode Pembayaran</h2>
         <p className="text-sm text-muted-foreground">
           Aktifkan atau nonaktifkan metode pembayaran
         </p>
@@ -75,7 +75,7 @@ export function PaymentMethodsClient({
             {methods.map((m) => (
               <label
                 key={m.key}
-                className="flex items-center gap-3 border-2 border-foreground bg-card px-4 py-3 text-sm cursor-pointer shadow-[3px_3px_0_0_hsl(var(--foreground))] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[4px_4px_0_0_hsl(var(--foreground))] transition-all duration-150"
+                className="flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-card px-4 py-3 text-sm shadow-sm transition-all duration-150 hover:border-primary/30 hover:shadow-md hover:-translate-y-0.5"
               >
                 <Checkbox
                   checked={enabled.has(m.key)}

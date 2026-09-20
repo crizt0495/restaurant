@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils"
+import { Badge } from "@/components/ui/badge"
 
 interface PageHeaderProps {
   title: string
@@ -9,35 +10,20 @@ interface PageHeaderProps {
 }
 
 export function PageHeader({ title, description, badge, className, children }: PageHeaderProps) {
-  if (badge) {
-    return (
-      <div className={cn("flex items-end justify-between animate-brutal-slide-up", className)}>
-        <div>
-          <div className="mb-1 flex items-center gap-2">
-            <span className="bg-primary px-2 py-0.5 text-[10px] font-black font-mono text-primary-foreground">
-              {badge}
-            </span>
-            <span className="h-[3px] w-14 bg-foreground" />
-          </div>
-          <h2 className="font-display text-3xl font-black uppercase tracking-tighter leading-none">{title}</h2>
-          {description && (
-            <p className="mt-1.5 text-sm font-bold uppercase tracking-wider text-muted-foreground">{description}</p>
-          )}
-        </div>
-        {children}
-      </div>
-    )
-  }
-
   return (
-    <div className={cn("flex items-end justify-between animate-brutal-slide-up", className)}>
+    <div className={cn("flex flex-wrap items-end justify-between gap-4 animate-brutal-slide-up", className)}>
       <div>
-        <h2 className="font-display text-3xl font-black uppercase tracking-tighter leading-none">{title}</h2>
+        {badge && (
+          <Badge variant="default" className="mb-2">
+            {badge}
+          </Badge>
+        )}
+        <h2 className="font-display text-2xl font-bold tracking-tight leading-none md:text-3xl">{title}</h2>
         {description && (
-          <p className="mt-1.5 text-sm font-bold uppercase tracking-wider text-muted-foreground">{description}</p>
+          <p className="mt-1.5 max-w-2xl text-sm text-muted-foreground">{description}</p>
         )}
       </div>
-      {children}
+      {children && <div className="flex flex-wrap items-center gap-2">{children}</div>}
     </div>
   )
 }

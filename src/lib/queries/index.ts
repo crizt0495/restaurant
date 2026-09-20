@@ -70,7 +70,7 @@ export async function getProducts(params?: {
   let query = supabase
     .from("products")
     .select("*, categories(name), product_variants(*)", { count: "exact" })
-    .eq("deleted_at", null)
+    .is("deleted_at", null)
     .order("created_at", { ascending: false })
 
   if (params?.search) {
@@ -178,7 +178,7 @@ export async function getInventoryItems(params?: { search?: string; category?: s
   let query = supabase
     .from("inventory_items")
     .select("*")
-    .eq("deleted_at", null)
+    .is("deleted_at", null)
     .order("name")
 
   if (params?.search) {
@@ -201,7 +201,7 @@ export async function getSuppliers() {
   const { data, error } = await supabase
     .from("suppliers")
     .select("*")
-    .eq("deleted_at", null)
+    .is("deleted_at", null)
     .order("name")
   if (error) return []
   return data ?? []
@@ -215,7 +215,7 @@ export async function getCustomers(params?: { search?: string }) {
   let query = supabase
     .from("customers")
     .select("*")
-    .eq("deleted_at", null)
+    .is("deleted_at", null)
     .order("created_at", { ascending: false })
 
   if (params?.search) {
@@ -291,7 +291,7 @@ export async function getUsers() {
   const { data, error } = await supabase
     .from("profiles")
     .select("*, branch:branches(name)")
-    .eq("deleted_at", null)
+    .is("deleted_at", null)
     .order("created_at", { ascending: false })
 
   if (error) return []

@@ -17,19 +17,19 @@ interface ToastProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const variantStyles: Record<ToastVariant, string> = {
-  default: "bg-foreground text-background",
-  destructive: "bg-destructive text-destructive-foreground",
-  success: "bg-success text-success-foreground",
-  warning: "bg-warning text-warning-foreground",
-  info: "bg-info text-info-foreground",
+  default: "bg-card text-card-foreground border-border",
+  destructive: "bg-destructive text-destructive-foreground border-destructive",
+  success: "bg-success text-success-foreground border-success",
+  warning: "bg-warning text-warning-foreground border-warning",
+  info: "bg-info text-info-foreground border-info",
 }
 
 const variantIcons: Record<ToastVariant, React.ReactNode> = {
   default: null,
-  destructive: <AlertCircle className="h-5 w-5" strokeWidth={3} />,
-  success: <CheckCircle2 className="h-5 w-5" strokeWidth={3} />,
-  warning: <AlertTriangle className="h-5 w-5" strokeWidth={3} />,
-  info: <Info className="h-5 w-5" strokeWidth={3} />,
+  destructive: <AlertCircle className="h-5 w-5" strokeWidth={2} />,
+  success: <CheckCircle2 className="h-5 w-5" strokeWidth={2} />,
+  warning: <AlertTriangle className="h-5 w-5" strokeWidth={2} />,
+  info: <Info className="h-5 w-5" strokeWidth={2} />,
 }
 
 const Toast = React.forwardRef<HTMLDivElement, ToastProps>(
@@ -37,7 +37,7 @@ const Toast = React.forwardRef<HTMLDivElement, ToastProps>(
     <div
       ref={ref}
       className={cn(
-        "pointer-events-auto relative flex w-full items-center gap-3 overflow-hidden border-3 border-foreground p-4 pr-10 shadow-[5px_5px_0_0_hsl(var(--foreground))] transition-all font-medium",
+        "pointer-events-auto relative flex w-full items-center gap-3 rounded-xl border p-4 pr-10 shadow-lg transition-all font-medium",
         variantStyles[variant],
         className
       )}
@@ -50,10 +50,10 @@ const Toast = React.forwardRef<HTMLDivElement, ToastProps>(
       {onClose && (
         <button
           onClick={onClose}
-          className="absolute right-2 top-2 inline-flex items-center justify-center h-6 w-6 border-2 border-current opacity-90 hover:opacity-100 hover:bg-background hover:text-foreground transition-colors focus:outline-none"
+          className="absolute right-2 top-2 inline-flex h-6 w-6 items-center justify-center rounded-md opacity-70 transition-opacity hover:opacity-100 focus:outline-none"
           aria-label="Close"
         >
-          <X className="h-3 w-3" strokeWidth={3} />
+          <X className="h-3.5 w-3.5" strokeWidth={2} />
         </button>
       )}
     </div>
@@ -67,7 +67,7 @@ const ToastTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <p
     ref={ref}
-    className={cn("text-sm font-bold uppercase tracking-wider [&+div]:text-xs", className)}
+    className={cn("text-sm font-semibold [&+div]:text-xs", className)}
     {...props}
   />
 ))

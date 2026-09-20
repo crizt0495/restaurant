@@ -21,15 +21,13 @@ export function LoginForm({ redirect }: { redirect?: string }) {
       <div className="space-y-2">
         <Label htmlFor="username">Username</Label>
         <div className="relative">
-          <div className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center border-2 border-foreground bg-foreground text-background">
-            <User className="h-4 w-4" strokeWidth={3} />
-          </div>
+          <User className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             id="username"
             name="username"
             placeholder="Masukkan username"
             autoComplete="username"
-            className="pl-12 h-12 text-sm"
+            className="h-12 pl-10"
             required
           />
         </div>
@@ -38,32 +36,30 @@ export function LoginForm({ redirect }: { redirect?: string }) {
       <div className="space-y-2">
         <Label htmlFor="password">Kata Sandi</Label>
         <div className="relative">
-          <div className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center border-2 border-foreground bg-foreground text-background">
-            <Lock className="h-4 w-4" strokeWidth={3} />
-          </div>
+          <Lock className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             id="password"
             name="password"
             type={showPassword ? "text" : "password"}
             placeholder="Masukkan kata sandi"
             autoComplete="current-password"
-            className="pl-12 pr-12 h-12 text-sm"
+            className="h-12 pl-10 pr-11"
             required
           />
           <button
             type="button"
             onClick={() => setShowPassword((v) => !v)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center border-2 border-border hover:border-foreground transition-colors"
+            className="absolute right-2.5 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
             aria-label={showPassword ? "Sembunyikan kata sandi" : "Tampilkan kata sandi"}
           >
-            {showPassword ? <EyeOff className="h-4 w-4" strokeWidth={3} /> : <Eye className="h-4 w-4" strokeWidth={3} />}
+            {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
           </button>
         </div>
       </div>
 
       {state && !state.success && (
-        <Alert variant="destructive" className="border-3 border-destructive">
-          <AlertDescription className="font-bold">{state.error}</AlertDescription>
+        <Alert variant="destructive">
+          <AlertDescription className="font-medium">{state.error}</AlertDescription>
         </Alert>
       )}
 
@@ -75,16 +71,16 @@ export function LoginForm({ redirect }: { redirect?: string }) {
 function SubmitButton() {
   const { pending } = useFormStatus()
   return (
-    <Button type="submit" className="w-full h-12 text-sm uppercase tracking-wider font-black" disabled={pending}>
+    <Button type="submit" size="lg" className="w-full bg-gradient-brand shadow-lg hover:shadow-xl" disabled={pending}>
       {pending ? (
         <>
-          <Loader2 className="h-4 w-4 animate-spin" strokeWidth={3} />
+          <Loader2 className="h-4 w-4 animate-spin" />
           <span>Memproses...</span>
         </>
       ) : (
         <>
           <span>Masuk</span>
-          <ArrowRight className="h-4 w-4" strokeWidth={3} />
+          <ArrowRight className="h-4 w-4" />
         </>
       )}
     </Button>

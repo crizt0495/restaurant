@@ -123,7 +123,7 @@ export function ShiftsClient({ shifts: initialShifts, canOpen, canClose }: Shift
     <div className="space-y-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="font-display text-3xl font-black uppercase tracking-tighter leading-none">Shift Kasir</h2>
+          <h2 className="font-display text-2xl font-bold tracking-tight md:text-3xl leading-none">Shift Kasir</h2>
           <p className="text-sm text-muted-foreground">Buka dan tutup shift kasir</p>
         </div>
         {canOpen && openShifts.length === 0 && (
@@ -143,7 +143,7 @@ export function ShiftsClient({ shifts: initialShifts, canOpen, canClose }: Shift
           </CardHeader>
           <CardContent className="space-y-2">
             {openShifts.map((s) => (
-              <div key={s.id} className="flex flex-col gap-2 border-2 border-foreground bg-card p-3 shadow-[3px_3px_0_0_hsl(var(--foreground))] transition-all duration-150 hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[4px_4px_0_0_hsl(var(--foreground))] sm:flex-row sm:items-center sm:justify-between">
+              <div key={s.id} className="flex flex-col gap-2 rounded-xl border border-border bg-card p-3 shadow-sm transition-all duration-150 hover:border-primary/30 hover:shadow-md sm:flex-row sm:items-center sm:justify-between">
                 <div>
                   <p className="font-medium">{s.user?.full_name || "Kasir"}</p>
                   <p className="text-xs text-muted-foreground">

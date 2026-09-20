@@ -17,7 +17,7 @@ export default async function CategoriesPage() {
   const { data: counts } = await supabase
     .from("products")
     .select("category_id", { count: "exact", head: false })
-    .eq("deleted_at", null)
+    .is("deleted_at", null)
 
   const productCount = (counts ?? []).reduce<Record<string, number>>((acc, p) => {
     const cat = (p as { category_id: string }).category_id

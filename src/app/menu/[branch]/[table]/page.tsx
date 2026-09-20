@@ -33,7 +33,7 @@ export default async function PublicMenuPage({
       .from("products")
       .select("id, name, description, image_url, selling_price, category_id, is_favorite")
       .eq("is_active", true)
-      .eq("deleted_at", null)
+      .is("deleted_at", null)
       .order("name"),
     supabase.from("organizations").select("name, logo_url, address, phone").eq("id", branch.organization_id).single(),
   ])

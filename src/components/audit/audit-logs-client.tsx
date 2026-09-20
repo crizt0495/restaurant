@@ -66,8 +66,8 @@ export function AuditLogsClient({ logs: initial }: { logs: AuditLog[] }) {
   return (
     <div className="space-y-4">
       <div>
-        <h2 className="font-display text-3xl font-black uppercase tracking-tighter leading-none">Log Audit</h2>
-        <p className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Catatan aktivitas sistem</p>
+        <h2 className="font-display text-2xl font-bold tracking-tight md:text-3xl leading-none">Log Audit</h2>
+        <p className="mt-1.5 text-sm font-medium text-muted-foreground">Catatan aktivitas sistem</p>
       </div>
 
       <div className="flex flex-col gap-3 sm:flex-row">

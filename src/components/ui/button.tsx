@@ -9,30 +9,29 @@ import { Loader2 } from "lucide-react";
 const buttonVariants = cva(
   [
     "inline-flex items-center justify-center gap-2",
-    "font-sans text-sm font-medium leading-none",
-    "rounded-md transition-all duration-150 ease-out",
-    "focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+    "font-sans text-sm font-semibold leading-none",
+    "rounded-lg transition-all duration-150 ease-out",
     "disabled:pointer-events-none disabled:opacity-40",
     "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   ],
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground border border-primary hover:bg-primary-hover active:bg-primary-active shadow-elev-1 hover:shadow-elev-hover-1 active:shadow-elev-1",
-        secondary: "bg-secondary text-secondary-foreground border border-secondary-border hover:bg-secondary-hover active:bg-secondary-active shadow-elev-1 hover:shadow-elev-hover-1",
-        outline: "bg-transparent text-foreground border border-border hover:bg-secondary active:bg-secondary-border",
-        ghost: "bg-transparent text-foreground border border-transparent hover:bg-secondary active:bg-secondary-active",
-        destructive: "bg-destructive text-destructive-foreground border border-destructive hover:bg-destructive/90 active:bg-destructive shadow-elev-1 hover:shadow-elev-hover-1",
-        success: "bg-success text-success-foreground border border-success hover:bg-success/90 active:bg-success/80 shadow-elev-1 hover:shadow-elev-hover-1",
+        default: "bg-primary text-primary-foreground border border-primary shadow-sm hover:bg-primary-hover active:bg-primary-active hover:shadow-md active:shadow-sm",
+        secondary: "bg-secondary text-secondary-foreground border border-secondary-border shadow-sm hover:bg-secondary-hover active:bg-secondary-active hover:shadow-md",
+        outline: "bg-card/60 text-foreground border border-border shadow-sm hover:bg-muted hover:border-border active:bg-secondary",
+        ghost: "bg-transparent text-foreground border border-transparent hover:bg-muted active:bg-secondary",
+        destructive: "bg-destructive text-destructive-foreground border border-destructive shadow-sm hover:bg-destructive/90 active:bg-destructive/80 hover:shadow-md",
+        success: "bg-success text-success-foreground border border-success shadow-sm hover:bg-success/90 active:bg-success/80 hover:shadow-md",
         link: "bg-transparent text-primary border border-transparent hover:underline-offset-4 hover:underline text-sm font-medium",
-        plain: "bg-transparent text-foreground border border-transparent hover:bg-secondary",
+        plain: "bg-transparent text-foreground border border-transparent hover:bg-muted",
       },
       size: {
-        default: "h-10 px-4 gap-2",
+        default: "h-9 px-4 gap-2",
         sm: "h-8 px-3 text-xs gap-1.5",
-        lg: "h-12 px-6 text-base gap-2.5",
+        lg: "h-11 px-6 text-base gap-2.5",
         xl: "h-14 px-8 text-lg gap-3",
-        icon: "h-10 w-10 p-0",
+        icon: "h-9 w-9 p-0",
         "icon-sm": "h-8 w-8 p-0",
       },
       fullWidth: {

@@ -25,7 +25,7 @@ export function MobileNav({ permissions, isSuperAdmin }: MobileNavProps) {
       : pathname.startsWith(item.href)
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-40 border-t-[3px] border-foreground bg-background lg:hidden">
+    <nav className="glass-strong fixed inset-x-0 bottom-0 z-40 border-t border-border pb-[env(safe-area-inset-bottom)] lg:hidden">
       <div className="flex items-stretch justify-around">
         {bottomNav.filter(canView).map((item) => {
           const Icon = item.icon
@@ -35,14 +35,14 @@ export function MobileNav({ permissions, isSuperAdmin }: MobileNavProps) {
               key={item.href}
               href={item.href}
               className={cn(
-                "relative flex h-16 w-full flex-col items-center justify-center gap-1 text-[10px] font-black uppercase tracking-wider transition-colors",
-                active ? "bg-foreground text-background" : "text-foreground hover:bg-muted"
+                "relative flex h-16 w-full flex-col items-center justify-center gap-1 text-[10px] font-medium transition-colors",
+                active ? "text-primary" : "text-muted-foreground hover:text-foreground"
               )}
             >
               {active && (
-                <span className="absolute top-0 left-1/2 -translate-x-1/2 h-1 w-10 bg-primary animate-brutal-pop" />
+                <span className="absolute top-0 left-1/2 h-0.5 w-10 -translate-x-1/2 rounded-full bg-primary" />
               )}
-              <Icon className="h-5 w-5" strokeWidth={active ? 3 : 2.5} />
+              <Icon className={cn("h-5 w-5", active && "text-primary")} strokeWidth={active ? 2.5 : 2} />
               {item.title}
             </Link>
           )

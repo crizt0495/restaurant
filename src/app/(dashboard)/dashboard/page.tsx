@@ -3,6 +3,7 @@ import { getCurrentUser, getDashboardMetrics } from "@/lib/helpers"
 import { redirect } from "next/navigation"
 import { DashboardView } from "@/components/dashboard/dashboard-view"
 import { DashboardSkeleton } from "@/components/dashboard/dashboard-skeleton"
+import { Badge } from "@/components/ui/badge"
 
 export const revalidate = 5
 
@@ -19,12 +20,15 @@ export default async function DashboardPage() {
     <div className="space-y-6">
       <div className="flex items-end justify-between animate-brutal-slide-up">
         <div>
-          <div className="mb-1 flex items-center gap-2">
-            <span className="bg-primary px-2 py-0.5 text-[10px] font-black font-mono text-primary-foreground">LIVE</span>
-            <span className="h-[3px] w-14 bg-foreground" />
-          </div>
-          <h2 className="font-display text-3xl font-black uppercase tracking-tighter leading-none">Dasbor</h2>
-          <p className="mt-1.5 text-sm font-bold text-muted-foreground uppercase tracking-wider">Ringkasan performa hari ini</p>
+          <Badge variant="default" className="mb-2 gap-1.5">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-current opacity-60" />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-current" />
+            </span>
+            LIVE
+          </Badge>
+          <h2 className="font-display text-2xl font-bold tracking-tight md:text-3xl leading-none">Dasbor</h2>
+          <p className="mt-1.5 text-sm text-muted-foreground">Ringkasan performa hari ini</p>
         </div>
       </div>
       <Suspense fallback={<DashboardSkeleton />}>

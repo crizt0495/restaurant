@@ -21,10 +21,10 @@ interface SearchResult {
 }
 
 const typeColors: Record<SearchResult["type"], string> = {
-  order: "bg-primary text-primary-foreground",
-  product: "bg-secondary text-secondary-foreground",
-  customer: "bg-accent text-accent-foreground",
-  supplier: "bg-info text-info-foreground",
+  order: "bg-primary/10 text-primary border-primary/20",
+  product: "bg-secondary/60 text-secondary-foreground border-border",
+  customer: "bg-accent/10 text-accent border-accent/20",
+  supplier: "bg-info/10 text-info border-info/20",
 }
 
 export function Header({ profileId }: { profileId?: string | null }) {
@@ -122,42 +122,44 @@ export function Header({ profileId }: { profileId?: string | null }) {
     return () => window.removeEventListener("keydown", onKey)
   }, [searchOpen])
 
+  const titleLabel = title.replace(/-/g, " ")
+
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center gap-3 border-b-[3px] border-foreground bg-background/95 px-4 backdrop-blur md:px-6">
+    <header className="glass sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-border px-4 md:px-6">
       <div className="flex items-center gap-3">
-        <span className="flex h-10 w-10 items-center justify-center border-3 border-foreground bg-foreground text-background shadow-[3px_3px_0_0_hsl(var(--primary))] lg:hidden">
-          <span className="font-display text-sm font-black">{title.slice(0, 2).toUpperCase()}</span>
+        <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-brand text-sm font-bold text-primary-foreground shadow sm:hidden">
+          {titleLabel.slice(0, 2).toUpperCase()}
         </span>
         <div className="flex flex-col">
-          <span className="text-[10px] font-black uppercase tracking-[0.25em] text-muted-foreground">Halaman</span>
-          <h1 className="text-base font-black uppercase tracking-tight leading-none mt-0.5">{title}</h1>
+          <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+            {titleLabel}
+          </span>
+          <h1 className="text-lg font-bold tracking-tight leading-none mt-0.5">{titleLabel}</h1>
         </div>
       </div>
 
       <button
         type="button"
         onClick={() => setSearchOpen(true)}
-        className="ml-auto hidden h-10 w-72 items-center gap-2 border-3 border-foreground bg-background px-3 text-left text-xs font-black uppercase tracking-wide shadow-[3px_3px_0_0_hsl(var(--foreground))] transition-all duration-150 hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[4px_4px_0_0_hsl(var(--foreground))] md:flex relative -top-0.5"
+        className="ml-auto hidden h-9 w-72 items-center gap-2 rounded-lg border border-border bg-card/70 px-3 text-left text-sm text-muted-foreground shadow-sm transition-colors hover:border-primary/40 hover:text-foreground md:flex"
         aria-label="Buka pencarian global"
       >
-        <Search className="h-4 w-4" strokeWidth={3} />
-        <span className="text-muted-foreground">Cari...</span>
-        <kbd className="ml-auto flex items-center gap-1 border-2 border-foreground bg-foreground text-background px-1.5 py-0.5 text-[10px] font-mono font-bold">
-          <Command className="h-3 w-3" strokeWidth={3} />K
+        <Search className="h-4 w-4" />
+        <span>Cari pesanan, produk, pelanggan...</span>
+        <kbd className="ml-auto flex h-6 items-center gap-1 rounded-md border border-border bg-muted px-1.5 font-mono text-[10px] font-bold text-muted-foreground">
+          <Command className="h-3 w-3" />K
         </kbd>
       </button>
 
-      <div className="flex items-center gap-2">
-        <Button variant="ghost" size="icon" className="md:hidden border-3 border-foreground shadow-[2px_2px_0_0_hsl(var(--foreground))]" asChild aria-label="Buka pencarian">
-          <span onClick={() => setSearchOpen(true)}>
-            <Search className="h-5 w-5" strokeWidth={3} />
-          </span>
+      <div className="flex items-center gap-1.5">
+        <Button variant="ghost" size="icon" className="md:hidden text-muted-foreground" onClick={() => setSearchOpen(true)} aria-label="Buka pencarian">
+          <Search className="h-5 w-5" />
         </Button>
-        <Button variant="ghost" size="icon" className="relative border-3 border-foreground shadow-[2px_2px_0_0_hsl(var(--foreground))] hover:bg-foreground hover:text-background" asChild aria-label="Notifikasi">
+        <Button variant="ghost" size="icon" className="relative text-muted-foreground hover:text-foreground" asChild aria-label="Notifikasi">
           <Link href="/notifications" className="relative">
-            <Bell className="h-5 w-5" strokeWidth={3} />
+            <Bell className="h-5 w-5" />
             {unread > 0 && (
-              <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center bg-destructive text-destructive-foreground border-2 border-foreground px-1 text-[10px] font-black animate-brutal-pop">
+              <span className="absolute -right-0.5 -top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-destructive px-1 text-[10px] font-bold text-destructive-foreground ring-2 ring-background animate-brutal-pop">
                 {unread > 99 ? "99+" : unread}
               </span>
             )}
@@ -168,26 +170,26 @@ export function Header({ profileId }: { profileId?: string | null }) {
       <Dialog open={searchOpen} onOpenChange={setSearchOpen}>
         <DialogContent className="max-w-xl">
           <DialogTitle className="sr-only">Pencarian Global</DialogTitle>
-          <div className="flex items-center gap-3 -mx-6 -mt-6 px-6 py-4 border-b-[3px] border-foreground bg-foreground text-background">
-            <Search className="h-5 w-5" strokeWidth={3} />
+          <div className="flex items-center gap-3 pb-3">
+            <Search className="h-5 w-5 text-muted-foreground" />
             <input
               autoFocus
               placeholder="Cari pesanan, produk, pelanggan, pemasok..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="flex-1 bg-transparent text-base font-black placeholder:opacity-50 outline-none"
+              className="flex-1 bg-transparent text-base outline-none placeholder:text-muted-foreground/60"
             />
-            <kbd className="border-2 border-background bg-transparent px-2 py-1 text-[10px] font-mono font-bold">ESC</kbd>
+            <kbd className="rounded-md border border-border bg-muted px-2 py-1 font-mono text-[10px] font-bold text-muted-foreground">ESC</kbd>
           </div>
-          <div className="max-h-80 overflow-y-auto py-2">
+          <div className="max-h-80 overflow-y-auto">
             {searching ? (
-              <p className="py-6 text-center text-xs font-black uppercase tracking-widest text-muted-foreground">Mencari...</p>
+              <p className="py-6 text-center text-sm text-muted-foreground">Mencari...</p>
             ) : searchQuery.length < 2 ? (
-              <p className="py-6 text-center text-xs font-black uppercase tracking-widest text-muted-foreground">Ketik minimal 2 karakter</p>
+              <p className="py-6 text-center text-sm text-muted-foreground">Ketik minimal 2 karakter</p>
             ) : searchResults.length === 0 ? (
-              <p className="py-6 text-center text-xs font-black uppercase tracking-widest text-muted-foreground">Tidak ada hasil</p>
+              <p className="py-6 text-center text-sm text-muted-foreground">Tidak ada hasil</p>
             ) : (
-              <ul className="space-y-2">
+              <ul className="space-y-1">
                 {searchResults.map((r) => (
                   <li key={`${r.type}-${r.id}`}>
                     <button
@@ -196,13 +198,13 @@ export function Header({ profileId }: { profileId?: string | null }) {
                         setSearchOpen(false)
                         router.push(r.href)
                       }}
-                      className="flex w-full items-center justify-between gap-3 border-2 border-border px-3 py-2 text-left transition-all hover:border-foreground hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0_0_hsl(var(--foreground))]"
+                      className="flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-muted"
                     >
-                      <div className="flex-1 min-w-0">
-                        <p className="font-black text-sm uppercase truncate">{r.label}</p>
-                        {r.sub && <p className="text-xs text-muted-foreground font-mono font-bold truncate">{r.sub}</p>}
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-sm font-medium">{r.label}</p>
+                        {r.sub && <p className="truncate font-mono text-xs text-muted-foreground">{r.sub}</p>}
                       </div>
-                      <span className={`px-2 py-1 text-[10px] font-black uppercase tracking-wider border-2 border-foreground ${typeColors[r.type]}`}>
+                      <span className={`rounded-full border px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider ${typeColors[r.type]}`}>
                         {r.type}
                       </span>
                     </button>
