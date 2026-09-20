@@ -1,6 +1,6 @@
 import { test } from "node:test"
 import assert from "node:assert/strict"
-import { slugify, truncate, generateOrderNumber, generatePONumber } from "/home/chris/Documents/Aplikasi/restourant/src/lib/utils.ts"
+import { slugify, truncate, generateOrderNumber, generatePONumber } from "../src/lib/utils.ts"
 
 test("slugify", () => {
   assert.equal(slugify("Nasi Goreng"), "nasi-goreng")
