@@ -6,6 +6,7 @@ import { formatCurrency } from "@/lib/utils"
 import { UtensilsCrossed, Plus, Minus, ShoppingCart, CheckCircle2, AlertTriangle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
 import { cn } from "@/lib/utils"
 
 interface MenuProduct {
@@ -16,6 +17,7 @@ interface MenuProduct {
   selling_price: number
   category_id: string
   is_favorite: boolean
+  tax_percentage: number
 }
 
 interface MenuCategory {
@@ -32,6 +34,8 @@ interface PublicMenuProps {
   orgName: string
   categories: MenuCategory[]
   products: MenuProduct[]
+  serviceChargePercentage?: number
+  taxInclusive?: boolean
 }
 
 interface CartLine {
@@ -39,7 +43,7 @@ interface CartLine {
   qty: number
 }
 
-export function PublicMenu({ branchId, tableId, branchName, tableName, orgName, categories, products }: PublicMenuProps) {
+export function PublicMenu({ branchId, tableId, branchName, tableName, orgName, categories, products, serviceChargePercentage = 0, taxInclusive = false }: PublicMenuProps) {
   const [activeCat, setActiveCat] = React.useState("")
   const [cart, setCart] = React.useState<CartLine[]>([])
   const [submitting, setSubmitting] = React.useState(false)
@@ -64,7 +68,16 @@ export function PublicMenu({ branchId, tableId, branchName, tableName, orgName, 
         .filter((c) => c.qty > 0)
     )
 
-  const total = cart.reduce((sum, c) => sum + c.product.selling_price * c.qty, 0)
+  const lineSubtotal = (c: CartLine) => c.product.selling_price * c.qty
+  const lineTax = (c: CartLine) => {
+    const subt = lineSubtotal(c)
+    const perc = Number(c.product.tax_percentage ?? 0)
+    return taxInclusive ? subt - subt / (1 + perc / 100) : (subt * perc) / 100
+  }
+  const subtotal = cart.reduce((s, c) => s + lineSubtotal(c), 0)
+  const taxAmount = cart.reduce((s, c) => s + lineTax(c), 0)
+  const serviceCharge = (subtotal * serviceChargePercentage) / 100
+  const total = subtotal + taxAmount + serviceCharge
   const totalItems = cart.reduce((s, c) => s + c.qty, 0)
 
   const placeOrder = async () => {
@@ -78,9 +91,7 @@ export function PublicMenu({ branchId, tableId, branchName, tableName, orgName, 
           tableId,
           items: cart.map((c) => ({
             product_id: c.product.id,
-            product_name: c.product.name,
             quantity: c.qty,
-            unit_price: c.product.selling_price,
           })),
         }),
       })
@@ -196,6 +207,13 @@ export function PublicMenu({ branchId, tableId, branchName, tableName, orgName, 
                 <ShoppingCart className="h-3.5 w-3.5" /> {totalItems} item
               </p>
               <p className="tabular mt-0.5 font-mono text-lg font-bold">{formatCurrency(total)}</p>
+              {(taxAmount > 0 || serviceCharge > 0) && (
+                <p className="mt-0.5 max-w-[10rem] text-2xs leading-tight text-muted-foreground">
+                  Subtotal {formatCurrency(subtotal)}
+                  {taxAmount > 0 && ` · Pajak ${formatCurrency(taxAmount)}`}
+                  {serviceCharge > 0 && ` · Layanan ${formatCurrency(serviceCharge)}`}
+                </p>
+              )}
             </div>
             <Button size="lg" className="bg-gradient-brand shadow-lg hover:shadow-xl" onClick={placeOrder} disabled={submitting}>
               {submitting ? "Mengirim..." : "Kirim ke Dapur"}
@@ -204,9 +222,17 @@ export function PublicMenu({ branchId, tableId, branchName, tableName, orgName, 
         </div>
       )}
 
-      {(placed || orderInfo) && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/55 p-4 backdrop-blur-sm">
-          <div className="w-full max-w-sm rounded-2xl border border-border bg-card p-6 text-center shadow-2xl animate-brutal-pop">
+      <Dialog
+        open={placed || !!orderInfo}
+        onOpenChange={(o) => {
+          if (!o) {
+            setPlaced(false)
+            setOrderInfo("")
+          }
+        }}
+      >
+        <DialogContent className="max-w-sm">
+          <div className="flex flex-col items-center text-center">
             <div className={cn("mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full", placed ? "bg-success/10" : "bg-warning/10")}>
               {placed ? (
                 <CheckCircle2 className="h-7 w-7 text-success" strokeWidth={2.25} />
@@ -214,14 +240,20 @@ export function PublicMenu({ branchId, tableId, branchName, tableName, orgName, 
                 <AlertTriangle className="h-7 w-7 text-warning" strokeWidth={2.25} />
               )}
             </div>
-            <h2 className="text-lg font-bold tracking-tight">{placed ? "Pesanan Terkirim!" : "Perhatian"}</h2>
+            <DialogTitle className="text-lg font-bold tracking-tight">{placed ? "Pesanan Terkirim!" : "Perhatian"}</DialogTitle>
             <p className="mt-2 text-sm text-muted-foreground">{orderInfo}</p>
-            <Button className="mt-5 w-full" onClick={() => { setPlaced(false); setOrderInfo("") }}>
+            <Button
+              className="mt-5 w-full"
+              onClick={() => {
+                setPlaced(false)
+                setOrderInfo("")
+              }}
+            >
               Tutup
             </Button>
           </div>
-        </div>
-      )}
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

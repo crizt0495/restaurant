@@ -73,6 +73,10 @@ export function TablesClient({ tables: initialTables }: { tables: TableItem[] })
         pendingRef.current = true
         schedule()
       })
+      .on("postgres_changes", { event: "*", schema: "public", table: "orders" }, () => {
+        pendingRef.current = true
+        schedule()
+      })
       .subscribe()
     return () => {
       supabase.removeChannel(channel)

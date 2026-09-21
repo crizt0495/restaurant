@@ -49,9 +49,10 @@ const Toast = React.forwardRef<HTMLDivElement, ToastProps>(
       <div className="flex-1">{children}</div>
       {onClose && (
         <button
+          type="button"
           onClick={onClose}
           className="absolute right-2 top-2 inline-flex h-6 w-6 items-center justify-center rounded-md opacity-70 transition-opacity hover:opacity-100 focus:outline-none"
-          aria-label="Close"
+          aria-label="Tutup"
         >
           <X className="h-3.5 w-3.5" strokeWidth={2} />
         </button>

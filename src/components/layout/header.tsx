@@ -64,8 +64,10 @@ export function Header({ profileId, user }: HeaderProps) {
 
     const channel = supabase
       .channel("header-notifications")
-      .on("postgres_changes", { event: "*", schema: "public", table: "notifications" }, () => {
+      .on("postgres_changes", { event: "*", schema: "public", table: "notifications" }, (payload) => {
         if (!pid) return
+        const row = payload.new as { user_id?: string | null } | null
+        if (row && row.user_id && row.user_id !== pid) return
         supabase
           .from("notifications")
           .select("id", { count: "exact", head: true })
@@ -80,9 +82,10 @@ export function Header({ profileId, user }: HeaderProps) {
     }
   }, [profileId])
 
-  const runSearch = React.useCallback(async (query: string) => {
+  const runSearch = React.useCallback(async (query: string): Promise<SearchResult[]> => {
     const supabase = createClient()
-    const q = `%${query}%`
+    const escaped = query.replace(/[\\%_]/g, (m) => `\\${m}`)
+    const q = `%${escaped}%`
     const [orders, products, customers, suppliers] = await Promise.all([
       supabase.from("orders").select("id, order_number, total").or(`order_number.ilike.${q}`).limit(5),
       supabase.from("products").select("id, name, sku").or(`name.ilike.${q},sku.ilike.${q}`).eq("is_active", true).is("deleted_at", null).limit(5),
@@ -103,20 +106,28 @@ export function Header({ profileId, user }: HeaderProps) {
     for (const s of suppliers.data ?? []) {
       results.push({ type: "supplier", id: s.id, label: s.name, sub: s.company || undefined, href: `/suppliers` })
     }
-    setSearchResults(results)
-    setSearching(false)
+    return results
   }, [])
 
   React.useEffect(() => {
     if (searchQuery.length < 2) {
       setSearchResults([])
+      setSearching(false)
       return
     }
+    let cancelled = false
     setSearching(true)
-    const t = setTimeout(() => {
-      void runSearch(searchQuery)
+    const t = setTimeout(async () => {
+      const results = await runSearch(searchQuery)
+      if (!cancelled) {
+        setSearchResults(results)
+        setSearching(false)
+      }
     }, 250)
-    return () => clearTimeout(t)
+    return () => {
+      cancelled = true
+      clearTimeout(t)
+    }
   }, [searchQuery, runSearch])
 
   React.useEffect(() => {

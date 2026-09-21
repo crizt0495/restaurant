@@ -350,7 +350,7 @@ export function POS({ user, categories, products, tables, customers: initialCust
     window.addEventListener("keydown", onKey)
     return () => window.removeEventListener("keydown", onKey)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedProduct, showPayment, processing, cart, payments, total, discountType, discountValue])
+  }, [selectedProduct, showPayment, processing, cart, payments, total, discountType, discountValue, quantity, selectedVariant, selectedModifiers, notes, orderType, selectedTable, customerId, itemDiscount, globalDiscount, serviceChargePercent, taxPercent])
 
   return (
     <div className="flex flex-col gap-4 lg:h-[calc(100vh-8rem)] lg:flex-row">
@@ -484,21 +484,21 @@ export function POS({ user, categories, products, tables, customers: initialCust
           ) : (
             <div className="space-y-2 p-3">
               {cart.map((item, i) => (
-                <div key={i} className="animate-brutal-pop rounded-xl border border-border bg-background/60 p-2.5">
+                <div key={`${item.product_id}-${item.variant_id ?? ""}`} className="animate-brutal-pop rounded-xl border border-border bg-background/60 p-2.5">
                   <div className="flex items-center justify-between gap-2">
                     <p className="truncate text-13 font-semibold">{item.product_name}</p>
-                    <Button size="icon-sm" variant="ghost" className="h-7 w-7 text-destructive hover:bg-destructive/10 hover:text-destructive" onClick={() => removeFromCart(i)}>
+                    <Button size="icon-sm" variant="ghost" className="h-7 w-7 text-destructive hover:bg-destructive/10 hover:text-destructive" onClick={() => removeFromCart(i)} aria-label="Hapus item dari keranjang">
                       <Trash2 className="h-3 w-3" />
                     </Button>
                   </div>
                   {item.variant_name && <p className="text-2xs text-muted-foreground">{item.variant_name}</p>}
                   <div className="mt-1.5 flex items-center justify-between">
                     <div className="flex items-center gap-1">
-                      <Button size="icon-sm" variant="outline" className="h-7 w-7" onClick={() => changeQty(i, -1)}>
+                      <Button size="icon-sm" variant="outline" className="h-7 w-7" onClick={() => changeQty(i, -1)} aria-label="Kurangi jumlah">
                         <Minus className="h-3 w-3" />
                       </Button>
                       <span className="tabular w-6 text-center text-xs font-semibold">{item.quantity}</span>
-                      <Button size="icon-sm" variant="outline" className="h-7 w-7" onClick={() => changeQty(i, 1)}>
+                      <Button size="icon-sm" variant="outline" className="h-7 w-7" onClick={() => changeQty(i, 1)} aria-label="Tambah jumlah">
                         <Plus className="h-3 w-3" />
                       </Button>
                     </div>
@@ -511,7 +511,10 @@ export function POS({ user, categories, products, tables, customers: initialCust
                       min={0}
                       className="h-6 w-20 px-1.5 text-xs"
                       value={item.discount}
-                      onChange={(e) => setItemDiscount(i, Number(e.target.value))}
+                      onChange={(e) => {
+                        const v = Number(e.target.value)
+                        setItemDiscount(i, Number.isFinite(v) ? v : 0)
+                      }}
                     />
                   </div>
                 </div>
@@ -539,7 +542,10 @@ export function POS({ user, categories, products, tables, customers: initialCust
                     min={0}
                     className="h-7 w-16 px-1.5 text-xs"
                     value={discountValue}
-                    onChange={(e) => setDiscountValue(Number(e.target.value))}
+                    onChange={(e) => {
+                      const v = Number(e.target.value)
+                      setDiscountValue(Number.isFinite(v) ? v : 0)
+                    }}
                   />
                 )}
               </div>
@@ -729,11 +735,11 @@ export function POS({ user, categories, products, tables, customers: initialCust
                       min={0}
                       className="h-9 flex-1 text-xs"
                       value={p.amount}
-                      onChange={(e) =>
-                        setPayments((prev) =>
-                          prev.map((x, j) => (j === i ? { ...x, amount: Number(e.target.value) } : x))
-                        )
-                      }
+                      onChange={(e) => {
+                        const v = Number(e.target.value)
+                        const amount = Number.isFinite(v) ? v : 0
+                        setPayments((prev) => prev.map((x, j) => (j === i ? { ...x, amount } : x)))
+                      }}
                     />
                     {payments.length > 1 && (
                       <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:bg-destructive/10 hover:text-destructive" onClick={() => removePaymentLine(i)} aria-label="Hapus metode">

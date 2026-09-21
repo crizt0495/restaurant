@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/dialog"
 import { updateOrderStatus, cancelOrder } from "@/lib/actions/index"
 import toast from "react-hot-toast"
+import Link from "next/link"
 import { Search, RefreshCw, Eye } from "lucide-react"
 
 const ORDER_STATUS = [
@@ -52,6 +53,7 @@ export function OrdersClient({ orders: initialOrders }: OrdersClientProps) {
   const [search, setSearch] = React.useState("")
   const [statusFilter, setStatusFilter] = React.useState("")
   const [confirmAction, setConfirmAction] = React.useState<{ order: any; action: string } | null>(null)
+  const [confirmProcessing, setConfirmProcessing] = React.useState(false)
 
   const refetchTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null)
   const pendingRef = React.useRef(false)
@@ -103,14 +105,16 @@ export function OrdersClient({ orders: initialOrders }: OrdersClientProps) {
   })
 
   const handleAction = async () => {
-    if (!confirmAction) return
+    if (!confirmAction || confirmProcessing) return
     const { order, action } = confirmAction
+    setConfirmProcessing(true)
     let result
     if (action === "CANCELLED") {
       result = await cancelOrder(order.id)
     } else {
       result = await updateOrderStatus(order.id, action)
     }
+    setConfirmProcessing(false)
     if (result.error) {
       toast.error(result.error)
     } else {
@@ -158,7 +162,7 @@ export function OrdersClient({ orders: initialOrders }: OrdersClientProps) {
       {filtered.length === 0 ? (
         <Card>
           <CardContent className="py-12 text-center text-muted-foreground">
-            <p>Belum ada pesanan</p>
+            <p>{orders.length === 0 ? "Belum ada pesanan" : "Tidak ada pesanan yang cocok dengan pencarian/filter"}</p>
           </CardContent>
         </Card>
       ) : (
@@ -201,10 +205,10 @@ export function OrdersClient({ orders: initialOrders }: OrdersClientProps) {
                       Batal
                     </Button>
                   )}
-                  <Button variant="outline" size="sm" onClick={() => setConfirmAction(null)} asChild>
-                    <a href={`/orders/${order.id}`}>
+                  <Button variant="outline" size="sm" asChild>
+                    <Link href={`/orders/${order.id}`}>
                       <Eye className="mr-1 h-3 w-3" /> Detail
-                    </a>
+                    </Link>
                   </Button>
                 </div>
               </CardContent>
@@ -223,9 +227,9 @@ export function OrdersClient({ orders: initialOrders }: OrdersClientProps) {
             <b>{confirmAction?.action ? translateStatus(confirmAction.action) : ""}</b>?
           </p>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setConfirmAction(null)}>Batal</Button>
-            <Button variant={confirmAction?.action === "CANCELLED" ? "destructive" : "default"} onClick={handleAction}>
-              Konfirmasi
+            <Button variant="outline" disabled={confirmProcessing} onClick={() => setConfirmAction(null)}>Batal</Button>
+            <Button variant={confirmAction?.action === "CANCELLED" ? "destructive" : "default"} disabled={confirmProcessing} onClick={handleAction}>
+              {confirmProcessing ? "Memproses..." : "Konfirmasi"}
             </Button>
           </DialogFooter>
         </DialogContent>

@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/table"
 import { createClient } from "@/lib/supabase/client"
 import toast from "react-hot-toast"
+import { useRouter } from "next/navigation"
 import { Plus, Lock, AlertCircle, Wallet, Loader2, Clock } from "lucide-react"
 
 interface ShiftRow {
@@ -51,6 +52,7 @@ interface ShiftsClientProps {
 }
 
 export function ShiftsClient({ shifts: initialShifts, canOpen, canClose }: ShiftsClientProps) {
+  const router = useRouter()
   const [shifts, setShifts] = React.useState<ShiftRow[]>(initialShifts)
   const [openDialog, setOpenDialog] = React.useState(false)
   const [openCash, setOpenCash] = React.useState("0")
@@ -69,13 +71,13 @@ export function ShiftsClient({ shifts: initialShifts, canOpen, canClose }: Shift
     const channel = supabase
       .channel("shifts-realtime")
       .on("postgres_changes", { event: "*", schema: "public", table: "cashier_shifts" }, () => {
-        window.location.reload()
+        router.refresh()
       })
       .subscribe()
     return () => {
       supabase.removeChannel(channel)
     }
-  }, [])
+  }, [router])
 
   const handleOpen = async () => {
     const amount = parseFloat(openCash)
@@ -93,7 +95,7 @@ export function ShiftsClient({ shifts: initialShifts, canOpen, canClose }: Shift
     toast.success("Shift dibuka")
     setOpenDialog(false)
     setOpenCash("0")
-    window.location.reload()
+    router.refresh()
   }
 
   const handleClose = async () => {
@@ -114,7 +116,7 @@ export function ShiftsClient({ shifts: initialShifts, canOpen, canClose }: Shift
     setCloseDialog(null)
     setActualCash("0")
     setCloseNotes("")
-    window.location.reload()
+    router.refresh()
   }
 
   const openShifts = shifts.filter((s) => s.status === "OPEN")

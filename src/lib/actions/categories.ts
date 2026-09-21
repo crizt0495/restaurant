@@ -6,6 +6,11 @@ import { getServerClient, getCurrentUser } from "@/lib/helpers"
 export async function createCategory(name: string, description?: string) {
   const user = await getCurrentUser()
   if (!user) return { error: "Unauthorized" }
+  if (!user.is_super_admin && !user.permissions.includes("products.create")) {
+    return { error: "Forbidden" }
+  }
+  const parsedName = name.trim()
+  if (!parsedName) return { error: "Nama kategori wajib diisi" }
   const supabase = await getServerClient()
 
   const { data: orgRow } = await supabase
@@ -14,10 +19,10 @@ export async function createCategory(name: string, description?: string) {
     .eq("id", user.branch_id ?? "")
     .single()
 
-  const slug = name.toLowerCase().replace(/[^\w ]+/g, "").replace(/ +/g, "-")
+  const slug = parsedName.toLowerCase().replace(/[^\w ]+/g, "").replace(/ +/g, "-")
 
   const { error } = await supabase.from("categories").insert({
-    name,
+    name: parsedName,
     slug,
     description,
     organization_id: orgRow?.organization_id,

@@ -132,6 +132,10 @@ export function UsersClient({ users, branches, roles, canCreate, canEdit }: User
   }
 
   const handleSave = async () => {
+    if (!editingId && !form.password) {
+      toast.error("Password wajib diisi (minimal 6 karakter)")
+      return
+    }
     setSaving(true)
     const result = editingId
       ? await updateUser(editingId, {
@@ -149,7 +153,7 @@ export function UsersClient({ users, branches, roles, canCreate, canEdit }: User
           branch_id: form.branch_id,
           phone: form.phone || null,
           is_active: form.is_active,
-          password: form.password || undefined,
+          password: form.password,
         })
     setSaving(false)
     if (result.error) {

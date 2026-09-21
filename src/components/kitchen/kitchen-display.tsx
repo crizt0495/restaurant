@@ -38,6 +38,7 @@ const columns = [
 export function KitchenDisplay({ orders: initialOrders }: { orders: KitchenOrder[] }) {
   const [orders, setOrders] = React.useState<KitchenOrder[]>(initialOrders)
   const [now, setNow] = React.useState<number>(0)
+  const [refetchError, setRefetchError] = React.useState(false)
 
   React.useEffect(() => {
     setOrders(initialOrders)
@@ -45,7 +46,12 @@ export function KitchenDisplay({ orders: initialOrders }: { orders: KitchenOrder
 
   React.useEffect(() => {
     setNow(Date.now())
-    const interval = setInterval(() => setNow(Date.now()), 1000)
+    const interval = setInterval(() => {
+      setNow((prev) => {
+        const curr = Date.now()
+        return Math.floor(curr / 60000) === Math.floor(prev / 60000) ? prev : curr
+      })
+    }, 1000)
     return () => clearInterval(interval)
   }, [])
 
@@ -71,6 +77,9 @@ export function KitchenDisplay({ orders: initialOrders }: { orders: KitchenOrder
           items: o.items ?? [],
         }))
       )
+      setRefetchError(false)
+    } else {
+      setRefetchError(true)
     }
   }, [])
 
@@ -174,6 +183,12 @@ export function KitchenDisplay({ orders: initialOrders }: { orders: KitchenOrder
           <span className="tabular font-mono text-sm font-bold">{format(now, "HH:mm:ss")}</span>
         </div>
       </div>
+
+      {refetchError && (
+        <div className="rounded-lg border border-warning/25 bg-warning/10 px-3 py-2 text-xs font-medium text-warning">
+          Gagal memuat pesanan terbaru — data bisa kedaluwarsa
+        </div>
+      )}
 
       <div className="grid gap-4 md:grid-cols-3">
         {columns.map((col) => {

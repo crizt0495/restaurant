@@ -1,7 +1,7 @@
 "use server"
 
 import { createServerClient } from "@supabase/ssr"
-import { cookies } from "next/headers"
+import { cookies, headers } from "next/headers"
 import { redirect } from "next/navigation"
 import { z } from "zod"
 
@@ -9,6 +9,15 @@ const loginSchema = z.object({
   username: z.string().min(3, "Username minimal 3 karakter"),
   password: z.string().min(6, "Password minimal 6 karakter"),
 })
+
+interface LoginAttempt {
+  count: number
+  reset: number
+}
+
+const RATE_WINDOW_MS = 5 * 60 * 1000
+const RATE_MAX_ATTEMPTS = 10
+const loginAttempts = new Map<string, LoginAttempt>()
 
 export type LoginResult =
   | { success: true }
@@ -20,6 +29,18 @@ export async function signInWithUsername(
 ): Promise<LoginResult> {
   const rawUsername = formData.get("username") as string
   const password = formData.get("password") as string
+  const h = await headers()
+  const forwarded = h.get("x-forwarded-for")?.split(",")[0]?.trim()
+  const clientIp = forwarded || "unknown"
+  const now = Date.now()
+  const attempt = loginAttempts.get(clientIp)
+  if (!attempt || now >= attempt.reset) {
+    loginAttempts.set(clientIp, { count: 1, reset: now + RATE_WINDOW_MS })
+  } else if (attempt.count >= RATE_MAX_ATTEMPTS) {
+    return { success: false, error: "Terlalu banyak percobaan, coba lagi nanti" }
+  } else {
+    attempt.count += 1
+  }
 
   const parsed = loginSchema.safeParse({
     username: rawUsername,

@@ -31,11 +31,15 @@ export default async function PublicMenuPage({
     supabase.from("categories").select("id, name, icon").eq("is_active", true).order("name"),
     supabase
       .from("products")
-      .select("id, name, description, image_url, selling_price, category_id, is_favorite")
+      .select("id, name, description, image_url, selling_price, category_id, is_favorite, tax_percentage")
       .eq("is_active", true)
       .is("deleted_at", null)
       .order("name"),
-    supabase.from("organizations").select("name, logo_url, address, phone").eq("id", branch.organization_id).single(),
+    supabase
+      .from("organizations")
+      .select("name, logo_url, address, phone, service_charge_percentage, tax_inclusive")
+      .eq("id", branch.organization_id)
+      .single(),
   ])
 
   return (
@@ -47,6 +51,8 @@ export default async function PublicMenuPage({
       orgName={orgRes.data?.name || "Restaurant"}
       categories={(categoriesRes.data as any[]) ?? []}
       products={(productsRes.data as any[]) ?? []}
+      serviceChargePercentage={Number(orgRes.data?.service_charge_percentage ?? 0)}
+      taxInclusive={Boolean(orgRes.data?.tax_inclusive)}
     />
   )
 }

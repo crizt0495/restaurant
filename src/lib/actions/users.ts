@@ -5,15 +5,18 @@ import { getCurrentUser } from "@/lib/helpers"
 import { createAdminClient } from "@/lib/supabase/admin"
 import { getServerClient } from "@/lib/helpers"
 import { z } from "zod"
+import { SYSTEM_PERMISSIONS } from "@/types"
+
+const roleValues = Object.keys(SYSTEM_PERMISSIONS) as [string, ...string[]]
 
 const userInputSchema = z.object({
   full_name: z.string().min(1),
   username: z.string().min(1),
-  role: z.string().min(1),
+  role: z.enum(roleValues),
   branch_id: z.string().min(1),
   phone: z.string().optional().nullable(),
   is_active: z.boolean().default(true),
-  password: z.string().min(6).optional(),
+  password: z.string().min(6),
 })
 
 export async function createUser(input: z.infer<typeof userInputSchema>) {
@@ -32,7 +35,7 @@ export async function createUser(input: z.infer<typeof userInputSchema>) {
   try {
     const { data: authUser, error: authError } = await admin.auth.admin.createUser({
       email: `${data.username}@restaurant.local`,
-      password: data.password || "password123",
+      password: data.password,
       email_confirm: true,
     })
 
@@ -52,6 +55,7 @@ export async function createUser(input: z.infer<typeof userInputSchema>) {
     })
 
     if (profileError) {
+      await admin.auth.admin.deleteUser(authUser.user.id).catch(() => {})
       return { error: profileError.message }
     }
 
@@ -79,6 +83,13 @@ export async function updateUser(
 
   const data = parsed.data
   const supabase = await getServerClient()
+  const admin = createAdminClient()
+
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("user_id")
+    .eq("id", id)
+    .single()
 
   const { error } = await supabase
     .from("profiles")
@@ -93,6 +104,13 @@ export async function updateUser(
     .eq("id", id)
 
   if (error) return { error: error.message }
+
+  if (profile?.user_id) {
+    await admin
+      .auth.admin.updateUserById(profile.user_id, { email: `${data.username}@restaurant.local` })
+      .catch(() => {})
+  }
+
   revalidatePath("/settings/users")
   return { success: true }
 }

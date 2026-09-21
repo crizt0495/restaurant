@@ -39,7 +39,9 @@ const statStyles = [
 export function DashboardView({ initialData }: DashboardViewProps) {
   const [data, setData] = React.useState<DashboardData>(initialData)
   const [live, setLive] = React.useState(false)
+  const [liveError, setLiveError] = React.useState(false)
   const refreshTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null)
+  const liveTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null)
   const pendingRef = React.useRef(false)
 
   React.useEffect(() => {
@@ -64,7 +66,11 @@ export function DashboardView({ initialData }: DashboardViewProps) {
       if (!error && result) {
         setData(parseRpcResult(result))
         setLive(true)
-        setTimeout(() => setLive(false), 2000)
+        setLiveError(false)
+        if (liveTimerRef.current) clearTimeout(liveTimerRef.current)
+        liveTimerRef.current = setTimeout(() => setLive(false), 2000)
+      } else {
+        setLiveError(true)
       }
     }
 
@@ -83,6 +89,7 @@ export function DashboardView({ initialData }: DashboardViewProps) {
     return () => {
       supabase.removeChannel(channel)
       if (refreshTimerRef.current) clearTimeout(refreshTimerRef.current)
+      if (liveTimerRef.current) clearTimeout(liveTimerRef.current)
     }
   }, [])
 
@@ -103,6 +110,11 @@ export function DashboardView({ initialData }: DashboardViewProps) {
 
   return (
     <div className="space-y-6 animate-brutal-slide-up">
+      {liveError && (
+        <div className="rounded-lg border border-warning/25 bg-warning/10 px-3 py-2 text-xs font-medium text-warning">
+          Gagal menyegarkan data real-time, menampilkan data terakhir
+        </div>
+      )}
       {/* Stat cards */}
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4 lg:grid-cols-8">
         {stats.map((stat, idx) => {

@@ -24,6 +24,7 @@ import type { Notification } from "@/types"
 interface NotificationsClientProps {
   notifications: Notification[]
   unread: number
+  profileId?: string | null
 }
 
 const typeIcons: Record<string, React.ReactNode> = {
@@ -51,7 +52,7 @@ function relativeTime(dateStr: string): string {
   return date.toLocaleDateString("id-ID")
 }
 
-export function NotificationsClient({ notifications: initial, unread: initialUnread }: NotificationsClientProps) {
+export function NotificationsClient({ notifications: initial, unread: initialUnread, profileId }: NotificationsClientProps) {
   const [items, setItems] = React.useState<Notification[]>(initial)
   const [unreadCount, setUnreadCount] = React.useState(initialUnread)
 
@@ -69,7 +70,8 @@ export function NotificationsClient({ notifications: initial, unread: initialUnr
         { event: "INSERT", schema: "public", table: "notifications" },
         (payload) => {
           const newNotif = payload.new as Notification
-          setItems((prev) => [newNotif, ...prev])
+          if (profileId && newNotif.user_id && newNotif.user_id !== profileId) return
+          setItems((prev) => (prev.some((n) => n.id === newNotif.id) ? prev : [newNotif, ...prev]))
           setUnreadCount((prev) => prev + 1)
           toast(newNotif.title)
         }
@@ -79,7 +81,7 @@ export function NotificationsClient({ notifications: initial, unread: initialUnr
     return () => {
       supabase.removeChannel(channel)
     }
-  }, [])
+  }, [profileId])
 
   const handleMarkRead = async (id: string) => {
     const result = await markNotificationRead(id)

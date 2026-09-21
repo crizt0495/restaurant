@@ -484,58 +484,116 @@ export async function receivePurchaseOrder(
       return { error: receiptError?.message || "Gagal membuat goods receipt" }
     }
 
-    for (const item of receivedItems) {
-      await supabase.from("goods_receipt_items").insert({
-        goods_receipt_id: receipt.id,
-        inventory_item_id: item.inventory_item_id,
-        quantity: Number(item.received_quantity),
-        unit_price: Number(item.unit_price),
+    const { data: poLines } = await supabase
+      .from("purchase_order_items")
+      .select("inventory_item_id, quantity, received_quantity")
+      .eq("purchase_order_id", id)
+
+    const lineMap = new Map<string, { qty: number; received: number }>()
+    for (const line of poLines ?? []) {
+      lineMap.set(line.inventory_item_id, {
+        qty: Number(line.quantity ?? 0),
+        received: Number(line.received_quantity ?? 0),
       })
-
-      const { data: inv } = await supabase
-        .from("inventory_items")
-        .select("quantity")
-        .eq("id", item.inventory_item_id)
-        .single()
-
-      const before = inv ? Number(inv.quantity) : 0
-      const after = before + Number(item.received_quantity)
-
-      await supabase
-        .from("inventory_items")
-        .update({ quantity: after })
-        .eq("id", item.inventory_item_id)
-
-      await supabase.from("stock_movements").insert({
-        organization_id: user.organization_id,
-        branch_id: user.branch_id,
-        inventory_item_id: item.inventory_item_id,
-        movement_type: "PURCHASE",
-        quantity: Number(item.received_quantity),
-        before_quantity: before,
-        after_quantity: after,
-        reference: "PURCHASE_ORDER",
-        reference_id: id,
-        cost_price: Number(item.unit_price),
-        notes: `Penerimaan PO ${po.po_number}`,
-        created_by: user.profile_id,
-      })
-
-      await supabase
-        .from("purchase_order_items")
-        .update({ received_quantity: Number(item.received_quantity) })
-        .eq("purchase_order_id", id)
-        .eq("inventory_item_id", item.inventory_item_id)
     }
 
-    await supabase
-      .from("purchase_orders")
-      .update({
-        status: "RECEIVED",
-        received_date: new Date().toISOString().slice(0, 10),
-        approved_by: user.profile_id,
-      })
-      .eq("id", id)
+    const received: { inventory_item_id: string; qty: number; unit_price: number }[] = []
+    for (const item of receivedItems) {
+      const qty = Number(item.received_quantity)
+      const unitPrice = Number(item.unit_price)
+      if (!Number.isFinite(qty) || qty <= 0 || !Number.isFinite(unitPrice) || unitPrice < 0) {
+        return { error: "Jumlah/harga penerimaan tidak valid" }
+      }
+      const line = lineMap.get(item.inventory_item_id)
+      if (!line) return { error: "Item tidak ada di PO ini" }
+      if (qty > line.qty - line.received) {
+        return { error: "Jumlah diterima melebihi sisa pesanan" }
+      }
+      received.push({ inventory_item_id: item.inventory_item_id, qty, unit_price: unitPrice })
+    }
+
+    const applied: { inventory_item_id: string; before: number }[] = []
+
+    try {
+      for (const item of received) {
+        const { error: riError } = await supabase.from("goods_receipt_items").insert({
+          goods_receipt_id: receipt.id,
+          inventory_item_id: item.inventory_item_id,
+          quantity: item.qty,
+          unit_price: item.unit_price,
+        })
+        if (riError) throw new Error(riError.message)
+
+        const { data: inv } = await supabase
+          .from("inventory_items")
+          .select("quantity")
+          .eq("id", item.inventory_item_id)
+          .single()
+
+        const before = inv ? Number(inv.quantity) : 0
+        const after = before + item.qty
+
+        const { error: invError } = await supabase
+          .from("inventory_items")
+          .update({ quantity: after })
+          .eq("id", item.inventory_item_id)
+        if (invError) throw new Error(invError.message)
+
+        applied.push({ inventory_item_id: item.inventory_item_id, before })
+
+        const { error: smError } = await supabase.from("stock_movements").insert({
+          organization_id: user.organization_id,
+          branch_id: user.branch_id,
+          inventory_item_id: item.inventory_item_id,
+          movement_type: "PURCHASE",
+          quantity: item.qty,
+          before_quantity: before,
+          after_quantity: after,
+          reference: "PURCHASE_ORDER",
+          reference_id: id,
+          cost_price: item.unit_price,
+          notes: `Penerimaan PO ${po.po_number}`,
+          created_by: user.profile_id,
+        })
+        if (smError) throw new Error(smError.message)
+
+        const line = lineMap.get(item.inventory_item_id)!
+        const { error: poiError } = await supabase
+          .from("purchase_order_items")
+          .update({ received_quantity: line.received + item.qty })
+          .eq("purchase_order_id", id)
+          .eq("inventory_item_id", item.inventory_item_id)
+        if (poiError) throw new Error(poiError.message)
+        line.received += item.qty
+      }
+
+      const { error: poUpdateError } = await supabase
+        .from("purchase_orders")
+        .update({
+          status: "RECEIVED",
+          received_date: new Date().toISOString().slice(0, 10),
+          approved_by: user.profile_id,
+        })
+        .eq("id", id)
+      if (poUpdateError) throw new Error(poUpdateError.message)
+    } catch (err: unknown) {
+      for (const a of applied) {
+        await supabase
+          .from("inventory_items")
+          .update({ quantity: a.before })
+          .eq("id", a.inventory_item_id)
+        await supabase
+          .from("stock_movements")
+          .delete()
+          .eq("inventory_item_id", a.inventory_item_id)
+          .eq("reference", "PURCHASE_ORDER")
+          .eq("reference_id", id)
+      }
+      await supabase.from("goods_receipt_items").delete().eq("goods_receipt_id", receipt.id)
+      await supabase.from("goods_receipts").delete().eq("id", receipt.id)
+      const message = err instanceof Error ? err.message : "Gagal menerima PO"
+      return { error: message }
+    }
 
     revalidatePath("/purchases")
     return { success: true }
@@ -584,6 +642,9 @@ export interface CreateOrderInput {
 export async function createOrder(input: CreateOrderInput) {
   const user = await getCurrentUser()
   if (!user) return { error: "Unauthorized" }
+  if (!user.is_super_admin && !user.permissions.includes("orders.create")) {
+    return { error: "Forbidden" }
+  }
   const supabase = await getServerClient()
 
   try {
@@ -643,6 +704,9 @@ export type PayOrderInput = {
 export async function payOrder(input: PayOrderInput) {
   const user = await getCurrentUser()
   if (!user) return { error: "Unauthorized" }
+  if (!user.is_super_admin && !user.permissions.includes("orders.create")) {
+    return { error: "Forbidden" }
+  }
   const supabase = await getServerClient()
 
   try {
@@ -675,6 +739,11 @@ export async function payOrder(input: PayOrderInput) {
 }
 
 export async function updateOrderStatus(id: string, status: string) {
+  const user = await getCurrentUser()
+  if (!user) return { error: "Unauthorized" }
+  if (!user.is_super_admin && !user.permissions.includes("orders.edit")) {
+    return { error: "Forbidden" }
+  }
   const supabase = await getServerClient()
   const { error } = await supabase
     .from("orders")
@@ -689,6 +758,9 @@ export async function updateOrderStatus(id: string, status: string) {
 export async function cancelOrder(id: string, reason?: string) {
   const user = await getCurrentUser()
   if (!user) return { error: "Unauthorized" }
+  if (!user.is_super_admin && !user.permissions.includes("orders.cancel")) {
+    return { error: "Forbidden" }
+  }
   const supabase = await getServerClient()
 
   const { data: order, error: fetchError } = await supabase
@@ -698,6 +770,9 @@ export async function cancelOrder(id: string, reason?: string) {
     .single()
 
   if (fetchError || !order) return { error: "Order tidak ditemukan" }
+  if (order.status === "CANCELLED" || order.status === "REFUNDED") {
+    return { error: "Order sudah dibatalkan" }
+  }
 
   const newPaymentStatus = order.payment_status === "PAID" ? "REFUNDED" : order.payment_status
 
@@ -737,6 +812,11 @@ export async function cancelOrder(id: string, reason?: string) {
 // UPDATING ORDER STATUS & KITCHEN FLOW
 // ============================================================
 export async function updateOrderItemStatus(itemId: string, status: string) {
+  const user = await getCurrentUser()
+  if (!user) return { error: "Unauthorized" }
+  if (!user.is_super_admin && !user.permissions.includes("orders.edit")) {
+    return { error: "Forbidden" }
+  }
   const supabase = await getServerClient()
   const { error } = await supabase
     .from("order_items")
@@ -804,6 +884,9 @@ export async function createReservation(input: z.infer<typeof reservationSchema>
 export async function updateReservationStatus(id: string, status: string) {
   const user = await getCurrentUser()
   if (!user) return { error: "Unauthorized" }
+  if (!user.is_super_admin && !user.permissions.includes("reservations.create")) {
+    return { error: "Forbidden" }
+  }
 
   const supabase = await getServerClient()
   const { error } = await supabase
@@ -916,6 +999,11 @@ export async function updatePromotion(
 }
 
 export async function togglePromotion(id: string, isActive: boolean) {
+  const user = await getCurrentUser()
+  if (!user) return { error: "Unauthorized" }
+  if (!user.is_super_admin && !user.permissions.includes("promotions.create")) {
+    return { error: "Forbidden" }
+  }
   const supabase = await getServerClient()
   const { error } = await supabase
     .from("promotions")
@@ -1156,7 +1244,7 @@ export async function redeemPoints(customerId: string, points: number) {
     return { error: "Forbidden" }
   }
 
-  if (points <= 0) return { error: "Jumlah poin harus lebih dari 0" }
+  if (!Number.isFinite(points) || points <= 0) return { error: "Jumlah poin harus lebih dari 0" }
 
   const supabase = await getServerClient()
 
@@ -1207,6 +1295,7 @@ export async function markNotificationRead(id: string) {
     .from("notifications")
     .update({ is_read: true })
     .eq("id", id)
+    .eq("user_id", user.profile_id)
 
   if (error) return { error: error.message }
   revalidatePath("/notifications")
@@ -1222,6 +1311,7 @@ export async function markAllNotificationsRead() {
     .from("notifications")
     .update({ is_read: true })
     .eq("is_read", false)
+    .eq("user_id", user.profile_id)
 
   if (error) return { error: error.message }
   revalidatePath("/notifications")
@@ -1652,11 +1742,15 @@ export async function approveStockOpname(id: string) {
     for (const item of opname.items || []) {
       const physicalQty = Number(item.physical_quantity)
       const difference = Number(item.difference)
+      if (!Number.isFinite(physicalQty) || physicalQty < 0 || !Number.isFinite(difference)) {
+        return { error: "Nilai stok opname tidak valid" }
+      }
 
-      await supabase
+      const { error: invUpdateError } = await supabase
         .from("inventory_items")
         .update({ quantity: physicalQty })
         .eq("id", item.inventory_item_id)
+      if (invUpdateError) return { error: invUpdateError.message }
 
       if (difference !== 0) {
         const { data: inv } = await supabase
@@ -1667,7 +1761,7 @@ export async function approveStockOpname(id: string) {
 
         const before = inv ? Number(inv.quantity) : 0
 
-        await supabase.from("stock_movements").insert({
+        const { error: movementError } = await supabase.from("stock_movements").insert({
           organization_id: user.organization_id,
           branch_id: user.branch_id,
           inventory_item_id: item.inventory_item_id,
@@ -1680,6 +1774,7 @@ export async function approveStockOpname(id: string) {
           notes: item.reason || `Opname ${opname.opname_number}`,
           created_by: user.profile_id,
         })
+        if (movementError) return { error: movementError.message }
       }
     }
 
@@ -1713,7 +1808,7 @@ export async function openCashierShift(openingCash: number) {
     return { error: "Forbidden" }
   }
 
-  if (openingCash < 0) return { error: "Kas awal tidak boleh negatif" }
+  if (!Number.isFinite(openingCash) || openingCash < 0) return { error: "Kas awal tidak boleh negatif" }
 
   const supabase = await getServerClient()
 
@@ -1757,7 +1852,7 @@ export async function closeCashierShift(actualCash: number, notes?: string) {
     return { error: "Forbidden" }
   }
 
-  if (actualCash < 0) return { error: "Kas aktual tidak boleh negatif" }
+  if (!Number.isFinite(actualCash) || actualCash < 0) return { error: "Kas aktual tidak boleh negatif" }
 
   const supabase = await getServerClient()
 

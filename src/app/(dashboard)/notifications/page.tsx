@@ -15,6 +15,7 @@ export default async function NotificationsPage() {
     <NotificationsClient
       notifications={data.notifications}
       unread={data.unread}
+      profileId={user.profile_id}
     />
   )
 }
