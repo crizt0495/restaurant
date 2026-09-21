@@ -192,6 +192,7 @@ public/                Static assets (manifest, sw)
 ## Key Business Logic (DB Functions)
 
 - `create_order_atomic(text, text, text, numeric, numeric, numeric, numeric, numeric, numeric, numeric, text, jsonb, jsonb)` — full transactional POS order: writes order, items, modifiers, payments, deducts stock from recipes (with row-level lock), updates table, sends notifications, writes audit log. All or nothing.
+- `pay_order_atomic(uuid, jsonb)` — transactional payment for an existing order (e.g. QR-menu or part-paid orders): records payments, marks order PAID/PARTIAL, deducts stock once for orders that skipped the atomic create flow (source `QR_MENU`), earns loyalty points, notifies staff, writes audit log. Trigger `orders_stock_flag_before_insert` flags whether stock was already consumed.
 - `get_auth_email_by_username(p_username text)` — username → auth email mapper for login.
 - `current_org_id()`, `current_profile()`, `current_branch_id()` — RLS-friendly helpers.
 - `create_notification`, `log_audit` — convenience writers.

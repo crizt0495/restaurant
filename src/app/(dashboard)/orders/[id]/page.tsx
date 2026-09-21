@@ -8,6 +8,7 @@ import Link from "next/link"
 import { ArrowLeft, Printer, ReceiptText, Banknote } from "lucide-react"
 import { CancelOrderButton } from "@/components/orders/cancel-order-button"
 import { RefundButton } from "@/components/orders/refund-button"
+import { PayOrderButton } from "@/components/orders/pay-order-button"
 
 export default async function OrderDetailPage({
   params,
@@ -34,6 +35,11 @@ export default async function OrderDetailPage({
     Number(order.paid_amount) > 0 &&
     order.status !== "REFUNDED" &&
     (user?.is_super_admin || user?.permissions.includes("sales.edit"))
+  const remaining = Number(order.total) - Number(order.paid_amount)
+  const canPay =
+    ["UNPAID", "PARTIAL"].includes(order.payment_status) &&
+    !["CANCELLED", "REFUNDED"].includes(order.status) &&
+    remaining > 0
 
   const statusVariant =
     order.status === "COMPLETED"
@@ -70,6 +76,7 @@ export default async function OrderDetailPage({
             </Link>
           </Button>
           {canCancel && <CancelOrderButton orderId={order.id} />}
+          {canPay && <PayOrderButton orderId={order.id} remaining={remaining} />}
           {canRefund && <RefundButton orderId={order.id} maxAmount={Number(order.paid_amount)} />}
         </div>
       </div>

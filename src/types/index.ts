@@ -247,6 +247,8 @@ export interface Order {
   paid_amount: number
   change_amount: number
   payment_status: OrderPaymentStatus
+  source?: string
+  stock_deducted?: boolean
   notes?: string
   prepared_by?: string
   completed_by?: string

@@ -635,6 +635,45 @@ export async function createOrder(input: CreateOrderInput) {
   }
 }
 
+export type PayOrderInput = {
+  orderId: string
+  payments: { method: string; amount: number }[]
+}
+
+export async function payOrder(input: PayOrderInput) {
+  const user = await getCurrentUser()
+  if (!user) return { error: "Unauthorized" }
+  const supabase = await getServerClient()
+
+  try {
+    const payments = input.payments.map((p) => ({
+      method: p.method,
+      amount: p.amount,
+    }))
+
+    const { data, error } = await supabase.rpc("pay_order_atomic", {
+      p_order_id: input.orderId,
+      p_payments: payments,
+    })
+
+    if (error) {
+      return { error: error.message }
+    }
+
+    revalidatePath("/orders")
+    revalidatePath("/pos")
+    revalidatePath("/tables")
+    revalidatePath(`/orders/${input.orderId}`)
+    return {
+      success: true,
+      payment_status: (data as { payment_status?: string } | null)?.payment_status ?? "PARTIAL",
+    }
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : "Gagal memproses pembayaran"
+    return { error: message }
+  }
+}
+
 export async function updateOrderStatus(id: string, status: string) {
   const supabase = await getServerClient()
   const { error } = await supabase
@@ -654,7 +693,7 @@ export async function cancelOrder(id: string, reason?: string) {
 
   const { data: order, error: fetchError } = await supabase
     .from("orders")
-    .select("payment_status, status")
+    .select("payment_status, status, table_id")
     .eq("id", id)
     .single()
 
@@ -674,7 +713,14 @@ export async function cancelOrder(id: string, reason?: string) {
     .eq("id", id)
   if (error) return { error: error.message }
 
-  // Update table status to AVAILABLE if this table... handled separately
+  // Free the table so it can be reused immediately
+  if (order.table_id) {
+    await supabase
+      .from("restaurant_tables")
+      .update({ status: "AVAILABLE", updated_at: new Date().toISOString() })
+      .eq("id", order.table_id)
+      .eq("status", "OCCUPIED")
+  }
   await supabase.from("audit_logs").insert({
     organization_id: user.organization_id,
     user_id: user.profile_id,

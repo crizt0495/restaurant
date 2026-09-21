@@ -98,6 +98,14 @@ export function KitchenDisplay({ orders: initialOrders }: { orders: KitchenOrder
           schedule()
         }
       )
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "order_items" },
+        () => {
+          pendingRef.current = true
+          schedule()
+        }
+      )
       .subscribe()
 
     return () => {

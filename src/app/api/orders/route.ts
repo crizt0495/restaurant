@@ -51,7 +51,7 @@ export async function POST(req: Request) {
   const productIds = items.map((i) => i.product_id)
   const { data: products } = await admin
     .from("products")
-    .select("id, is_active, deleted_at, selling_price, tax_percentage")
+    .select("id, name, is_active, deleted_at, selling_price, tax_percentage")
     .in("id", productIds)
     
   if (!products || products.length !== productIds.length) {
@@ -68,7 +68,7 @@ export async function POST(req: Request) {
     const p = products.find(prod => prod.id === item.product_id)!
     return {
       product_id: item.product_id,
-      product_name: item.product_name,
+      product_name: p.name,
       variant_id: null,
       variant_name: null,
       quantity: item.quantity,
@@ -88,25 +88,39 @@ export async function POST(req: Request) {
   // we either create a separate service-role RPC or insert manually here.
   // For safety, let's just insert manually with a specific source = 'QR_MENU'
   
-  const { data: order, error } = await admin
-    .from("orders")
-    .insert({
-      organization_id: branch.organization_id,
-      branch_id: branchId,
-      order_number: `ORD-${new Date().toISOString().slice(0, 10).replace(/-/g, "")}-${Math.floor(Math.random() * 10000).toString().padStart(4, "0")}`,
-      status: "NEW",
-      order_type: "DINE_IN",
-      table_id: tableId || null,
-      subtotal,
-      total: subtotal,
-      payment_status: "UNPAID",
-      notes: notes?.trim() || undefined,
-      source: "QR_MENU",
-    })
-    .select()
-    .single()
+  // Create the order with a collision-safe order number (retry on unique violation)
+  const insertOrder = async () => {
+    for (let attempt = 0; attempt < 10; attempt++) {
+      const stamp = new Date().toISOString().slice(0, 10).replace(/-/g, "")
+      const orderNumber = `ORD-${stamp}-${Math.floor(Math.random() * 10000).toString().padStart(4, "0")}`
+      const { data: order, error } = await admin
+        .from("orders")
+        .insert({
+          organization_id: branch.organization_id,
+          branch_id: branchId,
+          order_number: orderNumber,
+          status: "NEW",
+          order_type: "DINE_IN",
+          table_id: tableId || null,
+          subtotal,
+          total: subtotal,
+          payment_status: "UNPAID",
+          notes: notes?.trim() || undefined,
+          source: "QR_MENU",
+        })
+        .select()
+        .single()
 
-  if (error || !order) {
+      if (order) return { order, orderNumber }
+      // Retry only on order_number unique-violation; fail on anything else
+      if (!(error && error.code === "23505")) return { error }
+    }
+    return { error: new Error("Gagal membuat nomor order") }
+  }
+
+  const { order, error: orderError } = await insertOrder()
+
+  if (orderError || !order) {
     return NextResponse.json({ error: "Failed to create order" }, { status: 500 })
   }
 
