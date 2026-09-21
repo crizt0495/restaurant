@@ -160,7 +160,7 @@ export function KitchenDisplay({ orders: initialOrders }: { orders: KitchenOrder
 
   return (
     <div className="space-y-4 animate-brutal-slide-up">
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="font-display text-2xl font-bold tracking-tight leading-none md:text-3xl">Layar Dapur</h2>
           <p className="mt-1.5 text-sm text-muted-foreground">Pesanan langsung dari kasir</p>

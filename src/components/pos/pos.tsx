@@ -353,7 +353,7 @@ export function POS({ user, categories, products, tables, customers: initialCust
   }, [selectedProduct, showPayment, processing, cart, payments, total, discountType, discountValue])
 
   return (
-    <div className="flex h-[calc(100vh-8rem)] flex-col gap-4 lg:flex-row">
+    <div className="flex flex-col gap-4 lg:h-[calc(100vh-8rem)] lg:flex-row">
       {/* LEFT: categories */}
       <div className="flex shrink-0 gap-2 overflow-x-auto pb-1 lg:w-44 lg:flex-col lg:overflow-visible">
         <CategoryButton label="Semua" active={!activeCategory} onClick={() => setActiveCategory("")} />
@@ -487,18 +487,18 @@ export function POS({ user, categories, products, tables, customers: initialCust
                 <div key={i} className="animate-brutal-pop rounded-xl border border-border bg-background/60 p-2.5">
                   <div className="flex items-center justify-between gap-2">
                     <p className="truncate text-13 font-semibold">{item.product_name}</p>
-                    <Button size="icon-sm" variant="ghost" className="h-6 w-6 text-destructive hover:bg-destructive/10 hover:text-destructive" onClick={() => removeFromCart(i)}>
+                    <Button size="icon-sm" variant="ghost" className="h-7 w-7 text-destructive hover:bg-destructive/10 hover:text-destructive" onClick={() => removeFromCart(i)}>
                       <Trash2 className="h-3 w-3" />
                     </Button>
                   </div>
                   {item.variant_name && <p className="text-2xs text-muted-foreground">{item.variant_name}</p>}
                   <div className="mt-1.5 flex items-center justify-between">
                     <div className="flex items-center gap-1">
-                      <Button size="icon-sm" variant="outline" className="h-6 w-6" onClick={() => changeQty(i, -1)}>
+                      <Button size="icon-sm" variant="outline" className="h-7 w-7" onClick={() => changeQty(i, -1)}>
                         <Minus className="h-3 w-3" />
                       </Button>
                       <span className="tabular w-6 text-center text-xs font-semibold">{item.quantity}</span>
-                      <Button size="icon-sm" variant="outline" className="h-6 w-6" onClick={() => changeQty(i, 1)}>
+                      <Button size="icon-sm" variant="outline" className="h-7 w-7" onClick={() => changeQty(i, 1)}>
                         <Plus className="h-3 w-3" />
                       </Button>
                     </div>

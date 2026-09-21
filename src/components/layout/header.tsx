@@ -4,6 +4,8 @@ import * as React from "react"
 import { usePathname, useRouter } from "next/navigation"
 import { Bell, Search, Command } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { ThemeToggle } from "@/components/theme-toggle"
+import { UserMenu } from "@/components/user-menu"
 import { createClient } from "@/lib/supabase/client"
 import Link from "next/link"
 import {
@@ -27,7 +29,17 @@ const typeColors: Record<SearchResult["type"], string> = {
   supplier: "bg-info/10 text-info border-info/20",
 }
 
-export function Header({ profileId }: { profileId?: string | null }) {
+interface HeaderProps {
+  profileId?: string | null
+  user?: {
+    full_name: string
+    role: string
+    username: string
+    avatar_url?: string
+  } | null
+}
+
+export function Header({ profileId, user }: HeaderProps) {
   const pathname = usePathname()
   const router = useRouter()
   const segments = pathname.split("/").filter(Boolean)
@@ -127,9 +139,6 @@ export function Header({ profileId }: { profileId?: string | null }) {
   return (
     <header className="glass sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-border px-4 md:px-6">
       <div className="flex items-center gap-3">
-        <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-brand text-sm font-bold text-primary-foreground shadow sm:hidden">
-          {titleLabel.slice(0, 2).toUpperCase()}
-        </span>
         <div className="flex flex-col">
           <span className="text-3xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
             {titleLabel}
@@ -151,7 +160,7 @@ export function Header({ profileId }: { profileId?: string | null }) {
         </kbd>
       </button>
 
-      <div className="flex items-center gap-1.5">
+      <div className="ml-auto flex items-center gap-1.5 md:ml-0">
         <Button variant="ghost" size="icon" className="md:hidden text-muted-foreground" onClick={() => setSearchOpen(true)} aria-label="Buka pencarian">
           <Search className="h-5 w-5" />
         </Button>
@@ -165,6 +174,12 @@ export function Header({ profileId }: { profileId?: string | null }) {
             )}
           </Link>
         </Button>
+        <div className="lg:hidden">
+          <ThemeToggle />
+        </div>
+        <div className="lg:hidden">
+          <UserMenu user={user} triggerClassName="w-auto" />
+        </div>
       </div>
 
       <Dialog open={searchOpen} onOpenChange={setSearchOpen}>

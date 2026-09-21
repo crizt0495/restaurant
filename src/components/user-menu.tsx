@@ -2,7 +2,7 @@
 
 import { signOut } from "@/lib/actions/auth"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { getInitials } from "@/lib/utils"
+import { cn, getInitials } from "@/lib/utils"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,16 +21,17 @@ interface UserMenuProps {
     username: string
     avatar_url?: string
   } | null
+  triggerClassName?: string
 }
 
-export function UserMenu({ user }: UserMenuProps) {
+export function UserMenu({ user, triggerClassName }: UserMenuProps) {
   const name = user?.full_name ?? "Pengguna"
   const initials = getInitials(name)
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className="group flex w-full items-center gap-2.5 rounded-xl p-1.5 text-left transition-colors hover:bg-muted">
+        <button className={cn("group flex w-full items-center gap-2.5 rounded-xl p-1.5 text-left transition-colors hover:bg-muted", triggerClassName)}>
           <Avatar className="h-8 w-8 ring-0">
             <AvatarImage src={user?.avatar_url} alt={name} />
             <AvatarFallback className="text-xs">{initials}</AvatarFallback>

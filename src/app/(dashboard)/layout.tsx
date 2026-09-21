@@ -28,7 +28,14 @@ export default async function DashboardLayout({
         isSuperAdmin={user.is_super_admin}
       />
       <div className="flex min-h-screen flex-col lg:pl-72">
-        <Header profileId={user.profile_id} />
+        <Header
+          profileId={user.profile_id}
+          user={{
+            full_name: user.full_name,
+            role: user.role,
+            username: user.username,
+          }}
+        />
         <main className="flex-1 p-4 pb-24 lg:pb-8 md:p-6 lg:p-8">
           {children}
         </main>
