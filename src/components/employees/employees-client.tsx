@@ -264,7 +264,7 @@ export function EmployeesClient({ employees, branches, shifts, canCreate, canEdi
                       </TableCell>
                       {canEdit && (
                         <TableCell className="text-right">
-                          <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => openEdit(e)}>
+                          <Button variant="ghost" size="icon" aria-label="Edit karyawan" className="h-7 w-7" onClick={() => openEdit(e)}>
                             <Pencil className="h-3 w-3" />
                           </Button>
                         </TableCell>

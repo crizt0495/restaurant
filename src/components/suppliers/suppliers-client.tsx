@@ -198,7 +198,7 @@ export function SuppliersClient({ suppliers, canCreate, canEdit, canDelete }: Su
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-1">
                       {canEdit && (
-                        <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => openEdit(s)}>
+                        <Button variant="ghost" size="icon" aria-label="Edit supplier" className="h-7 w-7" onClick={() => openEdit(s)}>
                           <Pencil className="h-3 w-3" />
                         </Button>
                       )}
@@ -206,6 +206,7 @@ export function SuppliersClient({ suppliers, canCreate, canEdit, canDelete }: Su
                         <Button
                           variant="ghost"
                           size="icon"
+                          aria-label="Hapus supplier"
                           className="h-7 w-7 text-destructive"
                           onClick={() => handleDelete(s)}
                         >

@@ -76,7 +76,7 @@ export function SimpleReport({ title, description, dateFrom, dateTo, columns, ro
           {summary.map((s) => (
             <Card key={s.label} className="card-hover">
               <CardContent className="p-4">
-                <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">{s.label}</p>
+                <p className="text-2xs font-medium uppercase tracking-wider text-muted-foreground">{s.label}</p>
                 <p className="tabular mt-1 font-display text-2xl font-bold leading-none">{s.value}</p>
               </CardContent>
             </Card>

@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import Image from "next/image"
 import {
   Dialog,
   DialogContent,
@@ -396,19 +397,18 @@ export function POS({ user, categories, products, tables, customers: initialCust
                 >
                   <div className="relative mb-2 flex h-24 items-center justify-center bg-muted/60">
                     {product.image_url ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={product.image_url} alt={product.name} className="h-full w-full object-cover" />
+                      <Image fill src={product.image_url} alt={product.name} sizes="(max-width: 768px) 50vw, (max-width: 1280px) 33vw, 25vw" className="object-cover" />
                     ) : (
                       <Utensils className="h-7 w-7 text-muted-foreground/50" strokeWidth={2} />
                     )}
                     {product.is_favorite && (
-                      <Badge variant="success" className="absolute right-1.5 top-1.5 text-[9px]">
+                      <Badge variant="success" className="absolute right-1.5 top-1.5 text-4xs">
                         FAVORIT
                       </Badge>
                     )}
                   </div>
                   <div className="px-2.5 pb-2.5">
-                    <p className="line-clamp-1 text-[13px] font-semibold">{product.name}</p>
+                    <p className="line-clamp-1 text-13 font-semibold">{product.name}</p>
                     <p className="tabular mt-1 font-mono text-sm font-bold text-primary">
                       {formatCurrency(product.selling_price)}
                     </p>
@@ -430,7 +430,7 @@ export function POS({ user, categories, products, tables, customers: initialCust
                 type="button"
                 onClick={() => setOrderType(type)}
                 className={cn(
-                  "flex-1 rounded-lg px-2 py-1.5 text-[11px] font-semibold uppercase tracking-wide transition-all",
+                  "flex-1 rounded-lg px-2 py-1.5 text-2xs font-semibold uppercase tracking-wide transition-all",
                   orderType === type
                     ? "bg-card text-primary shadow-sm"
                     : "text-muted-foreground hover:text-foreground"
@@ -486,12 +486,12 @@ export function POS({ user, categories, products, tables, customers: initialCust
               {cart.map((item, i) => (
                 <div key={i} className="animate-brutal-pop rounded-xl border border-border bg-background/60 p-2.5">
                   <div className="flex items-center justify-between gap-2">
-                    <p className="truncate text-[13px] font-semibold">{item.product_name}</p>
+                    <p className="truncate text-13 font-semibold">{item.product_name}</p>
                     <Button size="icon-sm" variant="ghost" className="h-6 w-6 text-destructive hover:bg-destructive/10 hover:text-destructive" onClick={() => removeFromCart(i)}>
                       <Trash2 className="h-3 w-3" />
                     </Button>
                   </div>
-                  {item.variant_name && <p className="text-[11px] text-muted-foreground">{item.variant_name}</p>}
+                  {item.variant_name && <p className="text-2xs text-muted-foreground">{item.variant_name}</p>}
                   <div className="mt-1.5 flex items-center justify-between">
                     <div className="flex items-center gap-1">
                       <Button size="icon-sm" variant="outline" className="h-6 w-6" onClick={() => changeQty(i, -1)}>
@@ -502,10 +502,10 @@ export function POS({ user, categories, products, tables, customers: initialCust
                         <Plus className="h-3 w-3" />
                       </Button>
                     </div>
-                    <p className="tabular font-mono text-[13px] font-bold">{formatCurrency(item.unit_price * item.quantity)}</p>
+                    <p className="tabular font-mono text-13 font-bold">{formatCurrency(item.unit_price * item.quantity)}</p>
                   </div>
                   <div className="mt-1.5 flex items-center gap-1.5">
-                    <span className="text-[11px] text-muted-foreground">Diskon</span>
+                    <span className="text-2xs text-muted-foreground">Diskon</span>
                     <Input
                       type="number"
                       min={0}
@@ -567,7 +567,7 @@ export function POS({ user, categories, products, tables, customers: initialCust
           >
             <ReceiptText className="mr-1 h-4 w-4" /> Bayar · {formatCurrency(total)}
           </Button>
-          <p className="mt-2 text-center font-mono text-[10px] font-medium text-muted-foreground">
+          <p className="mt-2 text-center font-mono text-3xs font-medium text-muted-foreground">
             F2 CARI · F4 TAMBAH · F8 BAYAR · ESC TUTUP
           </p>
         </div>
@@ -605,7 +605,7 @@ export function POS({ user, categories, products, tables, customers: initialCust
                   const mod = pm.modifier
                   return (
                     <div key={mod?.id} className="mb-2">
-                      <p className="mb-1 text-[11px] font-medium text-muted-foreground">{mod?.name}</p>
+                      <p className="mb-1 text-2xs font-medium text-muted-foreground">{mod?.name}</p>
                       <div className="flex flex-wrap gap-1.5">
                         {mod?.options?.map((opt: any) => {
                           const modName = mod.name
@@ -652,11 +652,11 @@ export function POS({ user, categories, products, tables, customers: initialCust
             <div className="flex items-center justify-between rounded-xl border border-border bg-muted/40 px-3 py-2.5">
               <p className="text-sm font-medium">Qty</p>
               <div className="flex items-center gap-2">
-                <Button size="icon" variant="outline" className="h-8 w-8" onClick={() => setQuantity((q) => Math.max(1, q - 1))}>
+                <Button size="icon" variant="outline" aria-label="Kurangi jumlah" className="h-8 w-8" onClick={() => setQuantity((q) => Math.max(1, q - 1))}>
                   <Minus className="h-4 w-4" />
                 </Button>
                 <span className="tabular w-10 text-center text-base font-bold">{quantity}</span>
-                <Button size="icon" variant="outline" className="h-8 w-8" onClick={() => setQuantity((q) => q + 1)}>
+                <Button size="icon" variant="outline" aria-label="Tambah jumlah" className="h-8 w-8" onClick={() => setQuantity((q) => q + 1)}>
                   <Plus className="h-4 w-4" />
                 </Button>
               </div>

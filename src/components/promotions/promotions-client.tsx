@@ -322,6 +322,7 @@ export function PromotionsClient({
                       <Button
                         variant="ghost"
                         size="icon"
+                        aria-label="Edit promosi"
                         className="h-7 w-7"
                         onClick={() => openEdit(p)}
                       >

@@ -123,12 +123,13 @@ export function CategoriesClient({ categories, productCount }: CategoriesClientP
                   </p>
                 </div>
                 <div className="flex gap-1">
-                  <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => openEdit(cat)}>
+                  <Button variant="ghost" size="icon" aria-label="Edit kategori" className="h-7 w-7" onClick={() => openEdit(cat)}>
                     <Pencil className="h-3 w-3" />
                   </Button>
                   <Button
                     variant="ghost"
                     size="icon"
+                    aria-label="Hapus kategori"
                     className="h-7 w-7 text-destructive"
                     onClick={() => handleDelete(cat.id, cat.name)}
                   >

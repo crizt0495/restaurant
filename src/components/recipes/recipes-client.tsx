@@ -292,6 +292,7 @@ export function RecipesClient({
                           <Button
                             variant="ghost"
                             size="icon"
+                            aria-label="Edit resep"
                             className="h-7 w-7"
                             onClick={() => openEdit(recipe)}
                           >
@@ -302,6 +303,7 @@ export function RecipesClient({
                           <Button
                             variant="ghost"
                             size="icon"
+                            aria-label="Hapus resep"
                             className="h-7 w-7 text-destructive"
                             onClick={() =>
                               handleDelete(recipe.id, recipe.product?.name || recipe.name)
@@ -408,6 +410,7 @@ export function RecipesClient({
                     <Button
                       variant="ghost"
                       size="icon"
+                      aria-label="Hapus bahan"
                       className="col-span-1 h-7 w-7 text-destructive"
                       onClick={() => removeIngredient(index)}
                     >

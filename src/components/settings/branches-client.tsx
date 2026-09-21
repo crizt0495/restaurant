@@ -103,6 +103,7 @@ export function BranchesClient({ branches, canEdit }: BranchesClientProps) {
                   <Button
                     variant="ghost"
                     size="icon"
+                    aria-label="Edit cabang"
                     className="h-7 w-7"
                     onClick={() => openEdit(b)}
                   >

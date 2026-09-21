@@ -52,7 +52,7 @@ export default async function OrderDetailPage({
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-3">
-          <Button variant="ghost" size="icon" asChild className="text-muted-foreground hover:text-foreground">
+          <Button variant="ghost" size="icon" aria-label="Kembali ke pesanan" asChild className="text-muted-foreground hover:text-foreground">
             <Link href="/orders">
               <ArrowLeft className="h-4 w-4" />
             </Link>

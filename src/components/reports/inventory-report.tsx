@@ -116,7 +116,7 @@ export function InventoryReport({ items, totalStockValue }: InventoryReportProps
                       <div className="flex items-center gap-2">
                         {item.name}
                         {item.is_low_stock && (
-                          <Badge variant="destructive" className="text-[10px]">RENDAH</Badge>
+                          <Badge variant="destructive" className="text-3xs">RENDAH</Badge>
                         )}
                       </div>
                     </TableCell>

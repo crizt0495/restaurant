@@ -176,7 +176,7 @@ export function ExpensesClient({ expenses, branches, categories, canCreate }: Ex
                   <TableCell>{e.branch?.name || "-"}</TableCell>
                   {canCreate && (
                     <TableCell className="text-right">
-                      <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive" onClick={() => handleDelete(e.id)}>
+                      <Button variant="ghost" size="icon" aria-label="Hapus pengeluaran" className="h-7 w-7 text-destructive" onClick={() => handleDelete(e.id)}>
                         <Trash2 className="h-3 w-3" />
                       </Button>
                     </TableCell>

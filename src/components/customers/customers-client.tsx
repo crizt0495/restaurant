@@ -233,12 +233,12 @@ export function CustomersClient({ customers, canCreate, canEdit }: CustomersClie
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-1">
                       {canEdit && (
-                        <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => openEdit(c)}>
+                        <Button variant="ghost" size="icon" aria-label="Edit pelanggan" className="h-7 w-7" onClick={() => openEdit(c)}>
                           <Pencil className="h-3 w-3" />
                         </Button>
                       )}
                       {c.is_member && Number(c.points) > 0 && (
-                        <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => openReward(c)}>
+                        <Button variant="ghost" size="icon" aria-label="Hadiah poin" className="h-7 w-7" onClick={() => openReward(c)}>
                           <Gift className="h-3 w-3" />
                         </Button>
                       )}

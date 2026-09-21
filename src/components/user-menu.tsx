@@ -36,8 +36,8 @@ export function UserMenu({ user }: UserMenuProps) {
             <AvatarFallback className="text-xs">{initials}</AvatarFallback>
           </Avatar>
           <div className="hidden min-w-0 flex-1 sm:block">
-            <p className="truncate text-[13px] font-semibold leading-none">{name}</p>
-            <p className="mt-0.5 truncate text-[11px] text-muted-foreground">{user?.role}</p>
+            <p className="truncate text-13 font-semibold leading-none">{name}</p>
+            <p className="mt-0.5 truncate text-2xs text-muted-foreground">{user?.role}</p>
           </div>
           <ChevronUp className="hidden h-4 w-4 text-muted-foreground transition-transform group-data-[state=open]:rotate-180 sm:block" />
         </button>

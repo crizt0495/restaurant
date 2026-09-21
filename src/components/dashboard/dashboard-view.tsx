@@ -132,7 +132,7 @@ export function DashboardView({ initialData }: DashboardViewProps) {
                     </span>
                   )}
                 </div>
-                <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">{stat.title}</p>
+                <p className="text-2xs font-medium uppercase tracking-wider text-muted-foreground">{stat.title}</p>
                 <p className="tabular mt-1 font-display text-lg font-bold leading-none md:text-xl">{stat.value}</p>
               </CardContent>
             </Card>
@@ -154,7 +154,7 @@ export function DashboardView({ initialData }: DashboardViewProps) {
               <div className="flex h-52 items-end gap-2">
                 {data.salesTrend.map((d, i) => (
                   <div key={i} className="group flex flex-1 flex-col items-center gap-2">
-                    <span className="font-mono text-[10px] font-semibold text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100">
+                    <span className="font-mono text-3xs font-semibold text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100">
                       {formatCurrency(d.value)}
                     </span>
                     <div className="relative w-full flex-1 overflow-hidden rounded-t-lg bg-muted/50">
@@ -163,7 +163,7 @@ export function DashboardView({ initialData }: DashboardViewProps) {
                         style={{ height: `${(d.value / maxTrend) * 100}%`, minHeight: "6px" }}
                       />
                     </div>
-                    <span className="font-mono text-[10px] font-semibold text-muted-foreground">{d.label}</span>
+                    <span className="font-mono text-3xs font-semibold text-muted-foreground">{d.label}</span>
                   </div>
                 ))}
               </div>

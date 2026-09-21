@@ -31,7 +31,7 @@ export default async function LoginPage({
               <UtensilsCrossed className="h-9 w-9" strokeWidth={2.25} />
             </div>
             <div className="absolute -inset-2 rounded-3xl bg-gradient-brand opacity-20 blur-lg -z-10" />
-            <span className="absolute -right-3 -top-3 rounded-full bg-accent px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-accent-foreground shadow-lg animate-float">
+            <span className="absolute -right-3 -top-3 rounded-full bg-accent px-2.5 py-1 text-3xs font-bold uppercase tracking-wider text-accent-foreground shadow-lg animate-float">
               RMS v2
             </span>
           </div>

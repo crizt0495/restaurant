@@ -40,7 +40,7 @@ export function Sidebar({ user, permissions, isSuperAdmin }: SidebarProps) {
           <span className="block font-display text-lg font-bold tracking-tight leading-none">
             Resto<span className="text-primary">RMS</span>
           </span>
-          <span className="block text-[11px] font-medium tracking-wide text-muted-foreground">
+          <span className="block text-2xs font-medium tracking-wide text-muted-foreground">
             Manajemen Restoran
           </span>
         </div>
@@ -53,7 +53,7 @@ export function Sidebar({ user, permissions, isSuperAdmin }: SidebarProps) {
           return (
             <div key={section.title} className="space-y-0.5">
               <div className="px-3 pb-1.5 pt-1">
-                <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                <span className="text-2xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
                   {section.title}
                 </span>
               </div>
@@ -79,7 +79,7 @@ export function Sidebar({ user, permissions, isSuperAdmin }: SidebarProps) {
                         )}
                         strokeWidth={active ? 2.5 : 2}
                       />
-                      <span className="flex-1 text-[13px]">{item.title}</span>
+                      <span className="flex-1 text-13">{item.title}</span>
                       {active && (
                         <span className="h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_0_3px_hsl(var(--primary)/0.15)]" />
                       )}

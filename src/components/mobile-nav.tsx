@@ -35,7 +35,7 @@ export function MobileNav({ permissions, isSuperAdmin }: MobileNavProps) {
               key={item.href}
               href={item.href}
               className={cn(
-                "relative flex h-16 w-full flex-col items-center justify-center gap-1 text-[10px] font-medium transition-colors",
+                "relative flex h-16 w-full flex-col items-center justify-center gap-1 text-3xs font-medium transition-colors",
                 active ? "text-primary" : "text-muted-foreground hover:text-foreground"
               )}
             >

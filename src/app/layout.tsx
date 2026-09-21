@@ -35,14 +35,14 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="id" suppressHydrationWarning className={`dark ${plusJakarta.variable} ${spaceMono.variable}`}>
+    <html lang="id" suppressHydrationWarning className={`${plusJakarta.variable} ${spaceMono.variable}`}>
       <head>
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#e64a19" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
       </head>
       <body className="min-h-full flex flex-col antialiased">
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
           {children}
           <Toaster
             position="top-right"

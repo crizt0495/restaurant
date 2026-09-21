@@ -309,6 +309,7 @@ export function InventoryClient({ items, canCreate, canEdit, canDelete, canAdjus
                             <Button
                               variant="ghost"
                               size="icon"
+                              aria-label="Sesuaikan stok"
                               className="h-7 w-7"
                               onClick={() => {
                                 setAdjustItem(i)
@@ -320,7 +321,7 @@ export function InventoryClient({ items, canCreate, canEdit, canDelete, canAdjus
                             </Button>
                           )}
                           {canEdit && (
-                            <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => openEdit(i)}>
+                            <Button variant="ghost" size="icon" aria-label="Edit item" className="h-7 w-7" onClick={() => openEdit(i)}>
                               <Pencil className="h-3 w-3" />
                             </Button>
                           )}
@@ -328,6 +329,7 @@ export function InventoryClient({ items, canCreate, canEdit, canDelete, canAdjus
                             <Button
                               variant="ghost"
                               size="icon"
+                              aria-label="Hapus item"
                               className="h-7 w-7 text-destructive"
                               onClick={() => handleDelete(i)}
                             >

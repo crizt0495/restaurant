@@ -160,6 +160,7 @@ export function NotificationsClient({ notifications: initial, unread: initialUnr
                   <Button
                     variant="ghost"
                     size="icon"
+                    aria-label="Tandai sudah dibaca"
                     className="h-7 w-7 shrink-0"
                     onClick={() => handleMarkRead(n.id)}
                   >

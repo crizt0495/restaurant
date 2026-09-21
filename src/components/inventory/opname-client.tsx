@@ -343,6 +343,7 @@ export function OpnameClient({
                       <Button
                         variant="ghost"
                         size="icon"
+                        aria-label="Hapus baris opname"
                         className="col-span-1 h-7 w-7 text-destructive"
                         onClick={() => removeLine(index)}
                       >

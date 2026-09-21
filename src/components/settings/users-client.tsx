@@ -221,7 +221,7 @@ export function UsersClient({ users, branches, roles, canCreate, canEdit }: User
                   </TableCell>
                   <TableCell className="text-right">
                     {canEdit && (
-                      <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => openEdit(u)}>
+                      <Button variant="ghost" size="icon" aria-label="Edit pengguna" className="h-7 w-7" onClick={() => openEdit(u)}>
                         <Pencil className="h-3 w-3" />
                       </Button>
                     )}

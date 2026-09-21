@@ -131,7 +131,7 @@ export function Header({ profileId }: { profileId?: string | null }) {
           {titleLabel.slice(0, 2).toUpperCase()}
         </span>
         <div className="flex flex-col">
-          <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+          <span className="text-3xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
             {titleLabel}
           </span>
           <h1 className="text-lg font-bold tracking-tight leading-none mt-0.5">{titleLabel}</h1>
@@ -146,7 +146,7 @@ export function Header({ profileId }: { profileId?: string | null }) {
       >
         <Search className="h-4 w-4" />
         <span>Cari pesanan, produk, pelanggan...</span>
-        <kbd className="ml-auto flex h-6 items-center gap-1 rounded-md border border-border bg-muted px-1.5 font-mono text-[10px] font-bold text-muted-foreground">
+        <kbd className="ml-auto flex h-6 items-center gap-1 rounded-md border border-border bg-muted px-1.5 font-mono text-3xs font-bold text-muted-foreground">
           <Command className="h-3 w-3" />K
         </kbd>
       </button>
@@ -159,7 +159,7 @@ export function Header({ profileId }: { profileId?: string | null }) {
           <Link href="/notifications" className="relative">
             <Bell className="h-5 w-5" />
             {unread > 0 && (
-              <span className="absolute -right-0.5 -top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-destructive px-1 text-[10px] font-bold text-destructive-foreground ring-2 ring-background animate-brutal-pop">
+              <span className="absolute -right-0.5 -top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-destructive px-1 text-3xs font-bold text-destructive-foreground ring-2 ring-background animate-brutal-pop">
                 {unread > 99 ? "99+" : unread}
               </span>
             )}
@@ -179,7 +179,7 @@ export function Header({ profileId }: { profileId?: string | null }) {
               onChange={(e) => setSearchQuery(e.target.value)}
               className="flex-1 bg-transparent text-base outline-none placeholder:text-muted-foreground/60"
             />
-            <kbd className="rounded-md border border-border bg-muted px-2 py-1 font-mono text-[10px] font-bold text-muted-foreground">ESC</kbd>
+            <kbd className="rounded-md border border-border bg-muted px-2 py-1 font-mono text-3xs font-bold text-muted-foreground">ESC</kbd>
           </div>
           <div className="max-h-80 overflow-y-auto">
             {searching ? (
@@ -204,7 +204,7 @@ export function Header({ profileId }: { profileId?: string | null }) {
                         <p className="truncate text-sm font-medium">{r.label}</p>
                         {r.sub && <p className="truncate font-mono text-xs text-muted-foreground">{r.sub}</p>}
                       </div>
-                      <span className={`rounded-full border px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider ${typeColors[r.type]}`}>
+                      <span className={`rounded-full border px-2.5 py-0.5 text-3xs font-semibold uppercase tracking-wider ${typeColors[r.type]}`}>
                         {r.type}
                       </span>
                     </button>

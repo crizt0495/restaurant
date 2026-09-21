@@ -139,6 +139,21 @@
   --radius-2xl: 1.25rem;
 }
 
+@layer utilities {
+  .text-4xs {
+    font-size: 0.5625rem;
+  }
+  .text-3xs {
+    font-size: 0.625rem;
+  }
+  .text-2xs {
+    font-size: 0.6875rem;
+  }
+  .text-13 {
+    font-size: 0.8125rem;
+  }
+}
+
 @layer base {
   * {
     @apply border-border;

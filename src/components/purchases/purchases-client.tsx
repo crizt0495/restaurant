@@ -279,7 +279,7 @@ export function PurchasesClient({
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-1">
                       <Link href={`/purchases/${po.id}`}>
-                        <Button variant="ghost" size="icon" className="h-7 w-7">
+                        <Button variant="ghost" size="icon" aria-label="Lihat pembelian" className="h-7 w-7">
                           <Eye className="h-3 w-3" />
                         </Button>
                       </Link>
@@ -366,6 +366,7 @@ export function PurchasesClient({
                     <Button
                       variant="ghost"
                       size="icon"
+                      aria-label="Hapus baris pembelian"
                       className="col-span-1 h-7 w-7 text-destructive"
                       onClick={() => removeLine(index)}
                     >

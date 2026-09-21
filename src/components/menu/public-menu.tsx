@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import Image from "next/image"
 import { formatCurrency } from "@/lib/utils"
 import { UtensilsCrossed, Plus, Minus, ShoppingCart, CheckCircle2, AlertTriangle } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -142,8 +143,9 @@ export function PublicMenu({ branchId, tableId, branchName, tableName, orgName, 
                 className="flex gap-3 rounded-2xl border border-border bg-card p-3 shadow-sm transition-all duration-150 hover:border-primary/30 hover:shadow-md"
               >
                 {product.image_url ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={product.image_url} alt={product.name} className="h-20 w-20 shrink-0 rounded-xl object-cover" />
+                  <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl">
+                    <Image fill src={product.image_url} alt={product.name} sizes="80px" className="object-cover" />
+                  </div>
                 ) : (
                   <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-xl bg-muted">
                     <UtensilsCrossed className="h-7 w-7 text-muted-foreground/50" strokeWidth={2} />
@@ -158,18 +160,18 @@ export function PublicMenu({ branchId, tableId, branchName, tableName, orgName, 
                       )}
                     </div>
                     {product.is_favorite && (
-                      <Badge variant="success" className="shrink-0 text-[10px]">Populer</Badge>
+                      <Badge variant="success" className="shrink-0 text-3xs">Populer</Badge>
                     )}
                   </div>
                   <div className="mt-auto flex items-center justify-between pt-2">
                     <span className="tabular font-mono text-sm font-bold text-primary">{formatCurrency(product.selling_price)}</span>
                     {inCart ? (
                       <div className="flex items-center gap-2 rounded-lg border border-border bg-background/60 p-0.5">
-                        <Button size="icon" variant="ghost" className="h-7 w-7 text-primary hover:bg-primary/10" onClick={() => remove(product.id)}>
+                        <Button size="icon" variant="ghost" aria-label="Kurangi jumlah" className="h-7 w-7 text-primary hover:bg-primary/10" onClick={() => remove(product.id)}>
                           <Minus className="h-3.5 w-3.5" />
                         </Button>
                         <span className="tabular w-5 text-center text-sm font-bold">{inCart.qty}</span>
-                        <Button size="icon" variant="ghost" className="h-7 w-7 text-primary hover:bg-primary/10" onClick={() => add(product)}>
+                        <Button size="icon" variant="ghost" aria-label="Tambah jumlah" className="h-7 w-7 text-primary hover:bg-primary/10" onClick={() => add(product)}>
                           <Plus className="h-3.5 w-3.5" />
                         </Button>
                       </div>

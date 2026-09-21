@@ -269,12 +269,12 @@ export function ProductsClient({ products, categories, canCreate, canEdit, canDe
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-1">
                       {canEdit && (
-                        <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => openEdit(p)}>
+                        <Button variant="ghost" size="icon" aria-label="Edit produk" className="h-7 w-7" onClick={() => openEdit(p)}>
                           <Pencil className="h-3 w-3" />
                         </Button>
                       )}
                       {canDelete && (
-                        <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive" onClick={() => handleDelete(p.id, p.name)}>
+                        <Button variant="ghost" size="icon" aria-label="Hapus produk" className="h-7 w-7 text-destructive" onClick={() => handleDelete(p.id, p.name)}>
                           <Trash2 className="h-3 w-3" />
                         </Button>
                       )}

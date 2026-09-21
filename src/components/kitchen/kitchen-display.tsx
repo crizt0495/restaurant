@@ -214,7 +214,7 @@ export function KitchenDisplay({ orders: initialOrders }: { orders: KitchenOrder
                           </span>
                           <div>
                             <p className="text-sm font-bold leading-none">{order.table_number}</p>
-                            <p className="mt-0.5 font-mono text-[11px] text-muted-foreground">{order.order_number}</p>
+                            <p className="mt-0.5 font-mono text-2xs text-muted-foreground">{order.order_number}</p>
                           </div>
                         </div>
                         <Badge variant={late ? "destructive" : "neutral"} className={cn("tabular font-mono", !late && "bg-muted text-muted-foreground")}>
@@ -255,7 +255,7 @@ export function KitchenDisplay({ orders: initialOrders }: { orders: KitchenOrder
                             {item.modifiers && item.modifiers.length > 0 && (
                               <div className="mt-1.5 flex flex-wrap gap-1">
                                 {(item.modifiers ?? []).map((m, i) => (
-                                  <span key={i} className="rounded-md bg-muted px-1.5 py-0.5 text-[11px] font-medium text-muted-foreground">
+                                  <span key={i} className="rounded-md bg-muted px-1.5 py-0.5 text-2xs font-medium text-muted-foreground">
                                     {m.option_name}
                                   </span>
                                 ))}
