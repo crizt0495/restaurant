@@ -35,6 +35,8 @@ export default async function DashboardLayout({
             role: user.role,
             username: user.username,
           }}
+          permissions={user.permissions}
+          isSuperAdmin={user.is_super_admin}
         />
         <main className="flex-1 p-4 pb-24 lg:pb-8 md:p-6 lg:p-8">
           {children}

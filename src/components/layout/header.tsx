@@ -2,10 +2,11 @@
 
 import * as React from "react"
 import { usePathname, useRouter } from "next/navigation"
-import { Bell, Search, Command } from "lucide-react"
+import { Bell, Search, Command, Menu } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { UserMenu } from "@/components/user-menu"
+import { MobileMenu } from "@/components/layout/mobile-menu"
 import { createClient } from "@/lib/supabase/client"
 import Link from "next/link"
 import {
@@ -37,15 +38,18 @@ interface HeaderProps {
     username: string
     avatar_url?: string
   } | null
+  permissions?: string[]
+  isSuperAdmin?: boolean
 }
 
-export function Header({ profileId, user }: HeaderProps) {
+export function Header({ profileId, user, permissions = [], isSuperAdmin = false }: HeaderProps) {
   const pathname = usePathname()
   const router = useRouter()
   const segments = pathname.split("/").filter(Boolean)
   const title = segments[0] || "Dashboard"
   const [unread, setUnread] = React.useState(0)
   const [searchOpen, setSearchOpen] = React.useState(false)
+  const [menuOpen, setMenuOpen] = React.useState(false)
   const [searchQuery, setSearchQuery] = React.useState("")
   const [searchResults, setSearchResults] = React.useState<SearchResult[]>([])
   const [searching, setSearching] = React.useState(false)
@@ -150,6 +154,9 @@ export function Header({ profileId, user }: HeaderProps) {
   return (
     <header className="glass sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-border px-4 md:px-6">
       <div className="flex items-center gap-3">
+        <Button variant="ghost" size="icon" className="lg:hidden text-muted-foreground" onClick={() => setMenuOpen(true)} aria-label="Buka menu navigasi">
+          <Menu className="h-5 w-5" />
+        </Button>
         <div className="flex flex-col">
           <span className="text-3xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
             {titleLabel}
@@ -241,6 +248,8 @@ export function Header({ profileId, user }: HeaderProps) {
           </div>
         </DialogContent>
       </Dialog>
+
+      <MobileMenu open={menuOpen} onOpenChange={setMenuOpen} permissions={permissions} isSuperAdmin={isSuperAdmin} />
     </header>
   )
 }

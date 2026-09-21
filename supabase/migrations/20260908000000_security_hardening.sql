@@ -1,5 +1,4 @@
--- =====================================================
--- SECURITY HARDENING — Round 2 (from deep audit)
+-- SECURITY HARDENING - Round 2 (from deep audit)
 --
 -- H1 : profiles_update_own had no WITH CHECK -> any user
 --      could escalate their own role to SUPER_ADMIN.
@@ -20,7 +19,6 @@
 -- legitimately updates subtotal/discount/tax/service/total on
 -- existing orders (those changes only happen inside SECURITY
 -- DEFINER RPCs), so the revoke cannot break the app.
--- =====================================================
 
 -- ---------------------------------------------------------
 -- H1: block self role escalation on profiles
@@ -49,7 +47,7 @@ create policy "profiles_insert_admin"
   );
 
 -- ---------------------------------------------------------
--- H3: orders update — drop `with check (true)`, remove KITCHEN
+-- H3: orders update - drop `with check (true)`, remove KITCHEN
 --     (kitchen only manages order_items today), staff can change
 --     operational fields but not the pricing columns.
 -- ---------------------------------------------------------
