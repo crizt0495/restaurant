@@ -87,11 +87,13 @@ export async function POST(req: Request) {
 
   const { data: org } = await admin
     .from("organizations")
-    .select("service_charge_percentage, tax_inclusive")
+    .select("service_charge_percentage, is_service_charge_active, tax_inclusive")
     .eq("id", branch.organization_id)
     .single()
 
-  const serviceChargePercent = Number(org?.service_charge_percentage ?? 0)
+  const serviceChargePercent = Boolean(org?.is_service_charge_active)
+    ? Number(org?.service_charge_percentage ?? 0)
+    : 0
   const taxInclusive = Boolean(org?.tax_inclusive)
 
   const productIds = items.map((i) => i.product_id)

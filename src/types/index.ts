@@ -82,6 +82,8 @@ export interface Organization {
   tax_percentage?: number
   tax_inclusive?: boolean
   service_charge_percentage?: number
+  is_tax_active?: boolean
+  is_service_charge_active?: boolean
   currency?: string
   created_at: string
   updated_at: string

@@ -22,7 +22,7 @@ export default async function POSPage() {
       .limit(200),
     supabase
       .from("organizations")
-      .select("tax_percentage, tax_inclusive, service_charge_percentage")
+      .select("tax_percentage, tax_inclusive, service_charge_percentage, is_tax_active, is_service_charge_active")
       .eq("id", user.organization_id ?? "")
       .single(),
     supabase.from("settings").select("key, value").eq("key", "receipt").maybeSingle(),
@@ -45,9 +45,13 @@ export default async function POSPage() {
   let serviceChargePercentage = 5
 
   if (orgSettingsRes.data) {
-    taxPercentage = Number(orgSettingsRes.data.tax_percentage ?? 11)
+    taxPercentage = Boolean(orgSettingsRes.data.is_tax_active)
+      ? Number(orgSettingsRes.data.tax_percentage ?? 0)
+      : 0
     taxInclusive = Boolean(orgSettingsRes.data.tax_inclusive)
-    serviceChargePercentage = Number(orgSettingsRes.data.service_charge_percentage ?? 5)
+    serviceChargePercentage = Boolean(orgSettingsRes.data.is_service_charge_active)
+      ? Number(orgSettingsRes.data.service_charge_percentage ?? 0)
+      : 0
   }
 
   return (

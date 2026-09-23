@@ -8,6 +8,8 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Combobox } from "@/components/ui/combobox"
 import {
   Table,
   TableBody,
@@ -16,13 +18,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import {
   Dialog,
   DialogContent,
@@ -76,6 +71,9 @@ interface RecipesClientProps {
   canEdit: boolean
 }
 
+const getAutoRecipeName = (product?: { name?: string } | null) =>
+  `Resep ${product?.name || ""}`.trim()
+
 export function RecipesClient({
   recipes,
   products,
@@ -89,6 +87,7 @@ export function RecipesClient({
   const [editingRecipe, setEditingRecipe] = React.useState<Recipe | null>(null)
   const [selectedProductId, setSelectedProductId] = React.useState("")
   const [recipeName, setRecipeName] = React.useState("")
+  const [customName, setCustomName] = React.useState(false)
   const [ingredients, setIngredients] = React.useState<RecipeIngredient[]>([])
   const [saving, setSaving] = React.useState(false)
 
@@ -118,10 +117,24 @@ export function RecipesClient({
     return product ? Number(product.selling_price) : 0
   }
 
+  const selectedProduct = products.find((p) => p.id === selectedProductId)
+
+  const productOptions = products.map((p) => ({
+    value: p.id,
+    label: p.name,
+  }))
+
+  const ingredientOptions = inventoryItems.map((item) => ({
+    value: item.id,
+    label: item.name,
+    hint: item.unit,
+  }))
+
   const openCreate = () => {
     setEditingRecipe(null)
     setSelectedProductId("")
     setRecipeName("")
+    setCustomName(false)
     setIngredients([])
     setDialogOpen(true)
   }
@@ -129,21 +142,23 @@ export function RecipesClient({
   const openEdit = (recipe: Recipe) => {
     setEditingRecipe(recipe)
     setSelectedProductId(recipe.product_id)
-    setRecipeName(recipe.name)
     setIngredients(
       (recipe.items || []).map((item) => ({
         inventory_item_id: item.inventory_item_id,
         quantity: Number(item.quantity),
-        unit: item.unit,
+        unit: item.unit || item.inventory_item?.unit || "",
       }))
     )
+    const autoName = getAutoRecipeName(recipe.product)
+    setRecipeName(recipe.name === autoName ? "" : recipe.name)
+    setCustomName(recipe.name !== autoName)
     setDialogOpen(true)
   }
 
   const addIngredient = () => {
     setIngredients((prev) => [
       ...prev,
-      { inventory_item_id: "", quantity: 1, unit: "pcs" },
+      { inventory_item_id: "", quantity: 1, unit: "" },
     ])
   }
 
@@ -160,6 +175,11 @@ export function RecipesClient({
     setIngredients((prev) => prev.filter((_, i) => i !== index))
   }
 
+  const resolveIngredientUnit = (ing: RecipeIngredient) => {
+    const invItem = inventoryItems.find((i) => i.id === ing.inventory_item_id)
+    return invItem?.unit || ing.unit
+  }
+
   const handleSave = async () => {
     if (!selectedProductId) {
       toast.error("Pilih produk")
@@ -170,19 +190,17 @@ export function RecipesClient({
       toast.error("Tambahkan minimal satu bahan")
       return
     }
+    const name = customName
+      ? recipeName.trim()
+      : getAutoRecipeName(selectedProduct)
+    if (!name) {
+      toast.error("Masukkan nama resep")
+      return
+    }
     setSaving(true)
     const result = editingRecipe
-      ? await updateRecipe(
-          editingRecipe.id,
-          selectedProductId,
-          recipeName || `Resep ${products.find((p) => p.id === selectedProductId)?.name || ""}`,
-          validIngredients
-        )
-      : await createRecipe(
-          selectedProductId,
-          recipeName || `Resep ${products.find((p) => p.id === selectedProductId)?.name || ""}`,
-          validIngredients
-        )
+      ? await updateRecipe(editingRecipe.id, selectedProductId, name, validIngredients)
+      : await createRecipe(selectedProductId, name, validIngredients)
     setSaving(false)
     if (result.error) {
       toast.error(result.error)
@@ -333,101 +351,110 @@ export function RecipesClient({
           <div className="grid gap-4">
             <div className="grid gap-2">
               <Label>Produk</Label>
-              <Select
+              <Combobox
+                ariaLabel="Pilih produk"
+                options={productOptions}
                 value={selectedProductId}
                 onValueChange={(v) => setSelectedProductId(v)}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Pilih produk" />
-                </SelectTrigger>
-                <SelectContent>
-                  {products.map((p) => (
-                    <SelectItem key={p.id} value={p.id}>
-                      {p.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                placeholder="Ketik untuk cari produk..."
+                searchPlaceholder="Cari produk..."
+                emptyText="Produk tidak ditemukan"
+              />
+              {!customName && selectedProduct && (
+                <p className="text-xs text-muted-foreground">
+                  Nama resep otomatis: <span className="font-medium text-foreground">{getAutoRecipeName(selectedProduct)}</span>
+                </p>
+              )}
             </div>
 
             <div className="grid gap-2">
-              <Label>Nama Resep</Label>
-              <Input
-                placeholder="Opsional, default: Resep [nama produk]"
-                value={recipeName}
-                onChange={(e) => setRecipeName(e.target.value)}
-              />
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id="custom-recipe-name"
+                  checked={customName}
+                  onCheckedChange={(checked) => setCustomName(Boolean(checked))}
+                />
+                <Label htmlFor="custom-recipe-name" className="cursor-pointer text-sm text-muted-foreground">
+                  Custom Nama Resep?
+                </Label>
+              </div>
+              {customName && (
+                <Input
+                  placeholder={`Default: ${getAutoRecipeName(selectedProduct)}`}
+                  value={recipeName}
+                  onChange={(e) => setRecipeName(e.target.value)}
+                />
+              )}
             </div>
 
             <div className="grid gap-2">
               <Label>Bahan</Label>
               <div className="grid gap-2">
-                {ingredients.map((ing, index) => (
-                  <div
-                    key={index}
-                    className="grid grid-cols-12 items-center gap-2"
-                  >
-                    <Select
-                      value={ing.inventory_item_id}
-                      onValueChange={(v) => {
-                        const item = inventoryItems.find((i) => i.id === v)
-                        updateIngredient(index, {
-                          inventory_item_id: v,
-                          unit: item?.unit || "pcs",
-                        })
-                      }}
+                {ingredients.map((ing, index) => {
+                  const unit = resolveIngredientUnit(ing)
+                  const invItem = inventoryItems.find(
+                    (i) => i.id === ing.inventory_item_id
+                  )
+                  return (
+                    <div
+                      key={index}
+                      className="grid grid-cols-12 items-center gap-2"
                     >
-                      <SelectTrigger className="col-span-6">
-                        <SelectValue placeholder="Pilih bahan" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {inventoryItems.map((item) => (
-                          <SelectItem key={item.id} value={item.id}>
-                            {item.name} ({item.unit})
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <Input
-                      className="col-span-2"
-                      type="number"
-                      placeholder="Jumlah"
-                      value={ing.quantity}
-                      onChange={(e) =>
-                        updateIngredient(index, {
-                          quantity: Number(e.target.value),
-                        })
-                      }
-                    />
-                    <Input
-                      className="col-span-2"
-                      placeholder="Unit"
-                      value={ing.unit}
-                      onChange={(e) =>
-                        updateIngredient(index, { unit: e.target.value })
-                      }
-                    />
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      aria-label="Hapus bahan"
-                      className="col-span-1 h-7 w-7 text-destructive"
-                      onClick={() => removeIngredient(index)}
-                    >
-                      <Trash2 className="h-3 w-3" />
-                    </Button>
-                    <div className="col-span-1 text-right text-xs text-muted-foreground">
-                      {(() => {
-                        const invItem = inventoryItems.find(
-                          (i) => i.id === ing.inventory_item_id
-                        )
-                        return invItem
+                      <div className="col-span-6">
+                        <Combobox
+                          ariaLabel="Pilih bahan"
+                          options={ingredientOptions}
+                          value={ing.inventory_item_id}
+                          onValueChange={(v) => {
+                            const item = inventoryItems.find((i) => i.id === v)
+                            updateIngredient(index, {
+                              inventory_item_id: v,
+                              unit: item?.unit || "",
+                            })
+                          }}
+                          placeholder="Ketik untuk cari bahan..."
+                          searchPlaceholder="Cari bahan..."
+                          emptyText="Bahan tidak ditemukan"
+                        />
+                      </div>
+                      <Input
+                        className="col-span-2"
+                        type="number"
+                        min={0}
+                        step="any"
+                        placeholder="Jumlah"
+                        value={ing.quantity}
+                        onChange={(e) =>
+                          updateIngredient(index, {
+                            quantity: Number(e.target.value),
+                          })
+                        }
+                      />
+                      <Input
+                        className="col-span-2"
+                        value={unit}
+                        readOnly
+                        disabled
+                        aria-label="Satuan (otomatis dari master bahan)"
+                        title="Satuan otomatis dari master data bahan"
+                      />
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        aria-label="Hapus bahan"
+                        className="col-span-1 h-7 w-7 text-destructive"
+                        onClick={() => removeIngredient(index)}
+                      >
+                        <Trash2 className="h-3 w-3" />
+                      </Button>
+                      <div className="col-span-1 text-right text-xs text-muted-foreground">
+                        {invItem
                           ? formatCurrency(ing.quantity * Number(invItem.cost_price))
-                          : "-"
-                      })()}
+                          : "-"}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
               <Button variant="outline" size="sm" onClick={addIngredient}>
                 <Plus className="mr-1 h-3 w-3" /> Tambah Bahan

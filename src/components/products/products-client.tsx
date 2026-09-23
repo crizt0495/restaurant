@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { createProduct, updateProduct, deleteProduct, createCategory } from "@/lib/actions/index"
+import { createProduct, updateProduct, deleteProduct, createCategory, setProductActive } from "@/lib/actions/index"
 import { formatCurrency, getInitials } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -34,7 +34,7 @@ import {
 import { Switch } from "@/components/ui/switch"
 import { Pagination } from "@/components/ui/pagination"
 import toast from "react-hot-toast"
-import { Plus, Search, Pencil, Trash2, Star, Loader2, Utensils } from "lucide-react"
+import { Plus, Search, Pencil, Trash2, Star, Loader2, Utensils, ChevronUp, ChevronDown, ChevronsUpDown } from "lucide-react"
 
 interface Category {
   id: string
@@ -102,14 +102,39 @@ export function ProductsClient({ products, categories, canCreate, canEdit, canDe
   const [currentPage, setCurrentPage] = React.useState(1)
   const PAGE_SIZE = 20
 
+  type SortColumn = "name" | "selling_price" | "cost_price"
+  const [sortColumn, setSortColumn] = React.useState<SortColumn>("name")
+  const [sortDirection, setSortDirection] = React.useState<"asc" | "desc">("asc")
+
   React.useEffect(() => {
-    const t = setTimeout(() => setDebouncedSearch(search.trim().toLowerCase()), 250)
+    const t = setTimeout(() => setDebouncedSearch(search.trim().toLowerCase()), 300)
     return () => clearTimeout(t)
   }, [search])
 
   React.useEffect(() => {
     setCurrentPage(1)
   }, [debouncedSearch, categoryFilter])
+
+  const handleSort = (column: SortColumn) => {
+    if (sortColumn === column) {
+      setSortDirection((prev) => (prev === "asc" ? "desc" : "asc"))
+    } else {
+      setSortColumn(column)
+      setSortDirection("asc")
+    }
+    setCurrentPage(1)
+  }
+
+  const getSortIcon = (column: SortColumn) => {
+    if (sortColumn !== column) {
+      return <ChevronsUpDown className="h-3.5 w-3.5 text-muted-foreground/60" />
+    }
+    return sortDirection === "asc" ? (
+      <ChevronUp className="h-3.5 w-3.5 text-primary" />
+    ) : (
+      <ChevronDown className="h-3.5 w-3.5 text-primary" />
+    )
+  }
 
   const filtered = items.filter((p) => {
     const matchesCat = !categoryFilter || p.category_id === categoryFilter
@@ -120,10 +145,22 @@ export function ProductsClient({ products, categories, canCreate, canEdit, canDe
     return matchesCat && matchesSearch
   })
 
+  const sorted = React.useMemo(() => {
+    const arr = [...filtered]
+    arr.sort((a, b) => {
+      const dir = sortDirection === "asc" ? 1 : -1
+      if (sortColumn === "name") {
+        return String(a.name).localeCompare(String(b.name)) * dir
+      }
+      return (Number(a[sortColumn]) - Number(b[sortColumn])) * dir
+    })
+    return arr
+  }, [filtered, sortColumn, sortDirection])
+
   const paginated = React.useMemo(() => {
     const start = (currentPage - 1) * PAGE_SIZE
-    return filtered.slice(start, start + PAGE_SIZE)
-  }, [filtered, currentPage])
+    return sorted.slice(start, start + PAGE_SIZE)
+  }, [sorted, currentPage])
 
   const openCreate = () => {
     setEditingId(null)
@@ -176,6 +213,23 @@ export function ProductsClient({ products, categories, canCreate, canEdit, canDe
     }
     toast.success("Produk dihapus")
     window.location.reload()
+  }
+
+  const handleToggleActive = async (p: any) => {
+    const next = !p.is_active
+    const label = next ? "Aktifkan" : "Nonaktifkan"
+    if (!window.confirm(`${label} produk ${p.name}?`)) return
+    const prevItems = items
+    setItems((prev) =>
+      prev.map((x) => (x.id === p.id ? { ...x, is_active: next } : x))
+    )
+    const result = await setProductActive(p.id, next)
+    if (result.error) {
+      setItems(prevItems)
+      toast.error(result.error)
+      return
+    }
+    toast.success(next ? "Produk diaktifkan" : "Produk dinonaktifkan")
   }
 
   const handleAddCategory = async () => {
@@ -237,54 +291,95 @@ export function ProductsClient({ products, categories, canCreate, canEdit, canDe
         </Card>
       ) : (
         <>
-        <div className="overflow-x-auto">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Nama</TableHead>
-                <TableHead>SKU</TableHead>
-                <TableHead>Kategori</TableHead>
-                <TableHead className="text-right">Harga Jual</TableHead>
-                <TableHead className="text-right">Harga Pokok</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="text-right">Aksi</TableHead>
+        <Table wrapperClassName="max-h-[calc(100vh-320px)]">
+          <TableHeader>
+            <TableRow>
+              <TableHead className="sticky top-0 z-10 bg-[#1E1E1E]">
+                <button
+                  type="button"
+                  onClick={() => handleSort("name")}
+                  className="inline-flex cursor-pointer items-center gap-1 hover:text-foreground"
+                  aria-label="Urutkan nama"
+                >
+                  Nama {getSortIcon("name")}
+                </button>
+              </TableHead>
+              <TableHead className="sticky top-0 z-10 bg-[#1E1E1E]">SKU</TableHead>
+              <TableHead className="sticky top-0 z-10 bg-[#1E1E1E]">Kategori</TableHead>
+              <TableHead className="sticky top-0 z-10 bg-[#1E1E1E] text-right">
+                <button
+                  type="button"
+                  onClick={() => handleSort("selling_price")}
+                  className="inline-flex cursor-pointer items-center gap-1 hover:text-foreground"
+                  aria-label="Urutkan harga jual"
+                >
+                  Harga Jual {getSortIcon("selling_price")}
+                </button>
+              </TableHead>
+              <TableHead className="sticky top-0 z-10 bg-[#1E1E1E] text-right">
+                <button
+                  type="button"
+                  onClick={() => handleSort("cost_price")}
+                  className="inline-flex cursor-pointer items-center gap-1 hover:text-foreground"
+                  aria-label="Urutkan harga pokok"
+                >
+                  Harga Pokok {getSortIcon("cost_price")}
+                </button>
+              </TableHead>
+              <TableHead className="sticky top-0 z-10 bg-[#1E1E1E]">Status</TableHead>
+              <TableHead className="sticky top-0 z-10 bg-[#1E1E1E] text-right">Aksi</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {paginated.map((p) => (
+              <TableRow key={p.id} className="hover:bg-[#2A2A2A]">
+                <TableCell>
+                  <div className="flex items-center gap-2">
+                    {p.is_favorite && <Star className="h-3 w-3 fill-warning text-warning" />}
+                    <span className="font-medium">{p.name}</span>
+                  </div>
+                </TableCell>
+                <TableCell className="text-muted-foreground">{p.sku}</TableCell>
+                <TableCell>{p.categories?.name || "-"}</TableCell>
+                <TableCell className="text-right font-semibold">{formatCurrency(p.selling_price)}</TableCell>
+                <TableCell className="text-right">{formatCurrency(p.cost_price)}</TableCell>
+                <TableCell>
+                  {canEdit ? (
+                    <button
+                      type="button"
+                      onClick={() => handleToggleActive(p)}
+                      className="cursor-pointer rounded-full transition-opacity hover:opacity-75"
+                      aria-label={p.is_active ? "Nonaktifkan produk" : "Aktifkan produk"}
+                      title={p.is_active ? "Klik untuk nonaktifkan" : "Klik untuk aktifkan"}
+                    >
+                      <Badge variant={p.is_active ? "success" : "neutral"}>
+                        {p.is_active ? "Aktif" : "Nonaktif"}
+                      </Badge>
+                    </button>
+                  ) : (
+                    <Badge variant={p.is_active ? "success" : "neutral"}>
+                      {p.is_active ? "Aktif" : "Nonaktif"}
+                    </Badge>
+                  )}
+                </TableCell>
+                <TableCell className="text-right">
+                  <div className="flex justify-end gap-1">
+                    {canEdit && (
+                      <Button variant="ghost" size="icon" aria-label="Edit produk" className="h-7 w-7" onClick={() => openEdit(p)}>
+                        <Pencil className="h-3 w-3" />
+                      </Button>
+                    )}
+                    {canDelete && (
+                      <Button variant="ghost" size="icon" aria-label="Hapus produk" className="h-7 w-7 text-destructive" onClick={() => handleDelete(p.id, p.name)}>
+                        <Trash2 className="h-3 w-3" />
+                      </Button>
+                    )}
+                  </div>
+                </TableCell>
               </TableRow>
-            </TableHeader>
-            <TableBody>
-              {paginated.map((p) => (
-                <TableRow key={p.id}>
-                  <TableCell>
-                    <div className="flex items-center gap-2">
-                      {p.is_favorite && <Star className="h-3 w-3 fill-warning text-warning" />}
-                      <span className="font-medium">{p.name}</span>
-                    </div>
-                  </TableCell>
-                  <TableCell className="text-muted-foreground">{p.sku}</TableCell>
-                  <TableCell>{p.categories?.name || "-"}</TableCell>
-                  <TableCell className="text-right font-semibold">{formatCurrency(p.selling_price)}</TableCell>
-                  <TableCell className="text-right">{formatCurrency(p.cost_price)}</TableCell>
-                  <TableCell>
-                    <Badge variant={p.is_active ? "success" : "neutral"}>{p.is_active ? "Aktif" : "Nonaktif"}</Badge>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex justify-end gap-1">
-                      {canEdit && (
-                        <Button variant="ghost" size="icon" aria-label="Edit produk" className="h-7 w-7" onClick={() => openEdit(p)}>
-                          <Pencil className="h-3 w-3" />
-                        </Button>
-                      )}
-                      {canDelete && (
-                        <Button variant="ghost" size="icon" aria-label="Hapus produk" className="h-7 w-7 text-destructive" onClick={() => handleDelete(p.id, p.name)}>
-                          <Trash2 className="h-3 w-3" />
-                        </Button>
-                      )}
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+            ))}
+          </TableBody>
+        </Table>
         <Pagination
           totalItems={filtered.length}
           itemsPerPage={PAGE_SIZE}

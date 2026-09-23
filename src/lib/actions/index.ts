@@ -97,6 +97,24 @@ export async function deleteProduct(id: string) {
   return { success: true }
 }
 
+export async function setProductActive(id: string, isActive: boolean) {
+  const user = await getCurrentUser()
+  if (!user) return { error: "Unauthorized" }
+  if (!user.is_super_admin && !user.permissions.includes("products.edit")) {
+    return { error: "Forbidden" }
+  }
+
+  const supabase = await getServerClient()
+  const { error } = await supabase
+    .from("products")
+    .update({ is_active: isActive })
+    .eq("id", id)
+
+  if (error) return { error: error.message }
+  revalidatePath("/products")
+  return { success: true }
+}
+
 // ============================================================
 // CATEGORIES
 // ============================================================
@@ -1355,12 +1373,26 @@ export async function setRolePermission(role: string, permissionId: string, enab
 const organizationSchema = z.object({
   name: z.string().min(1),
   address: z.string().optional().nullable(),
-  phone: z.string().optional().nullable(),
-  email: z.string().optional().nullable(),
+  phone: z
+    .string()
+    .optional()
+    .nullable()
+    .refine((v) => !v || /^[0-9]*$/.test(v), {
+      message: "Telepon hanya boleh berisi angka",
+    }),
+  email: z
+    .string()
+    .optional()
+    .nullable()
+    .refine((v) => !v || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v), {
+      message: "Format email tidak valid",
+    }),
   tax_name: z.string().optional().nullable(),
   tax_percentage: z.coerce.number().min(0).default(0),
   service_charge_percentage: z.coerce.number().min(0).default(0),
-  currency: z.string().default("IDR"),
+  currency: z.enum(["IDR", "USD", "MYR", "SGD"]).default("IDR"),
+  is_tax_active: z.boolean().default(false),
+  is_service_charge_active: z.boolean().default(false),
 })
 
 export async function updateOrganization(input: z.infer<typeof organizationSchema>) {
@@ -1373,6 +1405,14 @@ export async function updateOrganization(input: z.infer<typeof organizationSchem
   const parsed = organizationSchema.safeParse(input)
   if (!parsed.success) return { error: parsed.error.issues[0]?.message || "Invalid input" }
 
+  const data = parsed.data
+  if (!data.is_tax_active) {
+    data.tax_percentage = 0
+  }
+  if (!data.is_service_charge_active) {
+    data.service_charge_percentage = 0
+  }
+
   const supabase = await getServerClient()
   const { data: branch } = await supabase
     .from("branches")
@@ -1384,7 +1424,7 @@ export async function updateOrganization(input: z.infer<typeof organizationSchem
 
   const { error } = await supabase
     .from("organizations")
-    .update(parsed.data)
+    .update(data)
     .eq("id", branch.organization_id)
 
   if (error) return { error: error.message }
